@@ -30,13 +30,13 @@ async function load() {
 function renderAtlas() {
   const p = $('#p-atlas');
   if (!p.dataset.built) {
-    p.innerHTML = `<div class="row" style="margin-bottom:8px"><input type="search" id="q" placeholder="search name, tag, region…" value="${esc(S.q)}" style="flex:1;min-width:160px">
+    p.innerHTML = `<div class="toolbar"><input type="search" id="q" placeholder="Search a place, a tag, a region…" value="${esc(S.q)}">
       <select id="tier"><option value="">any tier</option>${S.opt.tiers.map(t => `<option value="${t}" ${S.tier === t ? 'selected' : ''}>${esc(TIER_LABEL[t] || t)}</option>`).join('')}</select>
       <input type="number" id="maxcost" placeholder="max $/day" value="${esc(S.maxCost)}" style="width:110px">
       <select id="minpop" title="smallest city to show">${S.opt.pop_steps.map(v => `<option value="${v}" ${S.minPop === v ? 'selected' : ''}>≥ ${pop(v)} people</option>`).join('')}</select>
       <select id="sort">${[['fit', 'by fit'], ['cost', 'by cost'], ['distance', 'by distance'], ['population', 'by population'], ['tier', 'by tier'], ['name', 'by name']].map(([v, l]) => `<option value="${v}" ${S.sort === v ? 'selected' : ''}>${l}</option>`).join('')}</select></div>
       <div class="atlas"><div id="map"></div><div class="list" id="list"></div></div>
-      <div class="help">Every filter thins the map too. Fit is the domain scores weighted for the goal chosen above (the weights are yours to change in Settings → Logic); hand-set scores are marked, index-derived ones name their index in the detail. World cities are from <a href="https://www.geonames.org/" target="_blank">GeoNames</a> (CC BY 4.0); they have no scores unless they are also business cities, and the population filter keeps the map readable.</div>`;
+      <div class="help">Every filter thins the map too. Fit is how well a place matches the goal chosen above, from its scores<span class="dev-only"> (the weights are yours to change in Settings → Logic)</span>; hand-set scores are marked, index-derived ones name their index in the detail. World cities are from <a href="https://www.geonames.org/" target="_blank">GeoNames</a> (CC BY 4.0); they have no scores unless they are also business cities, and the population filter keeps the map readable.</div>`;
     p.dataset.built = '1';
     let t; $('#q').oninput = e => { clearTimeout(t); t = setTimeout(async () => { S.q = e.target.value; await load(); renderAtlas(); }, 200); };
     $('#tier').onchange = async e => { S.tier = e.target.value; await load(); renderAtlas(); };
@@ -47,9 +47,10 @@ function renderAtlas() {
     initMap();
   }
   $('#list').innerHTML = S.places.map(x => `<div class="item ${S.current === x.id ? 'on' : ''}" data-id="${x.id}">
-    <div><div class="nm">${esc(x.name)}${x.region && x.kind !== 'leisure' ? `, ${esc(x.region)}` : ''}${x.hub ? ` <span class="small">via ${esc(x.hub)}</span>` : ''}${x.status ? `<span class="badge verified">${esc(x.status)}</span>` : ''}</div>
-     <div class="sub">${x.kind === 'world_city' ? esc(x.country) + ' · ' + pop(x.population) + ' people · ' : ''}${x.tier ? esc(TIER_LABEL[x.tier] || x.tier) + ' · ' : ''}${x.cost_per_day != null ? '$' + x.cost_per_day + '/day · ' : ''}${miles(x.distance_miles)}${x.tags.length ? ' · ' + esc(x.tags.slice(0, 3).join(', ')) : ''}</div></div>
-    <div class="row" style="flex-wrap:nowrap"><label class="small" title="compare"><input type="checkbox" data-cmp="${x.id}" ${S.compare.includes(x.id) ? 'checked' : ''}></label><div class="fit">${x.fit != null ? Math.round(x.fit) : '—'}<small>fit</small></div></div></div>`).join('') || '<div class="item small">Nothing matches.</div>';
+    <div><div class="nm">${x.tier ? `<span class="tier ${esc(x.tier)}">${esc(TIER_LABEL[x.tier] || x.tier)}</span>` : ''}${esc(x.name)}${x.region && x.kind !== 'leisure' ? `<span class="small">, ${esc(x.region)}</span>` : ''}${x.hub ? ` <span class="small">via ${esc(x.hub)}</span>` : ''}${x.status ? `<span class="badge verified">${esc(x.status)}</span>` : ''}</div>
+     <div class="sub">${x.kind === 'world_city' ? esc(x.country) + ' · ' + pop(x.population) + ' people · ' : ''}${x.cost_per_day != null ? '$' + x.cost_per_day + ' a day · ' : ''}${miles(x.distance_miles)} from home</div>
+     ${x.tags.length ? `<div class="tags">${x.tags.slice(0, 4).map(t => `<span>${esc(t)}</span>`).join('')}</div>` : ''}</div>
+    <div class="side">${x.fit != null ? `<div class="ring" style="--v:${Math.round(x.fit)}"><b>${Math.round(x.fit)}</b><small>fit</small></div>` : ''}<label class="cmp" title="tick to compare"><input type="checkbox" data-cmp="${x.id}" ${S.compare.includes(x.id) ? 'checked' : ''}> compare</label></div></div>`).join('') || '<div class="item small">Nothing matches.</div>';
   drawMarkers();
 }
 function initMap() {

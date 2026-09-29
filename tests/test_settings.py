@@ -51,7 +51,7 @@ def test_every_change_is_kept_and_can_be_undone(client):
 def test_reset_returns_to_default(client):
     client.put("/v1/settings/display.theme", json={"value": "light"})
     r = client.delete("/v1/settings/display.theme")
-    assert r.json() == {"key": "display.theme", "value": "dark", "version": 0, "stored": False}
+    assert r.json() == {"key": "display.theme", "value": "system", "version": 0, "stored": False}
     first = client.get("/v1/history?limit=1").json()[0]
     assert first["action"] == "settings.reset" and first["after"] is None
     client.post(f"/v1/history/{first['id']}/undo")

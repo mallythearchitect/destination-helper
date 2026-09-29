@@ -61,10 +61,10 @@ table.t select{max-width:220px}
 <body>
 <header class="band"><div class="appbar">
  <span class="appbar-brand"><span class="appbar-eyebrow">Destination Helper</span>Settings</span>
- <span class="appbar-right"><span class="pill" id="health">engine <b>…</b></span><a href="browse.html">Browse</a><a href="/apps/launcher/web/">‹ Home</a></span>
+ <span class="appbar-right"><span class="pill dev-only" id="health">engine <b>…</b></span><a href="browse.html" data-user-label="History" data-dev-label="Browse">History</a><a href="/apps/launcher/web/">‹ Home</a></span>
 </div></header>
 <main class="wrap">
- <p class="muted" style="margin:0 0 18px;max-width:720px">Every app reads its defaults from here. A change saves the moment you make it, and every change is kept in <a href="#history">History</a>, where it can be undone. Keys are stored in a private file on this computer; this page only knows whether one is set.</p>
+ <p class="muted" style="margin:0 0 18px;max-width:720px">Your home city, time zone and how the app looks. A change saves the moment you make it and can be undone. Keys are stored in a private file on this computer; this page only knows whether one is set.<span class="dev-only"> Developer mode adds Data, AI, Backup, Logic (every rule as data) and <a href="#history">History</a>.</span></p>
  <div class="layout">
   <nav class="sections" id="nav"></nav>
   <div id="content"><p class="muted">Loading…</p></div>
@@ -76,7 +76,7 @@ table.t select{max-width:220px}
 <script>
 Tour.init({ page: 'settings', steps: [
   { title: 'Settings', text: 'Every app reads its defaults from here. A change saves the moment you make it, and every change can be undone.' },
-  { target: '#nav', title: 'The sections', text: 'Profile, Maps, Display, Data, AI, Backup, Logic, then Backups and History.' },
+  { target: '#nav', title: 'The sections', text: 'Profile, Maps and Display for everyone; in Developer mode also Data, AI, Backup, Logic, Backups and History.' },
   { target: '#ai', title: 'AI', text: 'Which model does each job and its backup, the monthly cap, what each model may see, and the Claude key. Keys go to a private file on this Mac; this page only knows whether one is set.' },
   { target: '#backups-panel', title: 'Backups', text: 'Back up now, the nightly schedule, and the restore test that proves a backup reads back.' },
   { target: '#history', title: 'History', text: 'Every change, newest first, with Undo. Download all time or a range as JSON or CSV.' },

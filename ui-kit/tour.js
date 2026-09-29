@@ -6,13 +6,14 @@
 (function () {
   'use strict';
   const PAGES = [
-    ['Home', '/apps/launcher/web/', 'your trips at a glance, what the engine did, the apps'],
-    ['AI inbox', '/apps/ai/web/', 'suggestions waiting for your OK, models, spend, test scores'],
-    ['Destinations', '/apps/destinations/web/', 'cities and places scored with sources, your shortlist, trip cost'],
-    ['Trips', '/apps/trips/web/', 'the Destination Helper: plan, check the plan, prepare, run the trip live'],
-    ['Browse', '/apps/system/web/browse.html', 'every record: find, link, tag, note, attach, undo'],
-    ['Settings', '/apps/system/web/settings.html', 'profile, keys, display, AI, backups, every rule as data, history'],
+    ['Home', '/apps/launcher/web/', 'your trips at a glance, what is coming up, the apps'],
+    ['Trips', '/apps/trips/web/', 'plan a trip, check the plan, prepare, run it live'],
+    ['Destinations', '/apps/destinations/web/', 'places scored with sources, your shortlist, trip cost'],
+    ['History', '/apps/system/web/browse.html', 'every trip, place and note you have kept', { dev: 'Browse', devDesc: 'every record: find, link, tag, note, attach, undo' }],
+    ['Settings', '/apps/system/web/settings.html', 'home city, time zone, appearance, keys', { devDesc: 'profile, keys, display, AI, backups, every rule as data, history' }],
+    ['AI inbox', '/apps/ai/web/', 'suggestions waiting for your OK, models, spend, test scores', { devOnly: true }],
   ];
+  const pages = () => { const dev = document.body.classList.contains('mode-dev'); return PAGES.filter(([, , , o]) => dev || !(o && o.devOnly)).map(([n, h, d, o]) => [dev && o && o.dev ? o.dev : n, h, dev && o && o.devDesc ? o.devDesc : d]); };
   const esc = s => String(s ?? '').replace(/[&<>"']/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
   const store = { get: k => { try { return localStorage.getItem(k); } catch (e) { return null; } }, set: (k, v) => { try { localStorage.setItem(k, v); } catch (e) {} } };
   let cfg = null, i = 0, els = null;
@@ -30,7 +31,7 @@
     if (m) { m.remove(); return; }
     m = document.createElement('div'); m.id = 'tour-menu';
     m.innerHTML = `<div class="tour-menu-in"><div class="tour-menu-head"><b>Go to</b><button class="tour-x" data-close>×</button></div>
-      ${PAGES.map(([n, h, d]) => `<a href="${h}" class="${location.pathname.startsWith(h) ? 'on' : ''}"><b>${esc(n)}</b><span>${esc(d)}</span></a>`).join('')}
+      ${pages().map(([n, h, d]) => `<a href="${h}" class="${location.pathname.startsWith(h) ? 'on' : ''}"><b>${esc(n)}</b><span>${esc(d)}</span></a>`).join('')}
       <div class="tour-menu-foot"><button class="tour-btn" data-tour>? Tour this page</button><a href="https://github.com/mallythearchitect/destination-helper/blob/main/docs/how-it-works.md" target="_blank" class="tour-btn">Read the guide</a></div></div>`;
     document.body.appendChild(m);
     m.addEventListener('click', e => { if (e.target === m || e.target.closest('[data-close]')) m.remove(); if (e.target.closest('[data-tour]')) { m.remove(); start(0); } });

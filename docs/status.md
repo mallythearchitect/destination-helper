@@ -1,5 +1,27 @@
 # Status
 
+## 2026-09-28, late — User and Developer modes; reframed for travellers
+
+Malachi: the AI inbox and Browse don't belong in front of a user; "what the
+engine did today" is for the engine, not a standalone app; the wording read
+like a developer's; "put a switch for now to switch between user and
+developer." Done:
+- A **User / Developer switch** in every header (`App.isDev()`, class
+  `dev-only`, remembered per browser; user mode is the default). User mode is
+  the app as a traveller sees it. Developer mode adds Home → Tracking and
+  Workflows, the AI inbox, Browse, the engine pill, rule codes and first-seen
+  times on findings, the Record button, Settings → Data / AI / Backup / Logic /
+  Backups / History, and every "Settings → Logic" pointer.
+- Home for users: the next trip, things to fix, still to book, your trips,
+  and **Coming up** (deadlines, timed plans and blockers across every trip
+  for the next two weeks) in place of the engine's run log.
+- **Browse is History** for users: every trip, place and note kept, searchable.
+- Wording: "Fix now / Worth a look / Tidy up" instead of blocker / warning /
+  note; "Guide" and "Local tips" instead of Helper and Region; "Add to
+  calendar"; no W-codes or pack names outside Developer mode.
+- Destinations: a search toolbar, place cards with a fit ring, tier and tag
+  chips, a taller map. Theme now follows the system by default.
+
 ## 2026-09-28, late — its own look and a UI/UX revamp
 
 Malachi: "completely different design from the mindscape version"; "the

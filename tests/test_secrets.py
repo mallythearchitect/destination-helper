@@ -5,7 +5,7 @@ import stat
 def test_secret_is_never_returned(client, env):
     assert client.get("/v1/secrets").json()[0] == {
         "name": "GOOGLE_MAPS_API_KEY", "section": "maps", "label": "Google Maps API key",
-        "help": "Street view and photoreal 3D in City Viewer. Replace the key that leaked from the old repo.",
+        "help": "Street view and photoreal 3D on a place's map. Optional.",
         "set": False}
     r = client.put("/v1/secrets/GOOGLE_MAPS_API_KEY", json={"value": "not-a-real-key-just-for-this-test-0001"})
     assert r.json() == {"name": "GOOGLE_MAPS_API_KEY", "set": True}

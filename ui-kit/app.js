@@ -1,6 +1,6 @@
 /* ---- The shared helpers every page uses, once. Load before the page's own script.
    App.$, App.esc, App.toast, App.api, App.act(app), App.money, App.fmtD, App.fmtWhen,
-   App.tabs({...}), App.detail(title, html), App.remember(key, value?), App.down(). */
+   App.tabs({...}), App.detail(title, html), App.remember(key, value?), App.down(), App.isDev(), App.onMode(fn). */
 (function () {
   'use strict';
   const $ = (s, el = document) => el.querySelector(s);
@@ -44,5 +44,27 @@
     $('#detail-body').innerHTML = `<h2>${title}</h2>${html}`; d.showModal(); return d;
   }
   const down = (sel, msg) => { const el = $(sel); if (el) el.innerHTML = `<p>${msg || "The engine isn't running. Start it with <span class=\"mono\">scripts/dev.sh</span> and reload."}</p>`; };
-  window.App = { $, esc, toast, api, act, money, money0, fmtD, fmtWhen, remember, tabs, detail, down };
+  /* User / Developer mode. User mode is the app as a traveller sees it; Developer mode
+     shows the engine behind it (workflows, tracking, the AI inbox, rule codes, Logic).
+     Anything with class="dev-only" is hidden in user mode; pages re-render on 'modechange'. */
+  const MODE_KEY = 'dh.mode';
+  const mode = () => remember(MODE_KEY) || 'user';
+  const isDev = () => mode() === 'dev';
+  function applyMode() {
+    document.body.classList.toggle('mode-dev', isDev()); document.body.classList.toggle('mode-user', !isDev());
+    const sw = $('#mode-switch'); if (sw) sw.querySelectorAll('button').forEach(b => b.classList.toggle('on', b.dataset.mode === mode()));
+    document.querySelectorAll('[data-user-label]').forEach(el => { el.textContent = isDev() ? (el.dataset.devLabel || el.dataset.userLabel) : el.dataset.userLabel; });
+  }
+  function setMode(m) { remember(MODE_KEY, m); applyMode(); document.dispatchEvent(new CustomEvent('modechange', { detail: m })); }
+  function mountMode() {
+    const right = $('.appbar-right'); if (!right || $('#mode-switch')) return;
+    const sw = document.createElement('div'); sw.id = 'mode-switch'; sw.className = 'mode-switch'; sw.title = 'User mode shows the app as a traveller sees it. Developer mode shows the engine behind it.';
+    sw.innerHTML = '<button data-mode="user">User</button><button data-mode="dev">Developer</button>';
+    right.appendChild(sw); sw.onclick = e => { const b = e.target.closest('[data-mode]'); if (b) setMode(b.dataset.mode); };
+    applyMode();
+  }
+  applyMode();
+  if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', mountMode); else mountMode();
+  const onMode = fn => document.addEventListener('modechange', e => fn(e.detail));
+  window.App = { $, esc, toast, api, act, money, money0, fmtD, fmtWhen, remember, tabs, detail, down, mode, isDev, setMode, onMode };
 })();

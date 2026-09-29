@@ -104,7 +104,7 @@
  <div class="side-layout">
   <aside class="sidebar">
    <div><h4>Trips</h4><div class="opts" id="trips"></div><button class="sbtn mini gold" id="new-trip">+ New trip</button></div>
-   <div><nav class="sidenav" id="tabs"><a href="#timeline" class="on">Timeline</a><a href="#checks">Checks</a><a href="#costs">Costs</a><a href="#prepare">Prepare</a><a href="#run">Run</a><a href="#confirm">Confirm</a><a href="#helper">Helper</a><a href="#region">Region</a></nav></div>
+   <div><nav class="sidenav" id="tabs"><a href="#timeline" class="on">Timeline</a><a href="#checks">Checks</a><a href="#costs">Costs</a><a href="#prepare">Prepare</a><a href="#run">Run</a><a href="#confirm">Confirm</a><a href="#helper">Guide</a><a href="#region">Local tips</a></nav></div>
   </aside>
   <div class="content">
    <div id="hero"></div>
@@ -127,12 +127,12 @@
 Tour.init({ page: 'trips', steps: [
   { title: 'Trips: the Destination Helper', text: 'A trip co-pilot. It plans the trip, then helps you run it: <b>Plan</b> (routes, timing, costs and the checks), <b>Prepare</b> (confirm bookings, the before-you-go list, deadlines), <b>Run</b> (the day\'s legs with leave-by times and live links). Work and personal, any size.' },
   { target: '#new-trip', title: 'Five questions to start', text: 'New trip asks who\'s going, where and when (or not sure yet), the budget and what matters, what\'s already booked, and how much the app should handle. Everything else is asked only when a step needs it.' },
-  { target: '#hero', title: 'The trip, and its health', text: 'The health score is 100 minus the open findings (the weights are in Settings → Logic). Move the trip along the stages as you go.' },
-  { target: '#tabs a[href="#timeline"]', title: 'The journey', text: 'One line through the whole trip: a stop per day, the night\'s stay on each, every leg, stay and activity as a card with its mode. A red edge means the checker found a blocker on it; amber, a warning. Click a card for the live links and the details.' },
-  { target: '#tabs a[href="#checks"]', title: 'Checks', text: 'The part other planners skip. Pickups booked before the flight lands, prices that don\'t say per person or group, nights with no stay, tight connections, the last ferry, budget caps, passport validity, deadlines. Every threshold is in Settings → Logic.' },
+  { target: '#hero', title: 'The trip, and its health', text: 'The health score starts at 100 and drops for every open problem the checker finds. Move the trip along the stages as you go.' },
+  { target: '#tabs a[href="#timeline"]', title: 'The journey', text: 'One line through the whole trip: a stop per day, the night\'s stay on each, every leg, stay and activity as a card with its mode. A red edge means something on it would cost money or a missed ride; amber, worth a look. Click a card for the live links and the details.' },
+  { target: '#tabs a[href="#checks"]', title: 'Checks', text: 'The part other planners skip. Pickups booked before the flight lands, prices that don\'t say per person or group, nights with no stay, tight connections, the last ferry, budget caps, passport validity, deadlines.' },
   { target: '#tabs a[href="#run"]', title: 'Travel day', text: 'Only the next move: what it is, when to leave, the confirmation code, the live links. Then the rest of the day.' },
   { target: '#tabs a[href="#confirm"]', title: 'Confirm', text: 'W27: message the business first (WhatsApp, LINE, text, email), call only if there is no reply, and the call says it\'s automated. The engine drafts; you send and log the answer.' },
-  { target: '#tabs a[href="#helper"]', title: 'The helper', text: 'The capability list itself: question codes, workflows with their steps, guardrails with why each exists, the brief, and this trip\'s track record.' },
+  { target: '#tabs a[href="#helper"]', title: 'The guide', text: 'The capability list itself: question codes, workflows with their steps, guardrails with why each exists, the brief, and this trip\'s track record.' },
 ]});
 </script>
 </body>

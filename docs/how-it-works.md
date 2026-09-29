@@ -16,6 +16,16 @@ one engine: one vault on this computer, records that connect, nothing ever
 lost, a source on every number, every rule as data, and AI as hands that
 only press buttons the apps already have.
 
+## Two ways to look at it: User and Developer
+
+The switch in every page's header. **User** is the app as a traveller sees
+it: Home, Trips, Destinations, History (every trip, place and note you have
+kept) and a short Settings. **Developer** shows the engine behind it: what
+ran overnight and the numbers it tracks (Home → Tracking, Workflows), the AI
+inbox, Browse (every record), the rule behind each finding, and Settings →
+Data, AI, Backup, Logic and History. The choice is remembered in your
+browser; nothing about the data changes.
+
 ## The apps
 
 - **Trips**: the co-pilot itself, described below.

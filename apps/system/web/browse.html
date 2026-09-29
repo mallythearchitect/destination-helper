@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Browse · Destination Helper</title>
+<title>History · Destination Helper</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,500;9..144,600;9..144,700&family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="/ui-kit/tokens.css">
@@ -52,14 +52,14 @@ ul.plain .x{margin-left:auto}
 </head>
 <body>
 <header class="band"><div class="appbar">
- <span class="appbar-brand"><span class="appbar-eyebrow">Destination Helper</span>Browse</span>
+ <span class="appbar-brand"><span class="appbar-eyebrow">Destination Helper</span><span id="pg-title">History</span></span>
  <span class="appbar-right"><span class="pill" id="count"></span><a href="settings.html">Settings</a><a href="/apps/launcher/web/">‹ Home</a></span>
 </div></header>
 <main class="wrap">
- <p class="muted" style="margin:0 0 14px;max-width:720px">Everything the engine holds, one record per thing. Search by any word in a name, detail, tag or note. Open a record to link it to another, tag it, add a note, attach a file, or undo any change to it.</p>
+ <p class="muted" id="pg-intro" style="margin:0 0 14px;max-width:720px">Every trip, place and note you have kept, in one place. Search by any word. Open one to add a note, attach a photo or a confirmation, or undo a change.</p>
  <div class="layout">
   <div class="listcol">
-   <div class="search"><input type="search" id="q" placeholder="Search records…" autocomplete="off"><button class="sbtn gold" id="new">+ New</button></div>
+   <div class="search"><input type="search" id="q" placeholder="Search your trips, places and notes…" autocomplete="off"><button class="sbtn gold" id="new">+ New</button></div>
    <div class="chips" id="types"></div>
    <div class="list" id="list"><div class="item muted">Loading…</div></div>
   </div>
@@ -75,6 +75,11 @@ ul.plain .x{margin-left:auto}
 </form></dialog>
 <script src="/ui-kit/app.js"></script>
 <script src="browse.js"></script>
+<script>
+(function () { const dev = App.isDev(); const t = document.getElementById('pg-title'), i = document.getElementById('pg-intro');
+  if (dev) { t.textContent = 'Browse'; i.textContent = 'Everything the engine holds, one record per thing. Search by any word in a name, detail, tag or note. Open a record to link it to another, tag it, add a note, attach a file, or undo any change to it.'; document.title = 'Browse · Destination Helper'; }
+  App.onMode(() => location.reload()); })();
+</script>
 <script src="/ui-kit/tour.js"></script>
 <script>
 Tour.init({ page: 'browse', steps: [

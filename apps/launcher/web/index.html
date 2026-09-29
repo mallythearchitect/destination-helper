@@ -37,13 +37,13 @@ a.app:hover{border-color:var(--gold);box-shadow:var(--shadow-md)}
 <body>
 <header class="band"><div class="appbar">
  <span class="appbar-brand"><span class="appbar-eyebrow">Destination Helper</span>Home</span>
- <span class="appbar-right"><span class="pill" id="health">engine <b>…</b></span></span>
+ <span class="appbar-right"><span class="pill dev-only" id="health">engine <b>…</b></span></span>
 </div></header>
 <main class="wrap">
  <div class="side-layout">
   <aside class="sidebar">
-   <div><h4>Home</h4><nav class="sidenav" id="tabs"><a href="#today" class="on">Overview</a><a href="#tracking">Tracking</a><a href="#workflows">Workflows</a><a href="#apps">Apps</a></nav></div>
-   <div><h4>What it does</h4><div class="opts"><button class="sub" disabled>plans the trip</button><button class="sub" disabled>checks the plan</button><button class="sub" disabled>prepares you</button><button class="sub" disabled>runs it live</button></div></div>
+   <div><h4>Home</h4><nav class="sidenav" id="tabs"><a href="#today" class="on">Overview</a><a href="#tracking" class="dev-only">Tracking</a><a href="#workflows" class="dev-only">Workflows</a><a href="#apps">Apps</a></nav></div>
+   <div><h4>What it does</h4><div class="opts"><button class="sub" disabled>plans your trip</button><button class="sub" disabled>checks the plan</button><button class="sub" disabled>gets you ready</button><button class="sub" disabled>runs the trip with you</button></div></div>
   </aside>
   <div class="content">
    <section class="panel on" id="p-today"></section>
@@ -60,8 +60,9 @@ a.app:hover{border-color:var(--gold);box-shadow:var(--shadow-md)}
 Tour.init({ page: 'home', steps: [
   { title: 'Destination Helper', text: 'A trip co-pilot: it plans the trip, checks the plan for the mistakes that cost money, helps you prepare, then runs the trip live. Work and personal, any size. Everything lives in one file on this computer.' },
   { target: '#trips-now', title: 'Your trips', text: 'Each trip with its stage, what is still to book, and what the checker has open. Click one to open it.' },
-  { target: '#tabs a[href="#workflows"]', title: 'What the engine does on its own', text: 'Every morning it re-checks every trip, writes the day\'s numbers, and forecasts them. Runs are listed; any of them can be run now.' },
-  { target: '#tabs a[href="#apps"]', title: 'The apps', text: 'Trips is the co-pilot. Destinations is the atlas of places with scores and costs. Browse holds every record; Settings holds every key and every rule.' },
+  { target: '#coming-up', title: 'Coming up', text: 'Deadlines and timed plans from every trip in the next two weeks, so nothing sneaks up on you.' },
+  { target: '#tabs a[href="#apps"]', title: 'The apps', text: 'Trips is the co-pilot. Destinations is the atlas of places with scores and costs. History holds every trip, place and note you have kept. Settings holds your home city, time zone and keys.' },
+  { target: '#mode-switch', title: 'User and Developer', text: 'User mode is the app as a traveller sees it. Developer mode shows the engine behind it: what ran overnight, the numbers it tracks, the AI inbox, rule codes, the settings behind every rule.' },
   { target: '#tour-go', title: 'Go anywhere', text: '<b>Go to</b> jumps to any page from any page; <b>? Tour</b> replays a page\'s tour.' },
 ]});
 </script>

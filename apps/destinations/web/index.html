@@ -11,26 +11,41 @@
 <link rel="stylesheet" href="/ui-kit/shell.css">
 <link rel="stylesheet" href="/ui-kit/app.css">
 <style>
-.atlas{display:grid;grid-template-columns:1fr 380px;gap:14px;align-items:start}
-#map{height:520px;border:1px solid var(--line);border-radius:var(--radius);overflow:hidden;background:#e9eef0}
-.list{border:1px solid var(--line);background:var(--ink-3);max-height:520px;overflow:auto;border-radius:var(--radius)}
-.item{display:grid;grid-template-columns:1fr auto;gap:8px;padding:8px 12px;border-top:1px solid var(--line);cursor:pointer;align-items:center}
-.item:first-child{border-top:0}.item:hover,.item.on{background:var(--gold-soft)}
-.item .nm{font-weight:500}.item .sub{font-size:12px;color:var(--mut)}
-.item .fit{font-family:var(--font-heading);font-size:20px;color:var(--gold);text-align:right}
-.item .fit small{display:block;font-family:var(--font-body);font-size:10.5px;color:var(--mut)}
+.toolbar{display:flex;gap:8px;flex-wrap:wrap;align-items:center;background:var(--ink-3);border:1px solid var(--line);border-radius:var(--radius);padding:10px 12px;margin-bottom:12px;box-shadow:var(--shadow-sm)}
+.toolbar input[type=search]{flex:1;min-width:180px;border-radius:var(--radius-pill);padding-left:38px;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' fill='none' stroke='%2368747A' stroke-width='2'%3E%3Ccircle cx='7' cy='7' r='5'/%3E%3Cpath d='m11 11 3.5 3.5'/%3E%3C/svg%3E");background-repeat:no-repeat;background-position:13px 50%}
+.toolbar select,.toolbar input[type=number]{width:auto;border-radius:var(--radius-pill)}
+.atlas{display:grid;grid-template-columns:1fr 400px;gap:14px;align-items:start}
+#map{height:600px;border:1px solid var(--line);border-radius:var(--radius);overflow:hidden;background:#e9eef0;box-shadow:var(--shadow-sm)}
+.list{max-height:600px;overflow:auto;display:flex;flex-direction:column;gap:8px;padding-right:2px}
+.item{display:grid;grid-template-columns:1fr auto;gap:10px;padding:12px 14px;cursor:pointer;align-items:center;background:var(--ink-3);border:1px solid var(--line);border-radius:12px;box-shadow:var(--shadow-sm)}
+.item:hover{border-color:var(--sea);box-shadow:var(--shadow-md)}
+.item.on{border-color:var(--gold);background:var(--gold-soft)}
+.item .nm{font-weight:600;font-size:15px;line-height:1.25}
+.item .nm .small{font-weight:400}
+.item .sub{font-size:12.5px;color:var(--mut);margin-top:3px}
+.item .tags{margin-top:6px;display:flex;flex-wrap:wrap;gap:4px}
+.item .tags span{font-size:11px;padding:2px 8px;border-radius:var(--radius-pill);background:var(--ink-2);color:var(--paper-2)}
+.item .tier{display:inline-block;font-size:10.5px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;padding:2px 7px;border-radius:var(--radius-pill);background:var(--sea-soft);color:var(--sea);margin-right:6px;vertical-align:middle}
+.item .tier.S,.item .tier.core{background:var(--gold-soft);color:var(--gold)}
+.item .side{display:flex;flex-direction:column;align-items:center;gap:6px}
+.ring{--v:0;width:48px;height:48px;border-radius:50%;background:conic-gradient(var(--sea) calc(var(--v) * 1%),var(--ink-2) 0);display:grid;place-items:center;position:relative}
+.ring::after{content:"";position:absolute;inset:5px;border-radius:50%;background:var(--ink-3)}
+.item.on .ring::after{background:#fff}
+.ring b{position:relative;z-index:1;font-family:var(--font-heading);font-size:16px;line-height:1}
+.ring small{position:relative;z-index:1;font-size:8px;letter-spacing:.1em;text-transform:uppercase;color:var(--mut);margin-top:-1px}
+.item .cmp{font-size:11px;color:var(--mut);display:flex;align-items:center;gap:4px}
 .score{height:8px;background:var(--ink-2);border-radius:99px;overflow:hidden;position:relative}
 .score i{position:absolute;left:0;top:0;bottom:0;background:var(--sea);border-radius:99px}
 .status-btns button.on{border-color:var(--gold);color:var(--gold)}
-.maplibregl-popup-content{background:var(--ink-3);color:var(--paper);font-family:var(--font-body);border:0;border-radius:12px;box-shadow:var(--shadow-md)}
+.maplibregl-popup-content{background:var(--ink-3);color:var(--paper);font-family:var(--font-body);border:0;border-radius:12px;box-shadow:var(--shadow-md);padding:10px 14px}
 .maplibregl-popup-tip{border-top-color:var(--ink-3)}
-@media (max-width:900px){.atlas{grid-template-columns:1fr}#map{height:360px}.list{max-height:none}}
+@media (max-width:900px){.atlas{grid-template-columns:1fr}#map{height:340px}.list{max-height:none}}
 </style>
 </head>
 <body>
 <header class="band"><div class="appbar">
  <span class="appbar-brand"><span class="appbar-eyebrow">Destination Helper</span>Destinations</span>
- <span class="appbar-right"><span class="pill" id="pill"></span><a href="/apps/system/web/browse.html">Browse</a><a href="/apps/launcher/web/">‹ Home</a></span>
+ <span class="appbar-right"><span class="pill" id="pill"></span><a href="/apps/system/web/browse.html" data-user-label="History" data-dev-label="Browse">History</a><a href="/apps/launcher/web/">‹ Home</a></span>
 </div></header>
 <main class="wrap">
  <div class="side-layout">

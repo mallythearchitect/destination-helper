@@ -88,11 +88,15 @@ function render() {
   loadHistory(); loadBackups();
   const io = new IntersectionObserver(es => es.forEach(e => { if (e.isIntersecting) { nav.querySelectorAll('a').forEach(a => a.classList.toggle('on', a.getAttribute('href') === '#' + e.target.id)); } }), { rootMargin: '-10% 0px -80% 0px' });
   content.querySelectorAll('section.sec').forEach(s => io.observe(s));
+  // User mode keeps Profile, Maps and Display; the engine's sections are for developers.
+  const DEV = new Set(['data', 'ai', 'backup', 'logic', 'backups-panel', 'history']);
+  content.querySelectorAll('section.sec').forEach(sec => { if (DEV.has(sec.id)) sec.classList.add('dev-only'); });
+  document.querySelectorAll('#nav a').forEach(a => { if (DEV.has((a.getAttribute('href') || '').slice(1))) a.classList.add('dev-only'); });
 }
 function applyTheme() {
-  const t = STATE.byKey['display.theme']?.value || 'dark';
+  const t = STATE.byKey['display.theme']?.value || 'system';
   const dark = t === 'dark' || (t === 'system' && matchMedia('(prefers-color-scheme: dark)').matches);
-  document.documentElement.dataset.theme = dark ? 'dark' : 'light';
+  if (t === 'system') delete document.documentElement.dataset.theme; else document.documentElement.dataset.theme = dark ? 'dark' : 'light';
 }
 
 // ---------- saving ------------------------------------------------------

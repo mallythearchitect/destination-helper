@@ -18,7 +18,7 @@ from .store import Store, now_iso
 
 SECTIONS = [
     ("profile", "Profile", "Who and where you are. Destinations and Trips read these."),
-    ("maps", "Maps", "Keys for Google and Mapillary. City Viewer used to forget them on reload."),
+    ("maps", "Maps", "Map keys: Google Maps for street view and 3D, Mapillary for street photos. Optional."),
     ("display", "Display", "Light or dark, layouts, Focus Mode picks."),
     ("data", "Data", "Which outside sources are on, and how often each one refreshes."),
     ("ai", "AI", "Keys for each AI service, which model does which job, the backup model, "
@@ -70,9 +70,9 @@ REGISTRY: list[Setting] = [
             "Times are stored in UTC and shown in this zone."),
     # Maps
     Setting("maps.default_view", "maps", "Default view", "select", "map",
-            "What City Viewer opens with.", options=["map", "satellite", "street", "3d"]),
+            "What a place's map opens with.", options=["map", "satellite", "street", "3d"]),
     # Display
-    Setting("display.theme", "display", "Theme", "select", "dark", "", options=["dark", "light", "system"]),
+    Setting("display.theme", "display", "Theme", "select", "system", "Light, dark, or follow the system.", options=["dark", "light", "system"]),
     Setting("display.bills_layout", "display", "Bills layout", "select", "cards",
             "The Bills & Finance layout variant.", options=["cards", "table", "compact"]),
     Setting("display.focus_mode_picks", "display", "Focus Mode picks", "list", [],

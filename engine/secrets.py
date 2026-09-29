@@ -23,7 +23,7 @@ class Secret:
 
 SECRETS: list[Secret] = [
     Secret("GOOGLE_MAPS_API_KEY", "maps", "Google Maps API key",
-           "Street view and photoreal 3D in City Viewer. Replace the key that leaked from the old repo."),
+           "Street view and photoreal 3D on a place's map. Optional."),
     Secret("MAPILLARY_TOKEN", "maps", "Mapillary token",
            "Crowdsourced street imagery, the fallback when Google has none."),
     Secret("ANTHROPIC_API_KEY", "ai", "Claude API key",
