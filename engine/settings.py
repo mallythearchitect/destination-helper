@@ -222,11 +222,15 @@ REGISTRY: list[Setting] = [
              "stages": [["plan", "Plan"], ["prepare", "Prepare"], ["run", "Run"], ["done", "Done"]],
              "statuses": [["idea", "Idea"], ["to_book", "To book"], ["booked", "Booked"], ["confirmed", "Confirmed"], ["check_now", "Check now"], ["cancelled", "Cancelled"], ["done", "Done"]],
              "paid_by": [["me", "I pay"], ["company", "Company pays"], ["split", "Split"]], "tags": [["personal", "Personal"], ["work", "Work"]],
-             "purposes": [["personal", "Personal"], ["work", "Work"], ["mixed", "Work + personal"]]},
-            "What a new trip starts as, how much worse a card's exchange rate usually is than the published one, the calendar alarm, and the words "
-            "for stages, statuses, who pays and the work/personal tag. Read by every Trips screen.", extra={"used_by": ["trips.create", "trips.options", "trips.costs"]},
+             "purposes": [["personal", "Personal"], ["work", "Work"], ["mixed", "Work + personal"]],
+             "handling": [["plan_for_me", "Plan it for me"], ["check_my_plan", "Check my plan"], ["just_remind", "Just remind me"]],
+             "health_weights": {"blocker": 25, "warn": 8, "info": 2}},
+            "What a new trip starts as, how much worse a card's exchange rate usually is than the published one, the calendar alarm, the words "
+            "for stages, statuses, who pays, the work/personal tag and how much the app should handle, and the trip health score's weights "
+            "(100 minus these per open finding, never under 0). Read by every Trips screen.", extra={"used_by": ["trips.create", "trips.options", "trips.costs"]},
             check=lambda v: _check_keys(v, {"headcount": int, "home_currency": str, "passport_country": str, "card_rate_markup_pct": (int, float),
-                                            "ics_alarm_minutes": int, "stages": list, "statuses": list, "paid_by": list, "tags": list, "purposes": list})),
+                                            "ics_alarm_minutes": int, "stages": list, "statuses": list, "paid_by": list, "tags": list, "purposes": list,
+                                            "handling": list, "health_weights": dict})),
     Setting("logic.ai.prompts", "logic", "AI · prompt overrides", "json", {},
             "Replace a workflow's prompt text: {\"trips.draft_message\": \"...\"}. Empty means the built-in prompt "
             "(engine/ai/prompts.py). An override is logged as version 'custom'. Score it on the Test scores tab before relying on it.",

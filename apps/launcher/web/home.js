@@ -9,7 +9,7 @@ const APPS = [
   ['Browse', 'Every record: find, link, tag, note, attach, undo', '/apps/system/web/browse.html', 'live'],
   ['Settings', 'Profile, keys, display, AI, backups, and every rule as data (Logic)', '/apps/system/web/settings.html', 'live'],
 ];
-function spark(points, key = 'value', color = '#D9A93C') {
+function spark(points, key = 'value', color = '#17788A') {
   if (!points || points.length < 2) return '<div class="small">not enough history yet</div>';
   const vs = points.map(p => p[key]), min = Math.min(...vs), max = Math.max(...vs), w = 300, h = 44, span = max - min || 1;
   const d = vs.map((v, i) => `${i === 0 ? 'M' : 'L'}${(i / (vs.length - 1) * w).toFixed(1)},${(h - 4 - (v - min) / span * (h - 8)).toFixed(1)}`).join(' ');
@@ -27,14 +27,15 @@ function renderToday() {
   const next = live.filter(t => t.start_date).sort((a, b) => a.start_date < b.start_date ? -1 : 1)[0];
   const runsToday = S.wf.runs.filter(r => r.started_at.slice(0, 10) === new Date().toISOString().slice(0, 10));
   const days = next ? Math.ceil((new Date(next.start_date + 'T00:00:00') - Date.now()) / 864e5) : null;
-  $('#p-today').innerHTML = `<h2 class="sec">Today <span class="small">${new Date().toLocaleDateString([], { weekday: 'long', month: 'long', day: 'numeric' })}</span></h2>
+  const hc = h => h >= 80 ? 'var(--ok)' : h >= 50 ? 'var(--sun)' : 'var(--bad)';
+  $('#p-today').innerHTML = `${next ? `<a class="next-trip" href="/apps/trips/web/"><div><div class="lab">Next trip</div><h2>${esc(next.name)}</h2><div class="meta">${esc(fmtD(next.start_date))}${next.end_date ? ' → ' + esc(fmtD(next.end_date)) : ''} · ${next.headcount} going · ${next.items} items · ${next.to_book ? next.to_book + ' to book' : 'all booked'}${next.findings.blocker ? ` · <b style="color:#F08A5D">${next.findings.blocker} blocker${next.findings.blocker === 1 ? '' : 's'}</b>` : ''}</div></div><div class="big">${days > 0 ? days : days === 0 ? 'today' : 'now'}<small>${days > 0 ? 'days to go' : 'under way'}</small></div></a>` : `<div class="card"><h3>No trip yet</h3><div>Start one in Trips: five questions, then the checker watches the plan as you add to it.</div><div class="row" style="margin-top:10px"><a class="sbtn gold" href="/apps/trips/web/">Open Trips</a></div></div>`}
    <div class="kpis">
-    <a class="kpi" href="/apps/trips/web/" style="text-decoration:none;color:inherit"><div class="lab">Next trip</div><div class="val" style="font-size:18px">${next ? esc(next.name.slice(0, 26)) : 'none planned'}</div><div class="sub">${next ? (days > 0 ? `in ${days} days · ${next.headcount} going` : days === 0 ? 'today' : 'under way') : '<a href="/apps/trips/web/">start one</a>'}</div></a>
-    <a class="kpi ${blockers ? 'warn' : ''}" href="/apps/trips/web/#checks" style="text-decoration:none;color:inherit"><div class="lab">The checker</div><div class="val">${blockers}</div><div class="sub">blocker${blockers === 1 ? '' : 's'} · ${warns} warning${warns === 1 ? '' : 's'}</div></a>
-    <a class="kpi" href="/apps/trips/web/#prepare" style="text-decoration:none;color:inherit"><div class="lab">Still to book</div><div class="val">${toBook}</div><div class="sub">${tasks} task${tasks === 1 ? '' : 's'} open</div></a>
+    <a class="kpi ${blockers ? 'warn' : ''}" href="/apps/trips/web/#checks"><div class="lab">The checker</div><div class="val">${blockers}</div><div class="sub">blocker${blockers === 1 ? '' : 's'} · ${warns} warning${warns === 1 ? '' : 's'}</div></a>
+    <a class="kpi" href="/apps/trips/web/#prepare"><div class="lab">Still to book</div><div class="val">${toBook}</div><div class="sub">${tasks} task${tasks === 1 ? '' : 's'} open</div></a>
+    <a class="kpi" href="/apps/trips/web/"><div class="lab">Trips</div><div class="val">${live.length}</div><div class="sub">${S.trips.length - live.length} done</div></a>
    </div>
    <div class="two">
-    <div class="card" id="trips-now"><h3>Your trips</h3>${S.trips.length ? S.trips.map(t => `<a class="trip" href="/apps/trips/web/"><div><b>${esc(t.name)}</b><div class="sub">${esc(t.stage)} · ${t.start_date ? esc(fmtD(t.start_date)) + (t.end_date ? ' → ' + esc(fmtD(t.end_date)) : '') : 'no dates'} · ${t.headcount} going · ${t.items} items</div></div><div class="sub">${t.findings.blocker ? '⛔ ' + t.findings.blocker + ' ' : ''}${t.to_book ? t.to_book + ' to book' : 'all booked'}</div></a>`).join('') : '<div class="small">No trips yet. <a href="/apps/trips/web/">Start one</a>: it asks who\'s going, the dates, the budget caps and what the trip is for.</div>'}</div>
+    <div class="card" id="trips-now"><h3>Your trips</h3>${S.trips.length ? S.trips.map(t => `<a class="trip" href="/apps/trips/web/"><div><b><i class="hp" style="background:${hc(t.health)}" title="health ${t.health}"></i>${esc(t.name)}</b><div class="sub">${esc(t.stage)} · ${t.start_date ? esc(fmtD(t.start_date)) + (t.end_date ? ' → ' + esc(fmtD(t.end_date)) : '') : 'no dates'} · ${t.headcount} going · ${t.items} items</div></div><div class="sub">health ${t.health}${t.to_book ? ' · ' + t.to_book + ' to book' : ''}</div></a>`).join('') : '<div class="small">No trips yet. <a href="/apps/trips/web/">Start one</a>.</div>'}</div>
     <div class="card"><h3>What the engine did today</h3>${runsToday.length ? runsToday.map(r => `<div class="run"><span>${esc(r.name)} <span class="small">${esc(r.trigger)} · ${fmtWhen(r.started_at)}</span></span><span class="${r.ok ? 'ok' : 'bad'}">${r.ok ? 'ok' : 'failed'}</span></div>`).join('') : '<div class="small">Nothing yet today. It re-checks every trip at 6 AM and writes the day\'s numbers after midnight (Workflows tab).</div>'}</div>
    </div>
    <h2 class="sec" style="margin-top:8px">Apps</h2>${appsGrid()}`;

@@ -1,5 +1,24 @@
 # Status
 
+## 2026-09-28, late — its own look and a UI/UX revamp
+
+Malachi: "completely different design from the mindscape version"; "the
+UI/UX needs a full revamp." Decision 0011. Done:
+- A new design system in `ui-kit/` (tokens, shell, app): light and warm,
+  coral + sea, Fraunces + Plus Jakarta Sans, rounded, dark mode by system.
+  The sidebar pattern is gone; pill navigation and rails instead.
+- Trips: a hero with the stage stepper and a **health score** (100 minus the
+  open findings; weights in Settings → Logic → Trips · defaults), **New trip as
+  the five onboarding questions** (v5; the fifth question's answers are new
+  trip fields, `handling` and `may_contact`, migration 0002), the **journey
+  timeline** (a stop per day, chapter chips, mode glyphs, check flags as
+  coloured edges), and a **travel-day Run screen** with the next move first.
+- Home: next-trip hero with the countdown; health per trip.
+- Destinations: light map, coral pins. Browse, Settings and the AI inbox
+  take the new look through the shared CSS.
+- Checked headless at 1440 and 390 px on every page: no console errors, no
+  horizontal scroll. 47 tests.
+
 ## 2026-09-28 — the repo is born
 
 The Destination Helper became its own repo today, split out of

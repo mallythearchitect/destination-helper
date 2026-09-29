@@ -19,7 +19,8 @@ from . import checks
 from . import queries as q
 
 TRIP_FIELDS = ("name", "purpose", "start_date", "end_date", "headcount", "travelers", "home_currency", "local_currency", "fx_rate", "fx_date",
-               "passport_country", "passport_expiry", "budget_night_cents", "budget_leg_cents", "budget_day_cents", "region_pack", "time_zone", "purpose_note")
+               "passport_country", "passport_expiry", "budget_night_cents", "budget_leg_cents", "budget_day_cents", "region_pack", "time_zone", "purpose_note",
+               "handling", "may_contact")
 ITEM_FIELDS = ("kind", "title", "from_place", "to_place", "start_at", "end_at", "time_zone", "status", "price_cents", "currency", "basis", "headcount",
                "paid_by", "tag", "international", "confirmation", "link", "operator", "contact", "last_departure", "desk_hours", "lead_minutes", "notes")
 
@@ -93,6 +94,8 @@ class CreateTrip(BaseModel):
     region_pack: str | None = Field(None, description="A region pack id from the helper, e.g. thailand")
     time_zone: str | None = Field(None, description="The destination's zone, e.g. Asia/Bangkok; item times are local")
     purpose_note: str | None = Field(None, description="What the trip is for: active days, nightlife, water sports...")
+    handling: str | None = Field(None, description="How much the app should handle: plan_for_me, check_my_plan (default) or just_remind")
+    may_contact: bool | None = Field(None, description="True if it may message, then call, businesses on your behalf (W27)")
 
 
 def _setup_missing(t: dict) -> list[str]:
@@ -122,6 +125,8 @@ def create_trip(store: Store, i: CreateTrip, app: str = "trips") -> dict:
         raise ValueError(f"purpose must be one of {_words(store, 'purposes')}")
     if i.start_date and i.end_date and i.end_date < i.start_date:
         raise ValueError("the end date is before the start")
+    if i.handling is not None and i.handling not in _words(store, "handling"):
+        raise ValueError(f"handling must be one of {_words(store, 'handling')}")
     with store.tx() as con:
         region = q.region_row(con, i.region_pack) if i.region_pack else None
         if i.region_pack and not region:
@@ -138,6 +143,7 @@ def create_trip(store: Store, i: CreateTrip, app: str = "trips") -> dict:
                      i.budget_night_cents, i.budget_leg_cents, i.budget_day_cents, i.region_pack, i.time_zone or (region or {}).get("time_zone"), i.purpose_note, ts, ts))
         if i.local_currency:
             con.execute("UPDATE trips SET local_currency=? WHERE id=?", (i.local_currency.upper(), tid))
+        con.execute("UPDATE trips SET handling=?, may_contact=? WHERE id=?", (i.handling or "check_my_plan", int(bool(i.may_contact)), tid))
         after = _row(con, "trips", tid)
         history.record(con, app=app, action="trips.create", tbl="trips", row_key=tid, before=None, after=after)
     t = q.trip_row(store.con, tid)
@@ -166,6 +172,8 @@ class UpdateTrip(BaseModel):
     region_pack: str | None = None
     time_zone: str | None = None
     purpose_note: str | None = None
+    handling: str | None = None
+    may_contact: bool | None = None
     clear: list[str] = Field(default_factory=list, description="Field names to blank out (e.g. budget_leg_cents)")
 
 
@@ -193,13 +201,16 @@ def update_trip(store: Store, i: UpdateTrip, app: str = "trips") -> dict:
             raise ValueError("the end date is before the start")
         if new["region_pack"] and not q.region_row(con, new["region_pack"]):
             raise ValueError(f"no region pack {new['region_pack']}")
+        if new["handling"] not in _words(store, "handling"):
+            raise ValueError(f"handling must be one of {_words(store, 'handling')}")
         trav = new["travelers"] if isinstance(new["travelers"], str) else json.dumps(new["travelers"])
         con.execute("UPDATE trips SET name=?, purpose=?, start_date=?, end_date=?, headcount=?, travelers=?, home_currency=?, local_currency=?, fx_rate=?, fx_date=?, "
-                    "passport_country=?, passport_expiry=?, budget_night_cents=?, budget_leg_cents=?, budget_day_cents=?, region_pack=?, time_zone=?, purpose_note=?, "
+                    "passport_country=?, passport_expiry=?, budget_night_cents=?, budget_leg_cents=?, budget_day_cents=?, region_pack=?, time_zone=?, purpose_note=?, handling=?, may_contact=?, "
                     "version=version+1, updated_at=? WHERE id=?",
                     (str(new["name"]).strip(), new["purpose"], new["start_date"], new["end_date"], new["headcount"], trav, str(new["home_currency"]).upper(),
                      (new["local_currency"] or None) and str(new["local_currency"]).upper(), new["fx_rate"], new["fx_date"], new["passport_country"], new["passport_expiry"],
-                     new["budget_night_cents"], new["budget_leg_cents"], new["budget_day_cents"], new["region_pack"], new["time_zone"], new["purpose_note"], now_iso(), i.id))
+                     new["budget_night_cents"], new["budget_leg_cents"], new["budget_day_cents"], new["region_pack"], new["time_zone"], new["purpose_note"],
+                     new["handling"], int(bool(new["may_contact"])), now_iso(), i.id))
         after = _row(con, "trips", i.id)
         history.record(con, app=app, action="trips.update", tbl="trips", row_key=i.id, before=cur, after=after)
         if after["name"] != cur["name"] or after["start_date"] != cur["start_date"] or after["end_date"] != cur["end_date"]:

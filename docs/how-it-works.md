@@ -87,7 +87,10 @@ vault, never in git. Pages only learn "set" or "not set".
 opens the newest copy and compares it with the live vault.
 
 **One look, built once.** Every page loads the same files from `ui-kit/`
-and adds only what is unique to it. Every page has a tour and a Go-to menu.
+and adds only what is unique to it. The look is the Helper's own (decision
+0011): light and warm, coral for the one action that matters, a serif for
+display, pill navigation and rails instead of a sidebar, dark mode when the
+system asks for it. Every page has a tour and a Go-to menu.
 
 **The checks before a commit.** Tidy code, no leaked keys, tests pass. The
 same three run on GitHub on every push.
@@ -206,12 +209,16 @@ brief behind it is `destination-helper-v3.docx` (Sep 28, 2026), and the app
 is built around the three things a normal planner doesn't do: it **checks the
 plan**, it **handles work and personal on one trip**, and it **runs the trip**.
 
-**A trip.** New trip asks the setup questions first (W24): who's going and how
-many, the dates, the budget caps (per night, per leg, per day), what the trip
-is for, passport country and home currency, and, for a country with a region
-pack, the local currency and today's exchange rate. The answer says what is
-still missing; the helper's first two guardrails (G01 ask the headcount, G02
-ask the budget) are built in. A trip is also a record, so notes, tags, files
+**A trip.** New trip is the brief's five questions (W24, v5): who's going and
+is it work, personal or both; where and when, or not sure yet; the budget
+and what matters most; what's already booked; how much the app should
+handle (plan it for me, check my plan, just remind me) and whether it may
+message, then call, businesses for you. Everything else (passport, exchange
+rate, caps per leg and per day) sits in Trip settings and is asked only when
+a step needs it. The answer says what is still missing; the helper's first
+two guardrails (G01 ask the headcount, G02 ask the budget) are built in.
+The trip's header shows its stage as a stepper you click along, and a
+**health score**: 100 minus a weight per open finding, never under 0. A trip is also a record, so notes, tags, files
 and links come from the engine, and Browse finds it.
 
 **Items.** Everything in the plan is an item: a leg (flight, train, bus, van,
@@ -223,8 +230,10 @@ flagged), who pays (I pay, company pays, split) and a work / personal tag, the
 confirmation number, the operator and how to reach them, and, when it matters,
 the last departure of the day and the front desk hours.
 
-**Timeline.** Every day of the trip with its items and the night's stay;
-a day with no stay says so. Click an item for the live links first (directions,
+**Timeline.** A journey line: a stop per day, the night's stay on each (a
+day with no stay says so in amber), chapter chips at the top to jump between
+places, and every leg, stay and activity as a card with its mode glyph. A
+red edge means the checker has a blocker on that item, amber a warning. Click an item for the live links first (directions,
 flights, all ways on Rome2Rio, the region's booking site with the date and
 headcount filled in, flight status), then the details, the checker's findings
 on it, and its confirmations. Legs show "be there by" from the buffers and
@@ -267,8 +276,9 @@ the setting that lists them, plus the region pack's arrival-card and visa lines
 landing). Tasks show on the Timeline's day, block the checker when missed, and
 go on the calendar file.
 
-**Run.** Today and tomorrow, with leave-by times, the live links per leg, what
-is waiting on people, and quick expense logging. The engine does not watch
+**Run.** The travel-day screen: the next move first (what it is, when, be
+there by and leave by, the confirmation code, the live links), then today
+and tomorrow, what is waiting on people, and quick expense logging. The engine does not watch
 traffic or flights by itself yet; that is the next step for W28 and needs keys
 and a background job.
 

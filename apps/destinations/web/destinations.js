@@ -36,7 +36,7 @@ function renderAtlas() {
       <select id="minpop" title="smallest city to show">${S.opt.pop_steps.map(v => `<option value="${v}" ${S.minPop === v ? 'selected' : ''}>≥ ${pop(v)} people</option>`).join('')}</select>
       <select id="sort">${[['fit', 'by fit'], ['cost', 'by cost'], ['distance', 'by distance'], ['population', 'by population'], ['tier', 'by tier'], ['name', 'by name']].map(([v, l]) => `<option value="${v}" ${S.sort === v ? 'selected' : ''}>${l}</option>`).join('')}</select></div>
       <div class="atlas"><div id="map"></div><div class="list" id="list"></div></div>
-      <div class="help">Every filter thins the map too. Fit is the domain scores weighted for the goal on the left (the weights are yours to change in Settings → Logic); hand-set scores are marked, index-derived ones name their index in the detail. World cities are from <a href="https://www.geonames.org/" target="_blank">GeoNames</a> (CC BY 4.0); they have no scores unless they are also business cities, and the population filter keeps the map readable.</div>`;
+      <div class="help">Every filter thins the map too. Fit is the domain scores weighted for the goal chosen above (the weights are yours to change in Settings → Logic); hand-set scores are marked, index-derived ones name their index in the detail. World cities are from <a href="https://www.geonames.org/" target="_blank">GeoNames</a> (CC BY 4.0); they have no scores unless they are also business cities, and the population filter keeps the map readable.</div>`;
     p.dataset.built = '1';
     let t; $('#q').oninput = e => { clearTimeout(t); t = setTimeout(async () => { S.q = e.target.value; await load(); renderAtlas(); }, 200); };
     $('#tier').onchange = async e => { S.tier = e.target.value; await load(); renderAtlas(); };
@@ -54,9 +54,9 @@ function renderAtlas() {
 }
 function initMap() {
   if (!window.maplibregl) { $('#map').innerHTML = '<div class="small" style="padding:12px">The map library did not load (needs internet for tiles and the library). The list still works.</div>'; return; }
-  S.map = new maplibregl.Map({ container: 'map', style: 'https://tiles.openfreemap.org/styles/dark', center: [S.opt.home.lon, S.opt.home.lat], zoom: 2.2, attributionControl: { compact: false, customAttribution: 'World cities © <a href="https://www.geonames.org/" target="_blank">GeoNames</a> (CC BY 4.0)' } });
+  S.map = new maplibregl.Map({ container: 'map', style: 'https://tiles.openfreemap.org/styles/positron', center: [S.opt.home.lon, S.opt.home.lat], zoom: 2.2, attributionControl: { compact: false, customAttribution: 'World cities © <a href="https://www.geonames.org/" target="_blank">GeoNames</a> (CC BY 4.0)' } });
   S.map.addControl(new maplibregl.NavigationControl({ showCompass: false }), 'top-right');
-  new maplibregl.Marker({ color: '#ecebe6' }).setLngLat([S.opt.home.lon, S.opt.home.lat]).setPopup(new maplibregl.Popup().setText('Home: ' + S.opt.home.name)).addTo(S.map);
+  new maplibregl.Marker({ color: '#17242B' }).setLngLat([S.opt.home.lon, S.opt.home.lat]).setPopup(new maplibregl.Popup().setText('Home: ' + S.opt.home.name)).addTo(S.map);
 }
 function drawMarkers() {
   if (!S.map) return;
@@ -64,7 +64,7 @@ function drawMarkers() {
   const pts = S.places.filter(x => x.lat != null && x.lon != null);
   pts.forEach(x => {
     const scored = x.fit != null, size = scored ? 8 + x.fit / 12 : x.kind === 'world_city' ? 4 + Math.min(6, Math.log10(Math.max(1, x.population || 1)) - 3) : 7;
-    const el = document.createElement('div'); el.style.cssText = `width:${size}px;height:${size}px;border-radius:50%;background:${x.status ? '#7fbf7f' : scored ? '#D9A93C' : x.kind === 'leisure' ? '#c47ab0' : '#9a9c9f'};border:1px solid #0d0e0f;cursor:pointer;opacity:${scored ? .95 : .7}`;
+    const el = document.createElement('div'); el.style.cssText = `width:${size}px;height:${size}px;border-radius:50%;background:${x.status ? '#2E8B57' : scored ? '#E4643B' : x.kind === 'leisure' ? '#17788A' : '#8A959A'};border:1.5px solid #fff;box-shadow:0 1px 3px rgba(23,36,43,.35);cursor:pointer;opacity:${scored ? .95 : .7}`;
     el.title = x.name; el.onclick = () => openPlace(x.id);
     S.markers.push(new maplibregl.Marker({ element: el }).setLngLat([x.lon, x.lat]).addTo(S.map));
   });

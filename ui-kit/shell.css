@@ -1,85 +1,91 @@
-/* The shared shell: dark ground + gold accent (the workspace's Industry look),
-   a light theme behind data-theme="light", the app bar, and page basics.
-   Every page loads tokens.css then this file. */
-:root{--ink:#161719;--ink-2:#0d0e0f;--ink-3:#1f2124;--paper:#ecebe6;--paper-2:#d6d4cc;--mut:#9a9c9f;--mut-2:#6b6d70;
- --gold:#D9A93C;--gold-2:#B6821F;--line:rgba(255,255,255,.12);--line-2:rgba(255,255,255,.25);
- --ok:#7fbf7f;--warn:#e0a848;--bad:#e06c6c}
-:root[data-theme="light"]{--ink:#f2f2f3;--ink-2:#e4e4e6;--ink-3:#ffffff;--paper:#1d1f20;--paper-2:#424244;--mut:#5d5d60;--mut-2:#7a7a7d;
- --gold:#8a6414;--gold-2:#B6821F;--line:rgba(0,0,0,.12);--line-2:rgba(0,0,0,.25)}
-*{box-sizing:border-box}
-html,body{margin:0;min-height:100%;background:var(--ink);color:var(--paper);font-family:var(--font-body);font-size:15px;line-height:1.45}
-a{color:var(--gold)}a:hover{color:var(--paper)}
-h1,h2,h3{font-family:var(--font-heading);font-weight:600;margin:0}
-.band{background:var(--ink-2);color:var(--paper);padding:0 24px}
-.appbar{display:flex;align-items:center;justify-content:space-between;gap:16px;padding:14px 0;border-bottom:1px solid var(--line)}
-.appbar-brand{font-family:var(--font-heading);font-weight:600;font-size:18px;white-space:nowrap}
-.appbar-eyebrow{font-family:var(--font-body);font-weight:500;font-size:11px;letter-spacing:.14em;text-transform:uppercase;color:var(--gold);margin-right:10px}
-.appbar-right{display:flex;align-items:center;gap:8px;flex-wrap:wrap;justify-content:flex-end;font-size:13px}
-.appbar-right a{text-decoration:none;color:var(--paper-2);border:1px solid var(--line-2);padding:4px 10px}
-.appbar-right a:hover{border-color:var(--paper)}
-.pill{font-size:11.5px;color:var(--mut);font-family:ui-monospace,Menlo,monospace;white-space:nowrap}
-.pill b{color:var(--paper)}
+/* The shell: a sticky white header with pill navigation, horizontal rails in
+   place of a sidebar, the detail sheet, the tour. Every page loads tokens.css
+   then this file, then app.css. */
+html,body{min-height:100%}
+h1,h2,h3{font-family:var(--font-heading)}
+
+/* ---- header */
+.band{position:sticky;top:0;z-index:50;background:color-mix(in srgb,var(--ink-3) 92%,transparent);backdrop-filter:saturate(1.4) blur(10px);-webkit-backdrop-filter:saturate(1.4) blur(10px);border-bottom:1px solid var(--line);padding:0 20px}
+.appbar{max-width:1120px;margin:0 auto;display:flex;align-items:center;justify-content:space-between;gap:14px;min-height:var(--header-h)}
+.appbar-brand{display:flex;align-items:center;gap:10px;font-family:var(--font-heading);font-weight:600;font-size:19px;white-space:nowrap;color:var(--paper)}
+.appbar-brand::before{content:"";width:28px;height:28px;border-radius:50%;flex:none;background:
+  radial-gradient(circle at 50% 50%,var(--ink-3) 0 3px,transparent 3.5px),
+  conic-gradient(from 0deg,var(--gold) 0 25%,var(--sea) 25% 50%,var(--gold) 50% 75%,var(--sea) 75% 100%);
+  box-shadow:inset 0 0 0 3px var(--ink-3),0 0 0 1.5px var(--paper)}
+.appbar-eyebrow{font-family:var(--font-body);font-weight:700;font-size:11px;letter-spacing:.16em;text-transform:uppercase;color:var(--mut);margin-right:6px}
+.appbar-right{display:flex;align-items:center;gap:6px;flex-wrap:wrap;justify-content:flex-end;font-size:13px}
+.appbar-right a,.tour-btn{text-decoration:none;color:var(--paper-2);border:1px solid var(--line);background:var(--ink-3);padding:6px 12px;border-radius:var(--radius-pill);font-size:13px;font-weight:500;font-family:var(--font-body);cursor:pointer;line-height:1.2}
+.appbar-right a:hover,.tour-btn:hover{border-color:var(--paper);color:var(--paper)}
+.pill{font-size:12px;color:var(--mut);white-space:nowrap;padding:6px 12px;border-radius:var(--radius-pill);background:var(--ink-2)}
+.pill b{color:var(--paper);font-weight:600}
 .pill.ok b{color:var(--ok)}.pill.bad b{color:var(--bad)}
-.wrap{max-width:1100px;margin:0 auto;padding:24px 16px 80px}
-.sbtn{font-family:var(--font-body);font-size:13.5px;padding:7px 14px;border:1px solid var(--line-2);background:transparent;color:var(--paper);cursor:pointer;border-radius:2px}
-.sbtn:hover{border-color:var(--paper)}
-.sbtn.gold{background:var(--gold);border-color:var(--gold);color:#0B0B0C;font-weight:500}
-.sbtn.gold:hover{background:var(--gold-2)}
-.sbtn:disabled{opacity:.5;cursor:default}
+.wrap{max-width:1120px;margin:0 auto;padding:22px 20px 96px}
+
+/* ---- buttons */
+.sbtn{font-family:var(--font-body);font-size:13.5px;font-weight:600;padding:9px 16px;border:1px solid var(--line-2);background:var(--ink-3);color:var(--paper);cursor:pointer;border-radius:var(--radius-pill);line-height:1.2;text-decoration:none;display:inline-flex;align-items:center;gap:6px;transition:transform .08s ease,box-shadow .12s ease}
+.sbtn:hover{border-color:var(--paper);box-shadow:var(--shadow-sm)}
+.sbtn:active{transform:translateY(1px)}
+.sbtn.gold{background:var(--gold);border-color:var(--gold);color:#fff}
+.sbtn.gold:hover{background:var(--gold-2);border-color:var(--gold-2)}
+.sbtn:disabled{opacity:.45;cursor:default;box-shadow:none}
 .sbtn.danger{border-color:var(--bad);color:var(--bad)}
+.sbtn.mini{font-size:12px;padding:5px 11px}
 .muted{color:var(--mut)}
 .mono{font-family:ui-monospace,Menlo,monospace;font-size:12.5px}
 
-/* ---- Sidebar layout: the pattern for every app page from 2026-09-27 on.
-   Left: the page's sections, its switches (Personal / Business) and its
-   time window. Right: the content, kept to a few figures with detail in a
-   popup. On a phone the sidebar becomes a scrolling strip at the top. */
-.side-layout{display:grid;grid-template-columns:220px 1fr;gap:26px;align-items:start}
-.sidebar{position:sticky;top:14px;display:flex;flex-direction:column;gap:18px}
-.sidebar h4{font-size:11px;letter-spacing:.12em;text-transform:uppercase;color:var(--mut);font-family:var(--font-body);font-weight:500;margin:0 0 6px}
-.sidebar .sidenav a,.sidebar .opts button{display:block;width:100%;text-align:left;font:inherit;font-size:14px;color:var(--paper-2);text-decoration:none;background:transparent;border:0;border-left:2px solid transparent;padding:6px 10px;cursor:pointer}
-.sidebar .sidenav a:hover,.sidebar .opts button:hover{color:var(--paper)}
-.sidebar .sidenav a.on,.sidebar .opts button.on{color:var(--paper);border-left-color:var(--gold)}
-.sidebar .opts button.sub{padding-left:22px;font-size:13px}
-.sidebar .opts button .n{color:var(--mut);float:right;font-size:12px}
-.side-layout > .content,.side-layout > .sidebar{min-width:0}
-.detail-dialog{background:var(--ink-3);color:var(--paper);border:1px solid var(--line-2);padding:20px 22px;max-width:680px;width:94vw;max-height:88vh;overflow:auto}
-.detail-dialog::backdrop{background:rgba(0,0,0,.6)}
-.detail-dialog h2{font-size:22px;margin-bottom:10px}
-.detail-dialog .close{float:right;font:inherit;background:transparent;border:1px solid var(--line-2);color:var(--paper);padding:3px 10px;cursor:pointer}
+/* ---- rails: the page's own navigation, above the content on every width.
+   The markup keeps the old names (.side-layout / .sidebar / .sidenav / .opts)
+   so every page renders; the look is a set of horizontal pill rails. */
+.side-layout{display:block}
+.sidebar{position:sticky;top:var(--header-h);z-index:40;display:flex;flex-direction:column;gap:4px;margin:-22px -20px 18px;padding:10px 20px 8px;background:color-mix(in srgb,var(--ink) 94%,transparent);backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px);border-bottom:1px solid var(--line)}
+.sidebar > div{display:flex;align-items:center;gap:8px;overflow-x:auto;scrollbar-width:none;min-width:0;padding:2px 0}
+.sidebar > div::-webkit-scrollbar{display:none}
+.sidebar h4{font-size:11px;letter-spacing:.14em;text-transform:uppercase;color:var(--mut);font-family:var(--font-body);font-weight:700;margin:0 4px 0 0;white-space:nowrap}
+.sidebar .sidenav,.sidebar .opts{display:flex;gap:4px;flex:1;min-width:0}
+.sidebar .sidenav a,.sidebar .opts button{font:inherit;font-size:13.5px;font-weight:500;color:var(--paper-2);text-decoration:none;background:transparent;border:1px solid transparent;padding:6px 12px;border-radius:var(--radius-pill);cursor:pointer;white-space:nowrap;line-height:1.2}
+.sidebar .sidenav a:hover,.sidebar .opts button:hover{background:var(--ink-3);border-color:var(--line)}
+.sidebar .sidenav a.on{background:var(--night);color:#fff;border-color:var(--night)}
+.sidebar .opts button.on{background:var(--ink-3);border-color:var(--gold);color:var(--paper);box-shadow:var(--shadow-sm)}
+.sidebar .opts button.sub{font-size:13px;color:var(--mut)}
+.sidebar .opts button .n{color:var(--mut);margin-left:6px;font-size:12px;font-weight:400}
+.sidebar .sbtn{white-space:nowrap}
+.side-layout > .content{min-width:0}
+
+/* ---- the detail sheet: centred on a desk, a bottom sheet on a phone */
+.detail-dialog{background:var(--ink-3);color:var(--paper);border:0;border-radius:var(--radius);padding:22px 24px;max-width:700px;width:min(94vw,700px);max-height:88vh;overflow:auto;box-shadow:var(--shadow-lg)}
+.detail-dialog::backdrop{background:rgba(23,36,43,.45);backdrop-filter:blur(2px)}
+.detail-dialog h2{font-size:24px;margin-bottom:10px;padding-right:80px}
+.detail-dialog .close{float:right;font:inherit;font-size:13px;font-weight:600;background:var(--ink-2);border:0;color:var(--paper);padding:6px 12px;border-radius:var(--radius-pill);cursor:pointer}
 @media (max-width:760px){
- .pill{white-space:normal;text-align:right;max-width:200px}
- .side-layout{grid-template-columns:1fr;gap:12px}
- .sidebar{position:static;flex-direction:column;gap:4px;padding-bottom:8px;border-bottom:1px solid var(--line)}
- .sidebar > div{display:flex;align-items:center;gap:6px;overflow-x:auto;min-width:0}
- .sidebar h4{margin:0 6px 0 0;white-space:nowrap}
- .sidebar .sidenav,.sidebar .opts{display:flex;gap:0;flex:1;min-width:0}
- .sidebar .sidenav a,.sidebar .opts button{width:auto;border-left:0;border-bottom:2px solid transparent;white-space:nowrap;padding:5px 8px;font-size:13.5px}
- .sidebar .sidenav a.on,.sidebar .opts button.on{border-bottom-color:var(--gold)}
- .sidebar .opts button.sub{padding-left:8px;font-size:12.5px;color:var(--mut)}
- .sidebar .opts button .n{float:none;display:block;font-size:10.5px;line-height:1.1}
+ .band{padding:0 14px}
+ .appbar{min-height:52px;gap:4px 8px;flex-wrap:wrap;padding:8px 0}
+ .appbar-brand{font-size:17px}
+ .appbar-right{gap:6px;flex-wrap:nowrap;overflow-x:auto;scrollbar-width:none;width:100%;justify-content:flex-start;padding-bottom:2px}
+ .appbar-right::-webkit-scrollbar{display:none}
+ .appbar-right a,.tour-btn{white-space:nowrap;flex:none}
+ .appbar-right a,.tour-btn{padding:5px 9px;font-size:12px}
+ .pill{display:none}
+ .wrap{padding:16px 14px 110px}
+ .sidebar{margin:-16px -14px 14px;padding:8px 14px 6px;top:92px}
+ .detail-dialog{position:fixed;margin:0;left:0;right:0;bottom:0;top:auto;width:100vw;max-width:100vw;max-height:88vh;border-radius:var(--radius) var(--radius) 0 0;padding:18px 16px 28px}
 }
 
-/* ---- Guided tour and the Go-to menu (ui-kit/tour.js) */
-.tour-btn{font-family:var(--font-body);font-size:13px;padding:4px 10px;border:1px solid var(--line-2);background:transparent;color:var(--paper-2);cursor:pointer;border-radius:2px;text-decoration:none;display:inline-block}
-.tour-btn:hover{border-color:var(--paper);color:var(--paper)}
-.tour-btn.gold{background:var(--gold);border-color:var(--gold);color:#0B0B0C;font-weight:500}
-#tour-menu{position:fixed;inset:0;background:rgba(0,0,0,.55);z-index:900;display:flex;align-items:flex-start;justify-content:flex-end}
-.tour-menu-in{background:var(--ink-3);color:var(--paper);border-left:1px solid var(--line-2);width:min(360px,92vw);height:100%;overflow:auto;padding:16px 18px;box-sizing:border-box}
-.tour-menu-head{display:flex;justify-content:space-between;align-items:center;margin-bottom:10px;font-size:18px;font-family:var(--font-heading)}
-.tour-x{font:inherit;font-size:20px;background:transparent;border:0;color:var(--paper);cursor:pointer}
-.tour-menu-in a:not(.tour-btn){display:block;padding:10px 10px;border:1px solid var(--line);margin-bottom:6px;text-decoration:none;color:var(--paper)}
-.tour-menu-in a:not(.tour-btn):hover,.tour-menu-in a.on{border-color:var(--gold)}
+/* ---- guided tour and the Go-to menu (ui-kit/tour.js) */
+.tour-btn.gold{background:var(--gold);border-color:var(--gold);color:#fff}
+#tour-menu{position:fixed;inset:0;background:rgba(23,36,43,.45);z-index:900;display:flex;align-items:flex-start;justify-content:flex-end}
+.tour-menu-in{background:var(--ink-3);color:var(--paper);width:min(360px,92vw);height:100%;overflow:auto;padding:16px 18px;box-shadow:var(--shadow-lg)}
+.tour-menu-head{display:flex;justify-content:space-between;align-items:center;margin-bottom:10px;font-size:19px;font-family:var(--font-heading)}
+.tour-x{font:inherit;font-size:22px;background:transparent;border:0;color:var(--paper);cursor:pointer}
+.tour-menu-in a:not(.tour-btn){display:block;padding:10px 12px;border:1px solid var(--line);border-radius:var(--radius-sm);margin-bottom:6px;text-decoration:none;color:var(--paper)}
+.tour-menu-in a:not(.tour-btn):hover,.tour-menu-in a.on{border-color:var(--gold);background:var(--gold-soft)}
 .tour-menu-in a b{display:block;font-family:var(--font-heading);font-size:17px}
 .tour-menu-in a span{font-size:12.5px;color:var(--mut)}
 .tour-menu-foot{display:flex;gap:8px;margin-top:14px;flex-wrap:wrap}
 #tour-dim,#tour-spot,#tour-card{display:none}
-body.touring #tour-dim{display:block;position:fixed;inset:0;background:rgba(0,0,0,.45);z-index:950}
-body.touring #tour-spot{display:block;position:absolute;z-index:951;border:2px solid var(--gold);border-radius:4px;box-shadow:0 0 0 9999px rgba(0,0,0,.45);pointer-events:none}
-body.touring #tour-dim{background:transparent}
-body.touring #tour-card{display:block;position:absolute;z-index:952;background:var(--ink-3);color:var(--paper);border:1px solid var(--gold);padding:14px 16px;box-sizing:border-box;box-shadow:0 12px 32px rgba(0,0,0,.4)}
+body.touring #tour-dim{display:block;position:fixed;inset:0;background:transparent;z-index:950}
+body.touring #tour-spot{display:block;position:absolute;z-index:951;border:2px solid var(--gold);border-radius:10px;box-shadow:0 0 0 9999px rgba(23,36,43,.45);pointer-events:none}
+body.touring #tour-card{display:block;position:absolute;z-index:952;background:var(--ink-3);color:var(--paper);border:0;border-radius:var(--radius);padding:16px 18px;box-shadow:var(--shadow-lg)}
 #tour-card h3{font-size:20px;margin:2px 0 6px}
 #tour-card p{margin:0 0 12px;font-size:14px;line-height:1.45;color:var(--paper-2)}
-#tour-card .tour-step{font-size:11px;letter-spacing:.12em;text-transform:uppercase;color:var(--gold)}
+#tour-card .tour-step{font-size:11px;letter-spacing:.14em;text-transform:uppercase;color:var(--gold);font-weight:700}
 #tour-card .tour-actions{display:flex;gap:6px;align-items:center}
-@media (max-width:760px){.tour-btn{padding:3px 8px;font-size:12px}}

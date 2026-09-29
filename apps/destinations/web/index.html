@@ -5,24 +5,24 @@
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Destinations · Destination Helper</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
-<link href="https://fonts.googleapis.com/css2?family=Barlow:wght@400;500;700&family=Barlow+Condensed:wght@400;600&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,500;9..144,600;9..144,700&family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="https://unpkg.com/maplibre-gl@5.0.0/dist/maplibre-gl.css">
 <link rel="stylesheet" href="/ui-kit/tokens.css">
 <link rel="stylesheet" href="/ui-kit/shell.css">
 <link rel="stylesheet" href="/ui-kit/app.css">
 <style>
 .atlas{display:grid;grid-template-columns:1fr 380px;gap:14px;align-items:start}
-#map{height:520px;border:1px solid var(--line);background:#0d0e0f}
-.list{border:1px solid var(--line);background:var(--ink-3);max-height:520px;overflow:auto}
+#map{height:520px;border:1px solid var(--line);border-radius:var(--radius);overflow:hidden;background:#e9eef0}
+.list{border:1px solid var(--line);background:var(--ink-3);max-height:520px;overflow:auto;border-radius:var(--radius)}
 .item{display:grid;grid-template-columns:1fr auto;gap:8px;padding:8px 12px;border-top:1px solid var(--line);cursor:pointer;align-items:center}
-.item:first-child{border-top:0}.item:hover,.item.on{background:rgba(217,169,60,.08)}
+.item:first-child{border-top:0}.item:hover,.item.on{background:var(--gold-soft)}
 .item .nm{font-weight:500}.item .sub{font-size:12px;color:var(--mut)}
 .item .fit{font-family:var(--font-heading);font-size:20px;color:var(--gold);text-align:right}
 .item .fit small{display:block;font-family:var(--font-body);font-size:10.5px;color:var(--mut)}
-.score{height:8px;background:var(--ink);border:1px solid var(--line);position:relative}
-.score i{position:absolute;left:0;top:0;bottom:0;background:var(--gold)}
+.score{height:8px;background:var(--ink-2);border-radius:99px;overflow:hidden;position:relative}
+.score i{position:absolute;left:0;top:0;bottom:0;background:var(--sea);border-radius:99px}
 .status-btns button.on{border-color:var(--gold);color:var(--gold)}
-.maplibregl-popup-content{background:var(--ink-3);color:var(--paper);font-family:var(--font-body);border:1px solid var(--line-2)}
+.maplibregl-popup-content{background:var(--ink-3);color:var(--paper);font-family:var(--font-body);border:0;border-radius:12px;box-shadow:var(--shadow-md)}
 .maplibregl-popup-tip{border-top-color:var(--ink-3)}
 @media (max-width:900px){.atlas{grid-template-columns:1fr}#map{height:360px}.list{max-height:none}}
 </style>

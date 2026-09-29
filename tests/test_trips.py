@@ -53,8 +53,10 @@ def test_a_trip_is_a_record_and_setup_asks_first(client):
     assert client.get("/v1/search?q=saturday").json()[0]["id"] == t["entity_id"]
     t2 = new_trip(client)
     assert t2["time_zone"] == "Asia/Bangkok" and t2["local_currency"] == "THB" and t2["setup_missing"] == []
-    u = act(client, "trips.update", id=t2["id"], expected_version=1, name="Thailand guys' trip", headcount=3)
-    assert u["version"] == 2 and u["headcount"] == 3 and client.get(f"/v1/entities/{t2['entity_id']}").json()["name"] == "Thailand guys' trip"
+    assert t2["handling"] == "check_my_plan" and t2["may_contact"] == 0
+    u = act(client, "trips.update", id=t2["id"], expected_version=1, name="Thailand guys' trip", headcount=3, handling="plan_for_me", may_contact=True)
+    assert u["version"] == 2 and u["headcount"] == 3 and u["handling"] == "plan_for_me" and u["may_contact"] == 1
+    assert client.post("/v1/actions/trips.update", json={"id": t2["id"], "handling": "do_everything"}).status_code == 400 and client.get(f"/v1/entities/{t2['entity_id']}").json()["name"] == "Thailand guys' trip"
     assert client.post("/v1/actions/trips.update", json={"id": t2["id"], "expected_version": 1, "name": "x"}).status_code == 409
     assert client.post("/v1/actions/trips.create", json={"name": "bad", "start_date": "2026-11-28", "end_date": "2026-11-13"}).status_code == 400
     assert client.post("/v1/actions/trips.create", json={"name": "bad", "region_pack": "mars"}).status_code == 400
@@ -79,6 +81,8 @@ def test_the_checker_catches_the_thailand_taxi(client):
                start_at="2026-11-17T12:00", status="booked", price_cents=120000, currency="THB")
     r = act(client, "trips.run_checks", trip_id=tid)
     by = {f["rule"]: f for f in r["findings"]}
+    assert client.get(f"/v1/trips/{tid}").json()["health"] == 100 - 25 - 8 * r["counts"]["warn"] - 2 * r["counts"]["info"]
+    assert client.get("/v1/trips").json()[0]["health"] < 100
     assert r["counts"]["blocker"] == 1 and "12:00 PM" in by["pickup-before-arrival"]["message"] and "6:45 PM" in by["pickup-before-arrival"]["message"]
     assert "7:15 PM" in by["pickup-before-arrival"]["fix"] and by["pickup-before-arrival"]["item_id"] == taxi["id"]
     assert by["price-basis"]["item_id"] == taxi["id"] and by["night-without-stay"]["message"].startswith("No place to sleep from Nov 13 to Nov 27")

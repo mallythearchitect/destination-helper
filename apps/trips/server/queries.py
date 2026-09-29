@@ -245,6 +245,11 @@ def leave_by(it: dict, tz: str | None, rules: dict, kinds: dict) -> dict | None:
             "words": f"Be there by {fmt_t(there)}" + (f"; leave by {fmt_t(leave)}" if it.get("lead_minutes") else " (add travel time to this item for a leave-by)")}
 
 
+def health(counts: dict, weights: dict) -> int:
+    """One number for how solid a plan is: 100 minus the weights per open finding, never under 0."""
+    return max(0, 100 - sum(int(weights.get(k, 0)) * int(counts.get(k, 0)) for k in ("blocker", "warn", "info")))
+
+
 def plan(store: Store, tid: str) -> dict:
     with store.read():
         con = store.con
@@ -280,8 +285,9 @@ def plan(store: Store, tid: str) -> dict:
     sev = {"blocker": 0, "warn": 0, "info": 0}
     for f in fds:
         sev[f["severity"]] = sev.get(f["severity"], 0) + 1
+    words = logic(store, "logic.trips.defaults")
     return {"trip": trip, "time_zone": tz, "items": its, "days": days, "unscheduled": unscheduled, "tasks": tks, "expenses": exps, "confirmations": cfs,
-            "findings": fds, "finding_counts": sev, "workflow_runs": runs, "costs": costs(store, tid),
+            "findings": fds, "finding_counts": sev, "health": health(sev, words.get("health_weights", {})), "workflow_runs": runs, "costs": costs(store, tid),
             "region": {k: region[k] for k in ("id", "name", "currency", "time_zone", "channels", "sites", "intro")} if region else None,
             "rules": rules, "today": date.today().isoformat()}
 
@@ -301,6 +307,9 @@ def trips(store: Store) -> list[dict]:
                               (t["id"], datetime.now().strftime("%Y-%m-%dT%H:%M"))).fetchone()
             t["next_item"] = dict(nxt) if nxt else None
             out.append(t)
+    w = logic(store, "logic.trips.defaults").get("health_weights", {})
+    for t in out:
+        t["health"] = health(t["findings"], w)
     return out
 
 

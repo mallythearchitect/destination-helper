@@ -5,24 +5,33 @@
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Destination Helper</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
-<link href="https://fonts.googleapis.com/css2?family=Barlow:wght@400;500;700&family=Barlow+Condensed:wght@400;600&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,500;9..144,600;9..144,700&family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="/ui-kit/tokens.css">
 <link rel="stylesheet" href="/ui-kit/shell.css">
 <link rel="stylesheet" href="/ui-kit/app.css">
 <style>
 .grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(210px,1fr));gap:10px;margin-top:8px}
-.app{border:1px solid var(--line);background:var(--ink-3);padding:12px 14px;text-decoration:none;color:inherit;display:block}
+.app{border:1px solid var(--line);background:var(--ink-3);padding:14px 16px;text-decoration:none;color:inherit;display:block;border-radius:var(--radius);box-shadow:var(--shadow-sm)}
 .app h2{font-size:19px;color:var(--paper)}
 .app p{margin:4px 0 0;color:var(--mut);font-size:12.5px}
-.app .st{display:inline-block;margin-top:8px;font-size:10.5px;letter-spacing:.12em;text-transform:uppercase;color:var(--gold)}
-a.app:hover{border-color:var(--gold)}
+.app .st{display:inline-block;margin-top:8px;font-size:10.5px;letter-spacing:.12em;text-transform:uppercase;color:var(--sea);font-weight:700}
+a.app:hover{border-color:var(--gold);box-shadow:var(--shadow-md)}
 .spark{width:100%;height:44px;display:block}
 .run{display:grid;grid-template-columns:1fr auto;gap:8px;padding:6px 0;border-top:1px solid var(--line);font-size:13px}
 .run:first-child{border-top:0}
 .lead{color:var(--paper-2);max-width:720px;margin:0 0 14px}
+.next-trip{display:grid;grid-template-columns:1fr auto;gap:16px;align-items:center;background:var(--night);color:#fff;border-radius:var(--radius);padding:22px 24px;margin-bottom:14px;box-shadow:var(--shadow-md);text-decoration:none;position:relative;overflow:hidden}
+.next-trip::before{content:"";position:absolute;right:-60px;top:-80px;width:260px;height:260px;border-radius:50%;background:radial-gradient(circle,rgba(228,100,59,.45),transparent 65%);pointer-events:none}
+.next-trip .lab{font-size:11px;letter-spacing:.14em;text-transform:uppercase;color:rgba(255,255,255,.7);font-weight:700}
+.next-trip h2{font-size:30px;color:#fff;margin:4px 0 2px}
+.next-trip .meta{font-size:13.5px;color:rgba(255,255,255,.75)}
+.next-trip .big{font-family:var(--font-heading);font-size:44px;line-height:1;text-align:right}
+.next-trip .big small{display:block;font-family:var(--font-body);font-size:11px;letter-spacing:.14em;text-transform:uppercase;color:rgba(255,255,255,.7);margin-top:4px}
 .trip{display:grid;grid-template-columns:1fr auto;gap:10px;padding:10px 0;border-top:1px solid var(--line);align-items:center;text-decoration:none;color:inherit}
 .trip:first-child{border-top:0}.trip:hover b{color:var(--gold)}
 .trip .sub{font-size:12.5px;color:var(--mut)}
+.hp{display:inline-block;width:10px;height:10px;border-radius:50%;margin-right:6px;vertical-align:middle}
+@media (max-width:760px){.next-trip{grid-template-columns:1fr;padding:18px 16px}.next-trip .big{text-align:left;font-size:36px}}
 </style>
 </head>
 <body>
