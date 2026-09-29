@@ -295,22 +295,76 @@ function itemLine(it) {
   if (f) parts.push(`<span class="${f.severity === 'blocker' ? 'bad' : 'muted'}">${esc(f.message.replace(it.title + ' ', '').replace(it.title + ': ', ''))}</span>${f.fix_action && f.fix_action.label ? ` · <span class="fixlink" data-fix="${f.id}">${esc(f.fix_action.label)}</span>` : ''}`);
   return parts.join(' · ');
 }
+function priceBlock(it) {
+  if (it.price_cents === 0) return `<span class="small">free</span>`;
+  if (it.group_cents == null) return it.status === 'cancelled' ? '' : `<span class="fixlink addprice" data-price="${it.id}">Add price</span>`;
+  const main = it.basis === 'per_person' && it.per_person_cents != null ? cur(it.per_person_cents, it.currency) : cur(it.group_cents, it.currency);
+  return `${esc(main)}<small>${it.basis === 'per_person' ? 'each' : it.headcount_used > 1 ? `for ${it.headcount_used === 2 ? 'both' : 'all ' + it.headcount_used}` : 'for you'} · ${paysWord(it.paid_by)}${it.home_cents != null && it.currency !== home() ? ` · ≈ ${money0(it.home_cents)}` : ''}</small>`;
+}
 function itemRow(it) {
   const flag = flagOf(it), stat = flag === 'blocker' ? '<span class="st fix">Fix now</span>' : statusTag(it.status);
   return `<div class="it flag-${flag} ${it.is_stay ? 'is-stay' : ''}" data-item="${it.id}"><div class="glyph">${glyph(it.kind, it.tag)}</div>
     <div><div class="ti">${esc(it.title)}${stat}${it.tag === 'work' ? '<span class="st work">Work</span>' : ''}</div><div class="su">${itemLine(it)}</div></div>
-    <div class="pr">${it.group_cents != null ? esc(it.basis === 'per_person' && it.per_person_cents != null ? cur(it.per_person_cents, it.currency) : cur(it.group_cents, it.currency)) : '<span class="small">no cost</span>'}<small>${it.group_cents != null ? `${it.basis === 'per_person' ? 'each' : it.headcount_used > 1 ? `for ${it.headcount_used === 2 ? 'both' : 'all ' + it.headcount_used}` : 'for you'} · ${paysWord(it.paid_by)}${it.home_cents != null && it.currency !== home() ? ` · ≈ ${money0(it.home_cents)}` : ''}` : ''}</small></div></div>`;
+    <div class="pr">${priceBlock(it)}</div></div>`;
+}
+function spans(p) {
+  /* Consecutive days under the same stay (or none) become one chapter. The last day, with no night, is its own. */
+  const out = []; let cur = null;
+  for (const d of p.days) {
+    const key = d.night ? d.night.item_id : (d.date >= (p.trip.end_date || '') ? 'last' : 'none');
+    if (!cur || cur.key !== key) { cur = { key, night: d.night, days: [] }; out.push(cur); }
+    cur.days.push(d);
+  }
+  return out;
 }
 function chapters(p) {
-  const out = []; let cur = null;
-  for (const d of p.days) { const n = d.night ? d.night.title : null; if (n !== (cur && cur.title)) { cur = { title: n, from: d.date, to: d.date, n: 0 }; out.push(cur); } cur.to = d.date; cur.n++; }
-  return out.map(c => `<a href="#d-${c.from}" data-jump="d-${c.from}">${esc(c.title ? c.title.split(/[,(]/)[0].trim() : 'no stay')} · ${esc(fmtD(c.from).replace(/^(\w+) /, '$1 '))}${c.n > 1 ? '–' + esc(fmtD(c.to).split(' ')[1]) : ''}</a>`).join('');
+  return spans(p).map(c => `<a href="#d-${c.days[0].date}" data-jump="d-${c.days[0].date}">${esc(c.key === 'last' ? 'Last day' : c.night ? c.night.title.split(/[,(]/)[0].trim() : 'No stay yet')} · ${esc(fmtD(c.days[0].date))}${c.days.length > 1 ? '–' + esc(fmtD(c.days[c.days.length - 1].date).split(' ')[1]) : ''}</a>`).join('');
 }
-function dayKind(d, byId) { const its = d.items.map(id => byId[id]); if (its.some(i => i.is_leg)) return 'travel'; if (its.some(i => i.tag === 'work')) return 'work'; if (!its.length) return 'free'; return its.length === 1 ? its[0].kind : 'busy'; }
+function dayKind(items) { if (items.some(i => i.is_leg)) return 'travel'; if (items.some(i => i.tag === 'work')) return 'work'; if (!items.length) return 'free'; return items.length === 1 ? items[0].kind : 'busy'; }
+function contRow(it) {
+  return `<div class="it cont flag-${flagOf(it)}" data-item="${it.id}"><div class="glyph">${glyph(it.kind, it.tag)}</div><div><div class="ti">${esc(it.kind === 'flight' ? 'lands' : 'arrives')}: ${esc(it.title)}</div><div class="su">${it.end_at ? esc(tOf(it.end_at) || dOf(it.end_at)) : ''}${it.to_place ? ' · ' + esc(it.to_place) : ''} · started ${esc(dOf(it.start_at))}</div></div><div class="pr"></div></div>`;
+}
+function dayRows(c, p, byId) {
+  const stayId = c.night ? c.night.item_id : null;
+  const rows = [], dayNo = d => p.days.indexOf(d) + 1;
+  let i = 0;
+  while (i < c.days.length) {
+    const d = c.days[i];
+    const items = d.items.map(id => byId[id]).filter(it => it.id !== stayId);
+    const arriving = p.items.filter(it => !it.is_stay && it.end_day && it.end_day === d.date && it.day && it.day !== d.date && it.status !== 'cancelled');
+    if (!items.length && !arriving.length && d.date !== p.today) {
+      let j = i; while (j + 1 < c.days.length && !c.days[j + 1].items.some(id => id !== stayId) && c.days[j + 1].date !== p.today && !p.items.some(it => !it.is_stay && it.end_day === c.days[j + 1].date && it.day !== c.days[j + 1].date)) j++;
+      const n = j - i + 1, first = c.days[i], last = c.days[j];
+      rows.push(`<div class="day free"><div class="d-lab">${esc(first.label.split(' ')[0])}${n > 1 ? '–' + esc(last.label.split(' ')[0]) : ''}<small>${esc(first.label.slice(4))}${n > 1 ? ' – ' + esc(last.label.slice(4)) : ''} · ${n > 1 ? 'days ' + dayNo(first) + '–' + dayNo(last) : 'day ' + dayNo(first)}</small></div><div class="d-items"><span>${n > 1 ? `${n} free days` : 'Nothing planned yet'}</span><span class="fixlink" data-add="${first.date}">Add something</span></div></div>`);
+      i = j + 1; continue;
+    }
+    rows.push(`<div class="day ${d.date === p.today ? 'today' : ''}"><div class="d-lab">${esc(d.label.split(' ')[0])}<small>${esc(d.label.slice(4))} · day ${dayNo(d)} · ${dayKind(items)}${d.date === p.today ? ' · today' : ''}</small></div><div class="d-items">${arriving.map(contRow).join('')}${items.map(itemRow).join('') || (arriving.length ? '' : `<div class="it empty"><span>Nothing planned yet</span><span class="fixlink" data-add="${d.date}">Add something</span></div>`)}</div></div>`);
+    i++;
+  }
+  return rows.join('');
+}
+function chapterBlock(c, p, byId) {
+  const first = c.days[0], last = c.days[c.days.length - 1], n = c.days.length;
+  const range = `${fmtD(first.date)}${n > 1 ? ' – ' + fmtD(last.date) : ''}`;
+  let head;
+  if (c.key === 'last') head = `<div class="ch-span">Last day · ${esc(range)}</div>`;
+  else if (!c.night) head = `<div class="ch-span">No stay yet · ${esc(range)} · ${n} night${n === 1 ? '' : 's'}</div><div class="ch-head" style="cursor:default"><div></div><div><div class="ch-title">Nowhere to sleep ${n === 1 ? 'on ' + esc(fmtD(first.date)) : 'from ' + esc(fmtD(first.date)) + ' to ' + esc(fmtD(last.date))}</div><div class="ch-meta">Add the stay, or mark the night as covered (a night bus, a friend's place).</div></div><div><button class="sbtn mini gold" data-addstay="${first.date}" data-end="${last.date}">Add a stay</button></div></div>`;
+  else {
+    const it = byId[c.night.item_id];
+    const nights = it.start_at && it.end_at ? Math.round((new Date(it.end_at.slice(0, 10)) - new Date(it.start_at.slice(0, 10))) / 864e5) : n;
+    const meta = [`${nights} night${nights === 1 ? '' : 's'}`, it.start_at && it.start_at.length > 10 ? `check-in ${tOf(it.start_at)}` : '', it.end_at ? `check-out ${dOf(it.end_at)}` : '', it.desk_hours ? `front desk ${esc(it.desk_hours)}` : '', it.confirmation ? `booking code ${esc(it.confirmation)}` : '', it.operator && it.operator !== it.title ? esc(it.operator) : ''].filter(Boolean);
+    const f = it.findings[0];
+    if (f) meta.push(`<span class="${f.severity === 'blocker' ? 'bad' : 'muted'}">${esc(f.message.replace(it.title + ' ', '').replace(it.title + ': ', ''))}</span>${f.fix_action && f.fix_action.label ? ` · <span class="fixlink" data-fix="${f.id}">${esc(f.fix_action.label)}</span>` : ''}`);
+    head = `<div class="ch-span">${esc(range)}</div><div class="ch-head" data-item="${it.id}"><div class="ph" data-photo="${esc((it.from_place || it.title).split(/[,(]/)[0].trim())}"></div>
+      <div><div class="ch-title">${esc(it.title)}${flagOf(it) === 'blocker' ? '<span class="st fix">Fix now</span>' : statusTag(it.status)}</div><div class="ch-meta">${meta.join(' · ')}</div></div>
+      <div class="pr">${priceBlock(it)}</div></div>`;
+  }
+  return `<section class="chapter ${c.key === 'none' ? 'nostay' : ''} ${c.key === 'last' ? 'last' : ''}" id="d-${first.date}">${head}<div class="ch-days">${dayRows(c, p, byId)}</div></section>`;
+}
 function stopBlock(d, p, byId, n) {
   const noStay = !d.night && d.date < (p.trip.end_date || '');
   return `<section class="stop ${d.date === p.today ? 'today' : ''} ${noStay ? 'nostay' : ''}" id="d-${d.date}"><i class="dot"></i>
-    <header class="stop-head"><div class="dayname">${esc(d.label.split(' ')[0])} ${esc(d.label.slice(4))}<small>day ${n} · ${dayKind(d, byId)}${d.date === p.today ? ' · today' : ''}</small></div><div class="night ${noStay ? 'warn' : ''}">${d.night ? 'night: ' + esc(d.night.title.split(/[,(]/)[0].trim()) : (noStay ? 'night: no stay yet' : 'last day')}</div></header>
+    <header class="stop-head"><div class="dayname">${esc(d.label.split(' ')[0])} ${esc(d.label.slice(4))}<small>day ${n} · ${dayKind(d.items.map(id => byId[id]))}${d.date === p.today ? ' · today' : ''}</small></div><div class="night ${noStay ? 'warn' : ''}">${d.night ? 'night: ' + esc(d.night.title.split(/[,(]/)[0].trim()) : (noStay ? 'night: no stay yet' : 'last day')}</div></header>
     ${d.items.map(id => itemRow(byId[id])).join('') || `<div class="it empty"><span>Nothing planned yet</span><span class="fixlink" data-add="${d.date}">Add something</span></div>`}</section>`;
 }
 function findingCard(f, compact) {
@@ -346,11 +400,10 @@ function renderTimeline() {
   const top = p.findings.slice(0, 5);
   $('#p-timeline').innerHTML = `${p.days.length ? `<div class="chapters">${chapters(p)}</div>` : ''}
    <div class="tl"><div>
-    <div class="journey">
-    ${p.days.map((d, i) => stopBlock(d, p, byId, i + 1)).join('')}
-    ${p.unscheduled.length ? `<section class="stop"><i class="dot"></i><header class="stop-head"><div class="dayname">No date yet</div></header>${p.unscheduled.map(id => itemRow(byId[id])).join('')}</section>` : ''}
+    ${spans(p).map(c => chapterBlock(c, p, byId)).join('')}
+    ${p.unscheduled.length ? `<section class="chapter last"><div class="ch-span">No date yet</div>${p.unscheduled.map(id => itemRow(byId[id])).join('')}</section>` : ''}
     ${!p.days.length && !p.unscheduled.length ? '<div class="card"><div>Nothing in the plan yet. <b>Add something</b>: the first flight, the first stay.</div></div>' : ''}
-    </div></div>
+    </div>
     <aside class="aside"><div class="ah"><h3>Checks</h3><span class="small">${p.findings.length ? 'checked just now' : 'all clear'}</span></div>
      <div class="sev">${p.finding_counts.blocker ? `<span class="b">${p.finding_counts.blocker} fix now</span>` : ''}${p.finding_counts.warn ? `<span class="w">${p.finding_counts.warn} worth a look</span>` : ''}${p.finding_counts.info ? `<span>${p.finding_counts.info} tidy up</span>` : ''}${!p.findings.length ? '<span>Nothing wrong that the checks can see</span>' : ''}</div>
      ${top.map(f => findingCard(f, true)).join('')}
@@ -358,8 +411,11 @@ function renderTimeline() {
      ${costCard(p.costs)}</aside></div>
     <div class="help dev-only">Every rule the checker uses is in <a href="/apps/system/web/settings.html#logic">Settings → Logic</a>.</div>`;
   const P = $('#p-timeline');
-  P.querySelectorAll('[data-item]').forEach(el => el.onclick = () => openItem(el.dataset.item));
+  P.querySelectorAll('[data-item]').forEach(el => el.onclick = e => { if (e.target.closest('[data-fix],[data-add],[data-addstay],[data-price]')) return; openItem(el.dataset.item); });
+  P.querySelectorAll('[data-price]').forEach(a => a.onclick = e => { e.stopPropagation(); const it = S.plan.items.find(x => x.id === a.dataset.price); if (it) { itemForm(it); setTimeout(() => { const f = $('#form input[name="price"]'); if (f) { f.focus(); f.scrollIntoView({ block: "center" }); } }, 150); } });
+  P.querySelectorAll('[data-photo]').forEach(el => App.photo(el.dataset.photo, el, 'circle'));
   P.querySelectorAll('[data-add]').forEach(a => a.onclick = e => { e.preventDefault(); e.stopPropagation(); itemForm(null, a.dataset.add); });
+  P.querySelectorAll('[data-addstay]').forEach(a => a.onclick = e => { e.stopPropagation(); itemForm(null, a.dataset.addstay, { kind: 'stay', end: new Date(new Date(a.dataset.end + 'T00:00:00').getTime() + 864e5).toISOString().slice(0, 10) }); });
   P.querySelectorAll('[data-jump]').forEach(a => a.onclick = e => { e.preventDefault(); const el = document.getElementById(a.dataset.jump); if (el) el.scrollIntoView({ behavior: 'smooth', block: 'start' }); });
   P.querySelectorAll('[data-go]').forEach(a => a.onclick = e => { e.preventDefault(); showTab(a.dataset.go); });
   wireFixes(P);
