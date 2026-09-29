@@ -102,3 +102,5 @@ Needs Malachi: open Trips (:8772), fix the two guessed dates, add the prices
 from the confirmations, mark what is already confirmed; a name (v7: "First
 Officer" looked clean, run a real trademark search); talk to 5–10 trip
 organizers.
+
+On GitHub since 2026-09-28: private repo `mallythearchitect/destination-helper`, branch `main`; CI runs ruff, the secrets scan, pytest and gitleaks on every push.
