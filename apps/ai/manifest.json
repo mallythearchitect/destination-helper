@@ -1,0 +1,2 @@
+{"id": "ai", "name": "AI inbox", "blurb": "Suggestions waiting for your OK, the models per job, spend against the cap, test scores.",
+ "pages": [{"id": "inbox", "title": "AI inbox", "path": "web/index.html", "status": "live"}]}

@@ -1,0 +1,25 @@
+{
+  "id": "system",
+  "name": "System",
+  "blurb": "Settings, Sources, What I Do, How It's Built, Cyberdeck Plans. Ships with every app.",
+  "pages": [
+    {
+      "id": "settings",
+      "title": "Settings",
+      "path": "web/settings.html",
+      "status": "live"
+    },
+    {
+      "id": "browse",
+      "title": "Browse",
+      "path": "web/browse.html",
+      "status": "live"
+    },
+    {
+      "id": "sources",
+      "title": "Sources",
+      "path": "web/sources.html",
+      "status": "phase 4"
+    }
+  ]
+}

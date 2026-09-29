@@ -1,0 +1,86 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Settings · Destination Helper</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Barlow:wght@400;500;700&family=Barlow+Condensed:wght@400;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/ui-kit/tokens.css">
+<link rel="stylesheet" href="/ui-kit/shell.css">
+<link rel="stylesheet" href="/ui-kit/app.css">
+<style>
+.layout{display:grid;grid-template-columns:200px 1fr;gap:28px}
+.layout > *{min-width:0}
+nav.sections{position:sticky;top:16px;align-self:start;display:flex;flex-direction:column;gap:2px}
+nav.sections a{color:var(--paper-2);text-decoration:none;padding:8px 10px;border-left:2px solid transparent;font-size:14.5px}
+nav.sections a:hover,nav.sections a.on{color:var(--paper);border-left-color:var(--gold)}
+section.sec{border:1px solid var(--line);background:var(--ink-3);padding:20px 22px;margin-bottom:18px;scroll-margin-top:16px}
+section.sec h2{font-size:26px}
+section.sec .blurb{color:var(--mut);margin:4px 0 14px}
+.setting{display:grid;grid-template-columns:minmax(160px,240px) 1fr;gap:6px 18px;padding:14px 0;border-top:1px solid var(--line);align-items:start}
+.setting:first-of-type{border-top:0}
+.setting label.lbl{font-weight:500;padding-top:6px}
+.setting .help{color:var(--mut);font-size:13px;margin-top:5px}
+.setting .meta{color:var(--mut-2);font-size:12px;margin-top:4px}
+.setting .meta a{color:var(--mut);margin-left:8px}
+.setting .state{font-size:12px;margin-left:8px}
+.state.saved{color:var(--ok)}.state.saving{color:var(--mut)}.state.err{color:var(--bad)}
+.checks{display:flex;flex-wrap:wrap;gap:6px 16px}
+.checks label{font-size:14px;display:flex;gap:6px;align-items:center}
+table.t select{max-width:220px}
+.secret .row .status{font-size:13px;min-width:70px}
+.status.set{color:var(--ok)}.status.unset{color:var(--mut)}
+.conflict{border:1px solid var(--warn);padding:10px 12px;margin-top:8px;font-size:13.5px;background:rgba(224,168,72,.08)}
+.conflict b{color:var(--warn)}
+.dl{border:1px solid var(--line);padding:10px 12px;margin-bottom:14px}
+.dl label{font-size:13px;color:var(--mut);display:inline-flex;align-items:center;gap:6px}
+.dl select,.dl input[type=date]{width:auto;max-width:220px;padding:5px 8px;font-size:13px}
+.hist{list-style:none;margin:0;padding:0;font-size:13.5px}
+.hist li{display:grid;grid-template-columns:1fr auto;gap:10px;padding:8px 0;border-top:1px solid var(--line)}
+.hist li:first-child{border-top:0}
+.hist .when{color:var(--mut);font-size:12px}
+.hist code{font-family:ui-monospace,Menlo,monospace;font-size:12px;color:var(--paper-2)}
+.hist .undone{opacity:.5;text-decoration:line-through}
+.bk{font-size:13.5px}
+.bk li{display:flex;gap:12px;align-items:center;padding:6px 0;border-top:1px solid var(--line);flex-wrap:wrap}
+.bk ul{list-style:none;padding:0;margin:8px 0 0}
+.log{font-size:12.5px;color:var(--mut);margin-top:10px}
+.log .ok{color:var(--ok)}.log .bad{color:var(--bad)}
+@media (max-width:760px){
+ .layout{grid-template-columns:1fr}
+ nav.sections{position:static;flex-direction:row;overflow-x:auto;gap:0;padding-bottom:6px;margin-bottom:6px;border-bottom:1px solid var(--line)}
+ nav.sections a{border-left:0;border-bottom:2px solid transparent;white-space:nowrap}
+ nav.sections a.on{border-bottom-color:var(--gold)}
+ .setting{grid-template-columns:1fr}
+ section.sec{padding:16px}
+ .band{padding:0 16px}
+}
+</style>
+</head>
+<body>
+<header class="band"><div class="appbar">
+ <span class="appbar-brand"><span class="appbar-eyebrow">Destination Helper</span>Settings</span>
+ <span class="appbar-right"><span class="pill" id="health">engine <b>…</b></span><a href="browse.html">Browse</a><a href="/apps/launcher/web/">‹ Home</a></span>
+</div></header>
+<main class="wrap">
+ <p class="muted" style="margin:0 0 18px;max-width:720px">Every app reads its defaults from here. A change saves the moment you make it, and every change is kept in <a href="#history">History</a>, where it can be undone. Keys are stored in a private file on this computer; this page only knows whether one is set.</p>
+ <div class="layout">
+  <nav class="sections" id="nav"></nav>
+  <div id="content"><p class="muted">Loading…</p></div>
+ </div>
+</main>
+<script src="/ui-kit/app.js"></script>
+<script src="settings.js"></script>
+<script src="/ui-kit/tour.js"></script>
+<script>
+Tour.init({ page: 'settings', steps: [
+  { title: 'Settings', text: 'Every app reads its defaults from here. A change saves the moment you make it, and every change can be undone.' },
+  { target: '#nav', title: 'The sections', text: 'Profile, Maps, Display, Data, AI, Backup, Logic, then Backups and History.' },
+  { target: '#ai', title: 'AI', text: 'Which model does each job and its backup, the monthly cap, what each model may see, and the Claude key. Keys go to a private file on this Mac; this page only knows whether one is set.' },
+  { target: '#backups-panel', title: 'Backups', text: 'Back up now, the nightly schedule, and the restore test that proves a backup reads back.' },
+  { target: '#history', title: 'History', text: 'Every change, newest first, with Undo. Download all time or a range as JSON or CSV.' },
+]});
+</script>
+</body>
+</html>

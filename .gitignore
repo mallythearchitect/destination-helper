@@ -1,0 +1,26 @@
+# Secrets. API keys live in .env and nowhere else. Never committed.
+.env
+.env.*
+!.env.example
+
+# Your data. This repo is the engine, not the contents: every real record,
+# backup and database stays on the machine that made it.
+vault/
+*.db
+*.db-journal
+*.db-wal
+*.db-shm
+*.sqlite
+# reference data packs are shipped; they hold nothing personal
+!packs/*.sqlite
+
+# Python
+__pycache__/
+*.py[cod]
+.venv/
+venv/
+.pytest_cache/
+.ruff_cache/
+
+# macOS
+.DS_Store

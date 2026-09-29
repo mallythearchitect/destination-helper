@@ -1,0 +1,28 @@
+[project]
+name = "destination-helper"
+version = "0.1.0"
+description = "The Destination Helper: plan a trip, check the plan, prepare, run it."
+requires-python = ">=3.12"
+
+[tool.ruff]
+line-length = 120
+target-version = "py312"
+
+[tool.ruff.lint]
+select = ["E", "F", "W", "I", "B", "UP"]
+ignore = ["B904"]
+
+[tool.ruff.lint.per-file-ignores]
+"apps/**/server/*.py" = ["E501"]   # SQL and action descriptions read better on one line
+"tests/*.py" = ["E501"]
+"scripts/*.py" = ["E501"]
+"engine/ai/**/*.py" = ["E501"]
+"engine/sources.py" = ["E501", "E702"]
+"engine/packs.py" = ["E501"]
+"engine/**/*.py" = ["E501"]   # SQL, help lines and descriptions read better unwrapped
+"packs/*.py" = ["E501"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+addopts = "-q"
+filterwarnings = ["ignore::DeprecationWarning"]

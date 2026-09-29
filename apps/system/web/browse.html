@@ -1,0 +1,89 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Browse · Destination Helper</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Barlow:wght@400;500;700&family=Barlow+Condensed:wght@400;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/ui-kit/tokens.css">
+<link rel="stylesheet" href="/ui-kit/shell.css">
+<link rel="stylesheet" href="/ui-kit/app.css">
+<style>
+.layout{display:grid;grid-template-columns:minmax(300px,420px) 1fr;gap:22px;align-items:start}
+.search{display:flex;gap:8px;align-items:center;margin-bottom:10px}
+.search input{flex:1}
+.list{border:1px solid var(--line);background:var(--ink-3)}
+.item{display:block;padding:10px 12px;border-top:1px solid var(--line);cursor:pointer;text-decoration:none;color:inherit}
+.item:first-child{border-top:0}
+.item:hover,.item.on{background:rgba(217,169,60,.08)}
+.item .ty{font-size:11px;letter-spacing:.12em;text-transform:uppercase;color:var(--gold)}
+.item .nm{font-weight:500}
+.item .sn{color:var(--mut);font-size:12.5px;margin-top:2px}
+.item .tg{font-size:11.5px;color:var(--mut-2)}
+.detail{border:1px solid var(--line);background:var(--ink-3);padding:18px 20px;min-height:200px}
+.detail h2{font-size:28px;line-height:1.1}
+.detail .ty{font-size:11px;letter-spacing:.12em;text-transform:uppercase;color:var(--gold)}
+.blk{margin-top:18px;padding-top:12px;border-top:1px solid var(--line)}
+.blk h3{font-size:12px;letter-spacing:.1em;text-transform:uppercase;color:var(--mut);margin-bottom:8px;font-family:var(--font-body);font-weight:500}
+.kv{display:grid;grid-template-columns:auto 1fr;gap:4px 14px;font-size:14px}
+.kv .k{color:var(--mut)}
+ul.plain{list-style:none;margin:0;padding:0;font-size:14px}
+ul.plain li{display:flex;gap:10px;align-items:center;padding:5px 0;border-top:1px solid var(--line);flex-wrap:wrap}
+ul.plain li:first-child{border-top:0}
+ul.plain .x{margin-left:auto}
+.hist li{display:grid;grid-template-columns:1fr auto;gap:10px;font-size:13px}
+.hist code{font-family:ui-monospace,Menlo,monospace;font-size:11.5px;color:var(--paper-2);word-break:break-word}
+.hist .undone{opacity:.5;text-decoration:line-through}
+.picker{position:relative}
+.picker .drop{position:absolute;left:0;right:0;top:100%;z-index:5;background:var(--ink-2);border:1px solid var(--line-2);max-height:220px;overflow:auto}
+.picker .drop div{padding:6px 10px;cursor:pointer;font-size:13.5px}
+.picker .drop div:hover{background:rgba(217,169,60,.12)}
+.conflict{border:1px solid var(--warn);padding:10px 12px;margin-top:8px;font-size:13.5px;background:rgba(224,168,72,.08)}
+.conflict b{color:var(--warn)}
+@media (max-width:800px){
+ .layout{grid-template-columns:1fr}
+ .band{padding:0 16px}
+ .detail{padding:14px}
+ body.showing .listcol{display:none}
+ .back{display:none}body.showing .back{display:inline-block}
+}
+</style>
+</head>
+<body>
+<header class="band"><div class="appbar">
+ <span class="appbar-brand"><span class="appbar-eyebrow">Destination Helper</span>Browse</span>
+ <span class="appbar-right"><span class="pill" id="count"></span><a href="settings.html">Settings</a><a href="/apps/launcher/web/">‹ Home</a></span>
+</div></header>
+<main class="wrap">
+ <p class="muted" style="margin:0 0 14px;max-width:720px">Everything the engine holds, one record per thing. Search by any word in a name, detail, tag or note. Open a record to link it to another, tag it, add a note, attach a file, or undo any change to it.</p>
+ <div class="layout">
+  <div class="listcol">
+   <div class="search"><input type="search" id="q" placeholder="Search records…" autocomplete="off"><button class="sbtn gold" id="new">+ New</button></div>
+   <div class="chips" id="types"></div>
+   <div class="list" id="list"><div class="item muted">Loading…</div></div>
+  </div>
+  <div class="detail" id="detail"><p class="muted">Pick a record, or make one with + New.</p></div>
+ </div>
+</main>
+<dialog class="form-dialog" id="newdlg"><form method="dialog" id="newform">
+ <h2 style="font-size:24px">New record</h2>
+ <label>Type</label><select id="n-type"></select>
+ <label>Name</label><input type="text" id="n-name" required>
+ <label>Where it came from (optional: a link or an app)</label><input type="text" id="n-source">
+ <div class="row" style="margin-top:16px;justify-content:flex-end"><button class="sbtn" value="cancel" type="button" id="n-cancel">Cancel</button><button class="sbtn gold" value="ok">Create</button></div>
+</form></dialog>
+<script src="/ui-kit/app.js"></script>
+<script src="browse.js"></script>
+<script src="/ui-kit/tour.js"></script>
+<script>
+Tour.init({ page: 'browse', steps: [
+  { title: 'Browse', text: 'Every record the engine holds, one per thing: a bill, a person, a company, a place, a clipping.' },
+  { target: '#q', title: 'Search', text: 'Any word in a name, detail, tag, note or file name finds it, even part of a word.' },
+  { target: '#types', title: 'Types', text: 'Chips narrow the list to one kind of record.' },
+  { target: '#new', title: 'New record', text: 'Make one of any type. Trips and the places you mark are also records, made from their apps.' },
+  { target: '#detail', title: 'The record', text: 'Rename, set details and outside ids, tag, link to another record by typing its name, add notes, attach files. Its own history sits at the bottom, with Undo on every change.' },
+]});
+</script>
+</body>
+</html>

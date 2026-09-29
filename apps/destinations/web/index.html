@@ -1,0 +1,69 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Destinations · Destination Helper</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Barlow:wght@400;500;700&family=Barlow+Condensed:wght@400;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://unpkg.com/maplibre-gl@5.0.0/dist/maplibre-gl.css">
+<link rel="stylesheet" href="/ui-kit/tokens.css">
+<link rel="stylesheet" href="/ui-kit/shell.css">
+<link rel="stylesheet" href="/ui-kit/app.css">
+<style>
+.atlas{display:grid;grid-template-columns:1fr 380px;gap:14px;align-items:start}
+#map{height:520px;border:1px solid var(--line);background:#0d0e0f}
+.list{border:1px solid var(--line);background:var(--ink-3);max-height:520px;overflow:auto}
+.item{display:grid;grid-template-columns:1fr auto;gap:8px;padding:8px 12px;border-top:1px solid var(--line);cursor:pointer;align-items:center}
+.item:first-child{border-top:0}.item:hover,.item.on{background:rgba(217,169,60,.08)}
+.item .nm{font-weight:500}.item .sub{font-size:12px;color:var(--mut)}
+.item .fit{font-family:var(--font-heading);font-size:20px;color:var(--gold);text-align:right}
+.item .fit small{display:block;font-family:var(--font-body);font-size:10.5px;color:var(--mut)}
+.score{height:8px;background:var(--ink);border:1px solid var(--line);position:relative}
+.score i{position:absolute;left:0;top:0;bottom:0;background:var(--gold)}
+.status-btns button.on{border-color:var(--gold);color:var(--gold)}
+.maplibregl-popup-content{background:var(--ink-3);color:var(--paper);font-family:var(--font-body);border:1px solid var(--line-2)}
+.maplibregl-popup-tip{border-top-color:var(--ink-3)}
+@media (max-width:900px){.atlas{grid-template-columns:1fr}#map{height:360px}.list{max-height:none}}
+</style>
+</head>
+<body>
+<header class="band"><div class="appbar">
+ <span class="appbar-brand"><span class="appbar-eyebrow">Destination Helper</span>Destinations</span>
+ <span class="appbar-right"><span class="pill" id="pill"></span><a href="/apps/system/web/browse.html">Browse</a><a href="/apps/launcher/web/">‹ Home</a></span>
+</div></header>
+<main class="wrap">
+ <div class="side-layout">
+  <aside class="sidebar">
+   <div><h4>Destinations</h4><nav class="sidenav" id="tabs"><a href="#atlas" class="on">Atlas</a><a href="#compare">Compare</a><a href="#trip">Trip cost</a><a href="#saved">My list</a><a href="#sources">Sources</a></nav></div>
+   <div><h4>Show</h4><div class="opts" id="kinds"></div></div>
+   <div><h4>Rank for</h4><div class="opts" id="goals"></div></div>
+  </aside>
+  <div class="content">
+   <section class="panel on" id="p-atlas"></section>
+   <section class="panel" id="p-compare"></section>
+   <section class="panel" id="p-trip"></section>
+   <section class="panel" id="p-saved"></section>
+   <section class="panel" id="p-sources"></section>
+  </div>
+ </div>
+</main>
+<dialog class="detail-dialog" id="detail"><button class="close" id="detail-close">Close</button><div id="detail-body"></div></dialog>
+<script src="https://unpkg.com/maplibre-gl@5.0.0/dist/maplibre-gl.js"></script>
+<script src="/ui-kit/app.js"></script>
+<script src="destinations.js"></script>
+<script src="/ui-kit/tour.js"></script>
+<script>
+Tour.init({ page: 'destinations', steps: [
+  { title: 'Destinations', text: 'Business cities and leisure destinations, scored, with a source on every figure. Your own shortlist sits on top and lives in the vault.' },
+  { target: '#kinds', title: 'What to show', text: 'US business cities, international business cities, leisure destinations, every world city of 15,000+ people (GeoNames), US places, or the scored ones plus the biggest cities. The map thins with every filter.' },
+  { target: '#goals', title: 'Rank for a goal', text: 'Eight domain scores (career, entrepreneurship, tech, network, lifestyle, safety, affordability, quality of life) weighted for a goal. The list re-sorts. Safety, affordability and quality of life come from Numbeo where it covers a city.' },
+  { target: '#map', title: 'The atlas', text: 'Every place on the map. Click a dot or a row for the popup: first the ways to get there (directions, flights, all modes, train, all live sites), then scores with their confidence, index values with links, distance from home, and your status.' },
+  { target: '.list', title: 'The list', text: 'Search, filter by tier or budget, sort by fit, cost, distance or name.' },
+  { target: '#tabs a[href="#compare"]', title: 'Compare', text: 'Tick up to four places on the list and see them side by side.' },
+  { target: '#tabs a[href="#trip"]', title: 'Trip cost', text: 'Days × people × cost per day, plus flights guessed from distance or your own number. Every input is visible.' },
+  { target: '#tabs a[href="#sources"]', title: 'Sources', text: 'What "business", "leisure", the tiers and cost per day mean in plain words; where each dataset came from; which index feeds which score; and a checker that re-fetches every link.' },
+]});
+</script>
+</body>
+</html>

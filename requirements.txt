@@ -1,0 +1,11 @@
+fastapi>=0.115
+uvicorn[standard]>=0.30
+pydantic>=2.7
+pytest>=8.0
+httpx>=0.27
+ruff>=0.6
+# later in the roadmap: playwright (page checks), litellm (switchboard), mcp (the AI plug)
+python-multipart>=0.0.9
+anyio>=4.0
+mcp>=2.0
+anthropic>=1.8

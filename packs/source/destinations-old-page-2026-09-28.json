@@ -1,0 +1,6180 @@
+{
+ "CITIES": [
+  {
+   "id": 1,
+   "name": "Boston",
+   "state": "MA",
+   "rating": 4.5,
+   "rating_count": 12400,
+   "tags": [
+    "Tech",
+    "Finance",
+    "Education"
+   ],
+   "description": "Major tech & finance hub. Home to world-class universities.",
+   "corridor": true,
+   "region": "Northeast",
+   "tier": "expansion",
+   "scores": {
+    "career": 88,
+    "entrepreneurship": 80,
+    "tech": 85,
+    "network": 87,
+    "lifestyle": 78
+   },
+   "cost": 210
+  },
+  {
+   "id": 2,
+   "name": "New York City",
+   "state": "NY",
+   "rating": 4.7,
+   "rating_count": 3166,
+   "tags": [
+    "Finance",
+    "Media",
+    "Tech"
+   ],
+   "description": "The hub of hubs. Unmatched density of professional opportunities.",
+   "corridor": true,
+   "region": "Northeast",
+   "tier": "expansion",
+   "scores": {
+    "career": 97,
+    "entrepreneurship": 92,
+    "tech": 90,
+    "network": 99,
+    "lifestyle": 70
+   },
+   "cost": 260
+  },
+  {
+   "id": 3,
+   "name": "Philadelphia",
+   "state": "PA",
+   "rating": 4.4,
+   "rating_count": 9800,
+   "tags": [
+    "Healthcare",
+    "Education",
+    "Tech"
+   ],
+   "description": "Major Amtrak corridor city with booming healthcare sector.",
+   "corridor": true,
+   "region": "Northeast",
+   "tier": "base",
+   "scores": {
+    "career": 78,
+    "entrepreneurship": 70,
+    "tech": 72,
+    "network": 74,
+    "lifestyle": 76
+   },
+   "cost": 155
+  },
+  {
+   "id": 4,
+   "name": "Providence",
+   "state": "RI",
+   "rating": 4.4,
+   "rating_count": 12713,
+   "tags": [
+    "Design",
+    "Education",
+    "Arts"
+   ],
+   "description": "Known for RISD, Brown University, and a creative economy.",
+   "corridor": true,
+   "region": "Northeast",
+   "tier": "base",
+   "scores": {
+    "career": 70,
+    "entrepreneurship": 65,
+    "tech": 66,
+    "network": 68,
+    "lifestyle": 74
+   },
+   "cost": 145
+  },
+  {
+   "id": 5,
+   "name": "Hartford",
+   "state": "CT",
+   "rating": 4.2,
+   "rating_count": 174,
+   "tags": [
+    "Insurance",
+    "Finance",
+    "Healthcare"
+   ],
+   "description": "Insurance capital. Close to NYC and Boston corridors.",
+   "corridor": true,
+   "region": "Northeast",
+   "tier": "base",
+   "scores": {
+    "career": 72,
+    "entrepreneurship": 60,
+    "tech": 63,
+    "network": 65,
+    "lifestyle": 70
+   },
+   "cost": 140
+  },
+  {
+   "id": 6,
+   "name": "Baltimore",
+   "state": "MD",
+   "rating": 4.5,
+   "rating_count": 661,
+   "tags": [
+    "Healthcare",
+    "Research",
+    "Logistics"
+   ],
+   "description": "Johns Hopkins anchors a world-class research ecosystem.",
+   "corridor": true,
+   "region": "Northeast",
+   "tier": "base",
+   "scores": {
+    "career": 74,
+    "entrepreneurship": 65,
+    "tech": 68,
+    "network": 70,
+    "lifestyle": 68
+   },
+   "cost": 150
+  },
+  {
+   "id": 7,
+   "name": "Pittsburgh",
+   "state": "PA",
+   "rating": 3.8,
+   "rating_count": 58,
+   "tags": [
+    "AI",
+    "Robotics",
+    "Healthcare"
+   ],
+   "description": "CMU and Pitt drive deep research in robotics and AI.",
+   "corridor": false,
+   "region": "Northeast",
+   "tier": "base",
+   "scores": {
+    "career": 73,
+    "entrepreneurship": 68,
+    "tech": 82,
+    "network": 66,
+    "lifestyle": 72
+   },
+   "cost": 120
+  },
+  {
+   "id": 8,
+   "name": "Albany",
+   "state": "NY",
+   "rating": 4.5,
+   "rating_count": 753,
+   "tags": [
+    "Government",
+    "Policy",
+    "Education"
+   ],
+   "description": "NY State Capital — crossroads for policy and government tech.",
+   "corridor": false,
+   "region": "Northeast",
+   "tier": "base",
+   "scores": {
+    "career": 65,
+    "entrepreneurship": 55,
+    "tech": 58,
+    "network": 60,
+    "lifestyle": 66
+   },
+   "cost": 115
+  },
+  {
+   "id": 9,
+   "name": "Burlington",
+   "state": "VT",
+   "rating": 3.8,
+   "rating_count": 3227,
+   "tags": [
+    "Sustainability",
+    "Tech",
+    "Healthcare"
+   ],
+   "description": "Growing sustainability-focused tech community.",
+   "corridor": false,
+   "region": "Northeast",
+   "tier": "base",
+   "scores": {
+    "career": 60,
+    "entrepreneurship": 58,
+    "tech": 62,
+    "network": 58,
+    "lifestyle": 78
+   },
+   "cost": 140
+  },
+  {
+   "id": 10,
+   "name": "Portland",
+   "state": "ME",
+   "rating": 4.2,
+   "rating_count": 2100,
+   "tags": [
+    "Maritime",
+    "Tech",
+    "Creative"
+   ],
+   "description": "Northernmost anchor. Tight-knit professional community.",
+   "corridor": false,
+   "region": "Northeast",
+   "tier": "base",
+   "scores": {
+    "career": 62,
+    "entrepreneurship": 60,
+    "tech": 60,
+    "network": 58,
+    "lifestyle": 76
+   },
+   "cost": 140
+  },
+  {
+   "id": 11,
+   "name": "Chicago",
+   "state": "IL",
+   "rating": 4.6,
+   "rating_count": 18500,
+   "tags": [
+    "Finance",
+    "Tech",
+    "Healthcare"
+   ],
+   "description": "Midwest powerhouse. Deep finance, consulting, and tech scene.",
+   "corridor": false,
+   "region": "Midwest",
+   "tier": "expansion",
+   "scores": {
+    "career": 90,
+    "entrepreneurship": 82,
+    "tech": 84,
+    "network": 88,
+    "lifestyle": 76
+   },
+   "cost": 170
+  },
+  {
+   "id": 12,
+   "name": "Detroit",
+   "state": "MI",
+   "rating": 4.1,
+   "rating_count": 5200,
+   "tags": [
+    "Automotive",
+    "Manufacturing",
+    "Tech"
+   ],
+   "description": "Reinventing itself as a tech and mobility hub.",
+   "corridor": false,
+   "region": "Midwest",
+   "tier": "base",
+   "scores": {
+    "career": 66,
+    "entrepreneurship": 65,
+    "tech": 68,
+    "network": 62,
+    "lifestyle": 62
+   },
+   "cost": 110
+  },
+  {
+   "id": 13,
+   "name": "Minneapolis",
+   "state": "MN",
+   "rating": 4.5,
+   "rating_count": 8900,
+   "tags": [
+    "Healthcare",
+    "Finance",
+    "Tech"
+   ],
+   "description": "Fortune 500 headquarters and a thriving startup ecosystem.",
+   "corridor": false,
+   "region": "Midwest",
+   "tier": "base",
+   "scores": {
+    "career": 78,
+    "entrepreneurship": 72,
+    "tech": 75,
+    "network": 74,
+    "lifestyle": 78
+   },
+   "cost": 150
+  },
+  {
+   "id": 14,
+   "name": "Columbus",
+   "state": "OH",
+   "rating": 4.3,
+   "rating_count": 6100,
+   "tags": [
+    "Tech",
+    "Finance",
+    "Education"
+   ],
+   "description": "Fast-growing tech hub in the heart of Ohio.",
+   "corridor": false,
+   "region": "Midwest",
+   "tier": "base",
+   "scores": {
+    "career": 72,
+    "entrepreneurship": 70,
+    "tech": 73,
+    "network": 68,
+    "lifestyle": 74
+   },
+   "cost": 120
+  },
+  {
+   "id": 15,
+   "name": "Indianapolis",
+   "state": "IN",
+   "rating": 4.2,
+   "rating_count": 4800,
+   "tags": [
+    "Healthcare",
+    "Sports",
+    "Logistics"
+   ],
+   "description": "Sports capital with a growing life sciences sector.",
+   "corridor": false,
+   "region": "Midwest",
+   "tier": "base",
+   "scores": {
+    "career": 68,
+    "entrepreneurship": 65,
+    "tech": 64,
+    "network": 64,
+    "lifestyle": 72
+   },
+   "cost": 115
+  },
+  {
+   "id": 16,
+   "name": "Los Angeles",
+   "state": "CA",
+   "rating": 4.5,
+   "rating_count": 28000,
+   "tags": [
+    "Media",
+    "Tech",
+    "Entertainment"
+   ],
+   "description": "Entertainment capital with a booming tech scene.",
+   "corridor": false,
+   "region": "West",
+   "tier": "expansion",
+   "scores": {
+    "career": 88,
+    "entrepreneurship": 88,
+    "tech": 85,
+    "network": 90,
+    "lifestyle": 80
+   },
+   "cost": 195
+  },
+  {
+   "id": 17,
+   "name": "San Francisco",
+   "state": "CA",
+   "rating": 4.6,
+   "rating_count": 22000,
+   "tags": [
+    "Tech",
+    "Finance",
+    "Innovation"
+   ],
+   "description": "Global tech capital. Highest density of startups per capita.",
+   "corridor": false,
+   "region": "West",
+   "tier": "expansion",
+   "scores": {
+    "career": 92,
+    "entrepreneurship": 96,
+    "tech": 99,
+    "network": 95,
+    "lifestyle": 65
+   },
+   "cost": 250
+  },
+  {
+   "id": 18,
+   "name": "Seattle",
+   "state": "WA",
+   "rating": 4.6,
+   "rating_count": 16000,
+   "tags": [
+    "Tech",
+    "Aerospace",
+    "Healthcare"
+   ],
+   "description": "Home to Amazon, Microsoft, and a thriving aerospace sector.",
+   "corridor": false,
+   "region": "West",
+   "tier": "expansion",
+   "scores": {
+    "career": 90,
+    "entrepreneurship": 84,
+    "tech": 94,
+    "network": 86,
+    "lifestyle": 76
+   },
+   "cost": 190
+  },
+  {
+   "id": 19,
+   "name": "Denver",
+   "state": "CO",
+   "rating": 4.5,
+   "rating_count": 11000,
+   "tags": [
+    "Tech",
+    "Energy",
+    "Outdoor"
+   ],
+   "description": "Booming tech hub with quality of life unmatched in the US.",
+   "corridor": false,
+   "region": "West",
+   "tier": "base",
+   "scores": {
+    "career": 80,
+    "entrepreneurship": 78,
+    "tech": 80,
+    "network": 78,
+    "lifestyle": 88
+   },
+   "cost": 165
+  },
+  {
+   "id": 20,
+   "name": "Phoenix",
+   "state": "AZ",
+   "rating": 4.3,
+   "rating_count": 9800,
+   "tags": [
+    "Tech",
+    "Finance",
+    "Healthcare"
+   ],
+   "description": "Fastest growing metro. Major semiconductor investment.",
+   "corridor": false,
+   "region": "West",
+   "tier": "base",
+   "scores": {
+    "career": 75,
+    "entrepreneurship": 72,
+    "tech": 74,
+    "network": 70,
+    "lifestyle": 76
+   },
+   "cost": 140
+  },
+  {
+   "id": 21,
+   "name": "Atlanta",
+   "state": "GA",
+   "rating": 4.5,
+   "rating_count": 14000,
+   "tags": [
+    "Tech",
+    "Media",
+    "Finance"
+   ],
+   "description": "Southeast business capital. Major hub for Black professionals.",
+   "corridor": false,
+   "region": "South",
+   "tier": "expansion",
+   "scores": {
+    "career": 85,
+    "entrepreneurship": 83,
+    "tech": 80,
+    "network": 86,
+    "lifestyle": 80
+   },
+   "cost": 150
+  },
+  {
+   "id": 22,
+   "name": "Austin",
+   "state": "TX",
+   "rating": 4.6,
+   "rating_count": 17000,
+   "tags": [
+    "Tech",
+    "Music",
+    "Startups"
+   ],
+   "description": "Fastest growing tech city. SXSW epicenter. High energy.",
+   "corridor": false,
+   "region": "South",
+   "tier": "expansion",
+   "scores": {
+    "career": 87,
+    "entrepreneurship": 92,
+    "tech": 88,
+    "network": 88,
+    "lifestyle": 84
+   },
+   "cost": 160
+  },
+  {
+   "id": 23,
+   "name": "Dallas",
+   "state": "TX",
+   "rating": 4.4,
+   "rating_count": 13000,
+   "tags": [
+    "Finance",
+    "Tech",
+    "Logistics"
+   ],
+   "description": "Corporate HQ magnet. Major finance and logistics hub.",
+   "corridor": false,
+   "region": "South",
+   "tier": "base",
+   "scores": {
+    "career": 82,
+    "entrepreneurship": 78,
+    "tech": 76,
+    "network": 80,
+    "lifestyle": 76
+   },
+   "cost": 145
+  },
+  {
+   "id": 24,
+   "name": "Houston",
+   "state": "TX",
+   "rating": 4.3,
+   "rating_count": 11500,
+   "tags": [
+    "Energy",
+    "Healthcare",
+    "Aerospace"
+   ],
+   "description": "Energy capital of the world with a massive medical center.",
+   "corridor": false,
+   "region": "South",
+   "tier": "base",
+   "scores": {
+    "career": 80,
+    "entrepreneurship": 75,
+    "tech": 72,
+    "network": 76,
+    "lifestyle": 72
+   },
+   "cost": 140
+  },
+  {
+   "id": 25,
+   "name": "Miami",
+   "state": "FL",
+   "rating": 4.5,
+   "rating_count": 15000,
+   "tags": [
+    "Finance",
+    "Tech",
+    "International"
+   ],
+   "description": "Gateway to Latin America. Booming crypto and fintech hub.",
+   "corridor": false,
+   "region": "South",
+   "tier": "expansion",
+   "scores": {
+    "career": 82,
+    "entrepreneurship": 85,
+    "tech": 78,
+    "network": 86,
+    "lifestyle": 84
+   },
+   "cost": 195
+  },
+  {
+   "id": 26,
+   "name": "Washington",
+   "state": "DC",
+   "rating": 4.6,
+   "rating_count": 19000,
+   "tags": [
+    "Government",
+    "Policy",
+    "Tech"
+   ],
+   "description": "Policy capital with a massive government tech ecosystem.",
+   "corridor": true,
+   "region": "Northeast",
+   "tier": "expansion",
+   "scores": {
+    "career": 88,
+    "entrepreneurship": 74,
+    "tech": 80,
+    "network": 90,
+    "lifestyle": 76
+   },
+   "cost": 205
+  },
+  {
+   "id": 27,
+   "name": "Charlotte",
+   "state": "NC",
+   "rating": 4.4,
+   "rating_count": 8700,
+   "tags": [
+    "Finance",
+    "Tech",
+    "Healthcare"
+   ],
+   "description": "Second largest US banking center after New York.",
+   "corridor": false,
+   "region": "South",
+   "tier": "base",
+   "scores": {
+    "career": 78,
+    "entrepreneurship": 72,
+    "tech": 70,
+    "network": 74,
+    "lifestyle": 78
+   },
+   "cost": 130
+  },
+  {
+   "id": 28,
+   "name": "Nashville",
+   "state": "TN",
+   "rating": 4.5,
+   "rating_count": 10200,
+   "tags": [
+    "Healthcare",
+    "Music",
+    "Tech"
+   ],
+   "description": "Healthcare IT capital. Country music meets tech innovation.",
+   "corridor": false,
+   "region": "South",
+   "tier": "base",
+   "scores": {
+    "career": 76,
+    "entrepreneurship": 74,
+    "tech": 70,
+    "network": 74,
+    "lifestyle": 82
+   },
+   "cost": 150
+  },
+  {
+   "id": 29,
+   "name": "Portland",
+   "state": "OR",
+   "rating": 4.4,
+   "rating_count": 9100,
+   "tags": [
+    "Tech",
+    "Sustainability",
+    "Creative"
+   ],
+   "description": "Progressive city with a strong sustainable tech community.",
+   "corridor": false,
+   "region": "West",
+   "tier": "base",
+   "scores": {
+    "career": 74,
+    "entrepreneurship": 72,
+    "tech": 76,
+    "network": 70,
+    "lifestyle": 80
+   },
+   "cost": 165
+  },
+  {
+   "id": 30,
+   "name": "Salt Lake City",
+   "state": "UT",
+   "rating": 4.4,
+   "rating_count": 7200,
+   "tags": [
+    "Tech",
+    "Outdoor",
+    "Finance"
+   ],
+   "description": "Silicon Slopes — one of the fastest growing tech regions.",
+   "corridor": false,
+   "region": "West",
+   "tier": "base",
+   "scores": {
+    "career": 76,
+    "entrepreneurship": 74,
+    "tech": 78,
+    "network": 70,
+    "lifestyle": 82
+   },
+   "cost": 140
+  }
+ ],
+ "INTL_CITIES": [
+  {
+   "name": "Toronto",
+   "country": "Canada",
+   "cc": "CA",
+   "group": "North America",
+   "lat": 43.6532,
+   "lon": -79.3832,
+   "road": true,
+   "tags": [
+    "Finance",
+    "Tech",
+    "Media"
+   ],
+   "description": "Canada's financial capital and its largest tech labour market.",
+   "cost": 125,
+   "scores": {
+    "career": 85,
+    "network": 88,
+    "entrepreneurship": 78,
+    "tech": 81,
+    "lifestyle": 78
+   },
+   "tier": "expansion",
+   "used": {
+    "career": [
+     "gci",
+     "gfci"
+    ],
+    "network": [
+     "gci"
+    ],
+    "entrepreneurship": [
+     "blink"
+    ],
+    "tech": [
+     "gser",
+     "blink"
+    ],
+    "lifestyle": [
+     "qol"
+    ]
+   }
+  },
+  {
+   "name": "Vancouver",
+   "country": "Canada",
+   "cc": "CA",
+   "group": "North America",
+   "lat": 49.2827,
+   "lon": -123.1207,
+   "road": true,
+   "tags": [
+    "Film",
+    "Tech",
+    "Trade"
+   ],
+   "description": "Pacific gateway: film and game studios, clean tech, and Asia trade.",
+   "cost": 135,
+   "scores": {
+    "career": 81,
+    "network": 79,
+    "entrepreneurship": 74,
+    "tech": 77,
+    "lifestyle": 84
+   },
+   "tier": "base",
+   "used": {
+    "career": [
+     "gci",
+     "gfci"
+    ],
+    "network": [
+     "gci"
+    ],
+    "entrepreneurship": [
+     "blink"
+    ],
+    "tech": [
+     "gser",
+     "blink"
+    ],
+    "lifestyle": [
+     "qol"
+    ]
+   }
+  },
+  {
+   "name": "Montreal",
+   "country": "Canada",
+   "cc": "CA",
+   "group": "North America",
+   "lat": 45.5019,
+   "lon": -73.5674,
+   "road": true,
+   "tags": [
+    "AI",
+    "Aerospace",
+    "Gaming"
+   ],
+   "description": "A deep AI research base (Mila), aerospace, and game studios, at lower cost than Toronto.",
+   "cost": 110,
+   "scores": {
+    "career": 83,
+    "network": 83,
+    "entrepreneurship": 73,
+    "tech": 77,
+    "lifestyle": 78
+   },
+   "tier": "base",
+   "used": {
+    "career": [
+     "gci",
+     "gfci"
+    ],
+    "network": [
+     "gci"
+    ],
+    "entrepreneurship": [
+     "blink"
+    ],
+    "tech": [
+     "gser",
+     "blink"
+    ],
+    "lifestyle": [
+     "qol"
+    ]
+   }
+  },
+  {
+   "name": "Mexico City",
+   "country": "Mexico",
+   "cc": "MX",
+   "group": "North America",
+   "lat": 19.4326,
+   "lon": -99.1332,
+   "road": true,
+   "tags": [
+    "Finance",
+    "Media",
+    "Fintech"
+   ],
+   "description": "Latin America's largest metro, and the base for Mexican finance and fintech.",
+   "cost": 95,
+   "scores": {
+    "career": 81,
+    "network": 81,
+    "entrepreneurship": 72,
+    "tech": 73,
+    "lifestyle": 49
+   },
+   "tier": "base",
+   "used": {
+    "career": [
+     "gci",
+     "gfci"
+    ],
+    "network": [
+     "gci"
+    ],
+    "entrepreneurship": [
+     "blink"
+    ],
+    "tech": [
+     "blink"
+    ],
+    "lifestyle": [
+     "qol"
+    ]
+   }
+  },
+  {
+   "name": "São Paulo",
+   "country": "Brazil",
+   "cc": "BR",
+   "group": "South America",
+   "lat": -23.5505,
+   "lon": -46.6333,
+   "road": false,
+   "tags": [
+    "Finance",
+    "Fintech",
+    "Industry"
+   ],
+   "description": "The business engine of South America: banks, fintech, and corporate headquarters.",
+   "cost": 70,
+   "scores": {
+    "career": 82,
+    "network": 83,
+    "entrepreneurship": 78,
+    "tech": 79,
+    "lifestyle": 50
+   },
+   "tier": "base",
+   "used": {
+    "career": [
+     "gci",
+     "gfci"
+    ],
+    "network": [
+     "gci"
+    ],
+    "entrepreneurship": [
+     "blink"
+    ],
+    "tech": [
+     "gser",
+     "blink"
+    ],
+    "lifestyle": [
+     "qol"
+    ]
+   }
+  },
+  {
+   "name": "Buenos Aires",
+   "country": "Argentina",
+   "cc": "AR",
+   "group": "South America",
+   "lat": -34.6037,
+   "lon": -58.3816,
+   "road": false,
+   "tags": [
+    "Software",
+    "Creative",
+    "Agribusiness"
+   ],
+   "description": "Deep software talent and a creative economy, with an economy that swings hard.",
+   "cost": 90,
+   "scores": {
+    "career": 81,
+    "network": 82,
+    "entrepreneurship": 70,
+    "tech": 71,
+    "lifestyle": 58
+   },
+   "tier": "base",
+   "used": {
+    "career": [
+     "gci",
+     "gfci"
+    ],
+    "network": [
+     "gci"
+    ],
+    "entrepreneurship": [
+     "blink"
+    ],
+    "tech": [
+     "blink"
+    ],
+    "lifestyle": [
+     "qol"
+    ]
+   }
+  },
+  {
+   "name": "Bogotá",
+   "country": "Colombia",
+   "cc": "CO",
+   "group": "South America",
+   "lat": 4.711,
+   "lon": -74.0721,
+   "road": false,
+   "tags": [
+    "Fintech",
+    "Services",
+    "Startups"
+   ],
+   "description": "Colombia's capital and a fast-growing startup and nearshore-services hub.",
+   "cost": 75,
+   "scores": {
+    "career": 79,
+    "network": 77,
+    "entrepreneurship": 71,
+    "tech": 73,
+    "lifestyle": 52
+   },
+   "tier": "base",
+   "used": {
+    "career": [
+     "gci",
+     "gfci"
+    ],
+    "network": [
+     "gci"
+    ],
+    "entrepreneurship": [
+     "blink"
+    ],
+    "tech": [
+     "blink"
+    ],
+    "lifestyle": [
+     "qol"
+    ]
+   }
+  },
+  {
+   "name": "Santiago",
+   "country": "Chile",
+   "cc": "CL",
+   "group": "South America",
+   "lat": -33.4489,
+   "lon": -70.6693,
+   "road": false,
+   "tags": [
+    "Mining",
+    "Finance",
+    "Startups"
+   ],
+   "description": "A stable regional finance centre, with Start-Up Chile and mining-tech money.",
+   "cost": 70,
+   "scores": {
+    "career": 80,
+    "network": 78,
+    "entrepreneurship": 70,
+    "tech": 72,
+    "lifestyle": 54
+   },
+   "tier": "base",
+   "used": {
+    "career": [
+     "gci",
+     "gfci"
+    ],
+    "network": [
+     "gci"
+    ],
+    "entrepreneurship": [
+     "blink"
+    ],
+    "tech": [
+     "blink"
+    ],
+    "lifestyle": [
+     "qol"
+    ]
+   }
+  },
+  {
+   "name": "London",
+   "country": "United Kingdom",
+   "cc": "GB",
+   "group": "Europe",
+   "lat": 51.5074,
+   "lon": -0.1278,
+   "road": false,
+   "tags": [
+    "Finance",
+    "Tech",
+    "Media"
+   ],
+   "description": "A top-two global financial centre and Europe's largest tech ecosystem.",
+   "cost": 190,
+   "scores": {
+    "career": 96,
+    "network": 99,
+    "entrepreneurship": 92,
+    "tech": 91,
+    "lifestyle": 67
+   },
+   "tier": "expansion",
+   "used": {
+    "career": [
+     "gci",
+     "gfci"
+    ],
+    "network": [
+     "gci"
+    ],
+    "entrepreneurship": [
+     "blink"
+    ],
+    "tech": [
+     "gser",
+     "blink"
+    ],
+    "lifestyle": [
+     "qol"
+    ]
+   }
+  },
+  {
+   "name": "Paris",
+   "country": "France",
+   "cc": "FR",
+   "group": "Europe",
+   "lat": 48.8566,
+   "lon": 2.3522,
+   "road": false,
+   "tags": [
+    "Luxury",
+    "AI",
+    "Finance"
+   ],
+   "description": "Corporate HQ capital of the EU, with luxury groups and a surging AI scene.",
+   "cost": 145,
+   "scores": {
+    "career": 90,
+    "network": 97,
+    "entrepreneurship": 85,
+    "tech": 85,
+    "lifestyle": 66
+   },
+   "tier": "expansion",
+   "used": {
+    "career": [
+     "gci",
+     "gfci"
+    ],
+    "network": [
+     "gci"
+    ],
+    "entrepreneurship": [
+     "blink"
+    ],
+    "tech": [
+     "gser",
+     "blink"
+    ],
+    "lifestyle": [
+     "qol"
+    ]
+   }
+  },
+  {
+   "name": "Berlin",
+   "country": "Germany",
+   "cc": "DE",
+   "group": "Europe",
+   "lat": 52.52,
+   "lon": 13.405,
+   "road": false,
+   "tags": [
+    "Startups",
+    "Creative",
+    "Policy"
+   ],
+   "description": "Germany's startup capital: creative, international, and cheaper than London or Paris.",
+   "cost": 135,
+   "scores": {
+    "career": 84,
+    "network": 85,
+    "entrepreneurship": 81,
+    "tech": 82,
+    "lifestyle": 77
+   },
+   "tier": "expansion",
+   "used": {
+    "career": [
+     "gci",
+     "gfci"
+    ],
+    "network": [
+     "gci"
+    ],
+    "entrepreneurship": [
+     "blink"
+    ],
+    "tech": [
+     "gser",
+     "blink"
+    ],
+    "lifestyle": [
+     "qol"
+    ]
+   }
+  },
+  {
+   "name": "Amsterdam",
+   "country": "Netherlands",
+   "cc": "NL",
+   "group": "Europe",
+   "lat": 52.3676,
+   "lon": 4.9041,
+   "road": false,
+   "tags": [
+    "Tech",
+    "Logistics",
+    "Finance"
+   ],
+   "description": "An English-friendly EU base for tech, payments, and European logistics.",
+   "cost": 170,
+   "scores": {
+    "career": 85,
+    "network": 85,
+    "entrepreneurship": 77,
+    "tech": 80,
+    "lifestyle": 88
+   },
+   "tier": "expansion",
+   "used": {
+    "career": [
+     "gci",
+     "gfci"
+    ],
+    "network": [
+     "gci"
+    ],
+    "entrepreneurship": [
+     "blink"
+    ],
+    "tech": [
+     "gser",
+     "blink"
+    ],
+    "lifestyle": [
+     "qol"
+    ]
+   }
+  },
+  {
+   "name": "Dublin",
+   "country": "Ireland",
+   "cc": "IE",
+   "group": "Europe",
+   "lat": 53.3498,
+   "lon": -6.2603,
+   "road": false,
+   "tags": [
+    "Tech",
+    "Pharma",
+    "Finance"
+   ],
+   "description": "The EU headquarters of big US tech, English-speaking, with a tight housing market.",
+   "cost": 170,
+   "scores": {
+    "career": 83,
+    "network": 80,
+    "entrepreneurship": 72,
+    "tech": 74,
+    "lifestyle": 69
+   },
+   "tier": "base",
+   "used": {
+    "career": [
+     "gci",
+     "gfci"
+    ],
+    "network": [
+     "gci"
+    ],
+    "entrepreneurship": [
+     "blink"
+    ],
+    "tech": [
+     "blink"
+    ],
+    "lifestyle": [
+     "qol"
+    ]
+   }
+  },
+  {
+   "name": "Zurich",
+   "country": "Switzerland",
+   "cc": "CH",
+   "group": "Europe",
+   "lat": 47.3769,
+   "lon": 8.5417,
+   "road": false,
+   "tags": [
+    "Banking",
+    "Insurance",
+    "Research"
+   ],
+   "description": "Private banking, reinsurance, and ETH research. Top-tier quality of life at top-tier prices.",
+   "cost": 245,
+   "scores": {
+    "career": 86,
+    "network": 81,
+    "entrepreneurship": 72,
+    "tech": 76,
+    "lifestyle": 86
+   },
+   "tier": "base",
+   "used": {
+    "career": [
+     "gci",
+     "gfci"
+    ],
+    "network": [
+     "gci"
+    ],
+    "entrepreneurship": [
+     "blink"
+    ],
+    "tech": [
+     "gser",
+     "blink"
+    ],
+    "lifestyle": [
+     "qol"
+    ]
+   }
+  },
+  {
+   "name": "Stockholm",
+   "country": "Sweden",
+   "cc": "SE",
+   "group": "Europe",
+   "lat": 59.3293,
+   "lon": 18.0686,
+   "road": false,
+   "tags": [
+    "Tech",
+    "Fintech",
+    "Design"
+   ],
+   "description": "Produces unicorns at an outsized rate per capita: Spotify, Klarna, and many more.",
+   "cost": 145,
+   "scores": {
+    "career": 83,
+    "network": 81,
+    "entrepreneurship": 78,
+    "tech": 79,
+    "lifestyle": 78
+   },
+   "tier": "base",
+   "used": {
+    "career": [
+     "gci",
+     "gfci"
+    ],
+    "network": [
+     "gci"
+    ],
+    "entrepreneurship": [
+     "blink"
+    ],
+    "tech": [
+     "gser",
+     "blink"
+    ],
+    "lifestyle": [
+     "qol"
+    ]
+   }
+  },
+  {
+   "name": "Lisbon",
+   "country": "Portugal",
+   "cc": "PT",
+   "group": "Europe",
+   "lat": 38.7223,
+   "lon": -9.1393,
+   "road": false,
+   "tags": [
+    "Startups",
+    "Tourism",
+    "Remote work"
+   ],
+   "description": "A remote-work and startup magnet, home to Web Summit, with rising rents.",
+   "cost": 115,
+   "scores": {
+    "career": 82,
+    "network": 80,
+    "entrepreneurship": 69,
+    "tech": 71,
+    "lifestyle": 71
+   },
+   "tier": "base",
+   "used": {
+    "career": [
+     "gci",
+     "gfci"
+    ],
+    "network": [
+     "gci"
+    ],
+    "entrepreneurship": [
+     "blink"
+    ],
+    "tech": [
+     "blink"
+    ],
+    "lifestyle": [
+     "qol"
+    ]
+   }
+  },
+  {
+   "name": "Madrid",
+   "country": "Spain",
+   "cc": "ES",
+   "group": "Europe",
+   "lat": 40.4168,
+   "lon": -3.7038,
+   "road": false,
+   "tags": [
+    "Finance",
+    "Infrastructure",
+    "Latin America"
+   ],
+   "description": "Spain's corporate capital and the European bridge to Latin American business.",
+   "cost": 115,
+   "scores": {
+    "career": 86,
+    "network": 89,
+    "entrepreneurship": 72,
+    "tech": 76,
+    "lifestyle": 79
+   },
+   "tier": "base",
+   "used": {
+    "career": [
+     "gci",
+     "gfci"
+    ],
+    "network": [
+     "gci"
+    ],
+    "entrepreneurship": [
+     "blink"
+    ],
+    "tech": [
+     "gser",
+     "blink"
+    ],
+    "lifestyle": [
+     "qol"
+    ]
+   }
+  },
+  {
+   "name": "Munich",
+   "country": "Germany",
+   "cc": "DE",
+   "group": "Europe",
+   "lat": 48.1351,
+   "lon": 11.582,
+   "road": false,
+   "tags": [
+    "Automotive",
+    "Insurance",
+    "Deep tech"
+   ],
+   "description": "BMW, Siemens, and Allianz headquarters, plus a strong deep-tech startup base from TUM.",
+   "cost": 145,
+   "scores": {
+    "career": 82,
+    "network": 81,
+    "entrepreneurship": 75,
+    "tech": 78,
+    "lifestyle": 87
+   },
+   "tier": "base",
+   "used": {
+    "career": [
+     "gci",
+     "gfci"
+    ],
+    "network": [
+     "gci"
+    ],
+    "entrepreneurship": [
+     "blink"
+    ],
+    "tech": [
+     "gser",
+     "blink"
+    ],
+    "lifestyle": [
+     "qol"
+    ]
+   }
+  },
+  {
+   "name": "Dubai",
+   "country": "United Arab Emirates",
+   "cc": "AE",
+   "group": "Asia",
+   "lat": 25.2048,
+   "lon": 55.2708,
+   "road": false,
+   "tags": [
+    "Trade",
+    "Finance",
+    "Real estate"
+   ],
+   "description": "The Gulf's trading and finance hub: zero income tax and a global connector.",
+   "cost": 145,
+   "scores": {
+    "career": 87,
+    "network": 84,
+    "entrepreneurship": 73,
+    "tech": 75,
+    "lifestyle": 76
+   },
+   "tier": "base",
+   "used": {
+    "career": [
+     "gci",
+     "gfci"
+    ],
+    "network": [
+     "gci"
+    ],
+    "entrepreneurship": [
+     "blink"
+    ],
+    "tech": [
+     "blink"
+    ],
+    "lifestyle": [
+     "qol"
+    ]
+   }
+  },
+  {
+   "name": "Abu Dhabi",
+   "country": "United Arab Emirates",
+   "cc": "AE",
+   "group": "Asia",
+   "lat": 24.4539,
+   "lon": 54.3773,
+   "road": false,
+   "tags": [
+    "Sovereign wealth",
+    "Energy",
+    "Finance"
+   ],
+   "description": "Sovereign-wealth capital (ADIA, Mubadala) with a fast-growing finance centre (ADGM).",
+   "cost": 125,
+   "scores": {
+    "career": 85,
+    "network": 79,
+    "entrepreneurship": 64,
+    "tech": 66,
+    "lifestyle": 78
+   },
+   "tier": "base",
+   "used": {
+    "career": [
+     "gci",
+     "gfci"
+    ],
+    "network": [
+     "gci"
+    ],
+    "entrepreneurship": [
+     "blink"
+    ],
+    "tech": [
+     "blink"
+    ],
+    "lifestyle": [
+     "qol"
+    ]
+   }
+  },
+  {
+   "name": "Tel Aviv",
+   "country": "Israel",
+   "cc": "IL",
+   "group": "Asia",
+   "lat": 32.0853,
+   "lon": 34.7818,
+   "road": false,
+   "tags": [
+    "Tech",
+    "Cyber",
+    "Venture"
+   ],
+   "description": "Among the densest startup and cybersecurity ecosystems per capita anywhere.",
+   "cost": 190,
+   "scores": {
+    "career": 80,
+    "network": 78,
+    "entrepreneurship": 84,
+    "tech": 87,
+    "lifestyle": 74
+   },
+   "tier": "base",
+   "used": {
+    "career": [
+     "gci",
+     "gfci"
+    ],
+    "network": [
+     "gci"
+    ],
+    "entrepreneurship": [
+     "blink"
+    ],
+    "tech": [
+     "gser",
+     "blink"
+    ],
+    "lifestyle": [
+     "qol"
+    ]
+   }
+  },
+  {
+   "name": "Riyadh",
+   "country": "Saudi Arabia",
+   "cc": "SA",
+   "group": "Asia",
+   "lat": 24.7136,
+   "lon": 46.6753,
+   "road": false,
+   "tags": [
+    "Energy",
+    "Government",
+    "Giga-projects"
+   ],
+   "description": "Vision 2030 capital, with regional HQ mandates pulling multinationals in.",
+   "cost": 95,
+   "scores": {
+    "career": 82,
+    "network": 78,
+    "entrepreneurship": 70,
+    "tech": 72,
+    "lifestyle": 69
+   },
+   "tier": "base",
+   "used": {
+    "career": [
+     "gci",
+     "gfci"
+    ],
+    "network": [
+     "gci"
+    ],
+    "entrepreneurship": [
+     "blink"
+    ],
+    "tech": [
+     "blink"
+    ],
+    "lifestyle": [
+     "qol"
+    ]
+   }
+  },
+  {
+   "name": "Lagos",
+   "country": "Nigeria",
+   "cc": "NG",
+   "group": "Africa",
+   "lat": 6.5244,
+   "lon": 3.3792,
+   "road": false,
+   "tags": [
+    "Fintech",
+    "Media",
+    "Trade"
+   ],
+   "description": "Africa's biggest startup market by funding, led by fintech, with Nollywood and Afrobeats.",
+   "cost": 65,
+   "scores": {
+    "career": 78,
+    "network": 73,
+    "entrepreneurship": 70,
+    "tech": 72
+   },
+   "tier": "base",
+   "used": {
+    "career": [
+     "gci",
+     "gfci"
+    ],
+    "network": [
+     "gci"
+    ],
+    "entrepreneurship": [
+     "blink"
+    ],
+    "tech": [
+     "blink"
+    ]
+   }
+  },
+  {
+   "name": "Nairobi",
+   "country": "Kenya",
+   "cc": "KE",
+   "group": "Africa",
+   "lat": -1.2921,
+   "lon": 36.8219,
+   "road": false,
+   "tags": [
+    "Fintech",
+    "NGOs",
+    "Startups"
+   ],
+   "description": "'Silicon Savannah': the M-Pesa home market and East Africa's HQ city.",
+   "cost": 55,
+   "scores": {
+    "career": 78,
+    "network": 75,
+    "entrepreneurship": 67,
+    "tech": 69,
+    "lifestyle": 50
+   },
+   "tier": "base",
+   "used": {
+    "career": [
+     "gci",
+     "gfci"
+    ],
+    "network": [
+     "gci"
+    ],
+    "entrepreneurship": [
+     "blink"
+    ],
+    "tech": [
+     "blink"
+    ],
+    "lifestyle": [
+     "qol"
+    ]
+   }
+  },
+  {
+   "name": "Johannesburg",
+   "country": "South Africa",
+   "cc": "ZA",
+   "group": "Africa",
+   "lat": -26.2041,
+   "lon": 28.0473,
+   "road": false,
+   "tags": [
+    "Finance",
+    "Mining",
+    "Retail"
+   ],
+   "description": "Africa's largest stock exchange (JSE) and its most developed corporate market.",
+   "cost": 75,
+   "scores": {
+    "career": 79,
+    "network": 77,
+    "entrepreneurship": 66,
+    "tech": 68,
+    "lifestyle": 66
+   },
+   "tier": "base",
+   "used": {
+    "career": [
+     "gci",
+     "gfci"
+    ],
+    "network": [
+     "gci"
+    ],
+    "entrepreneurship": [
+     "blink"
+    ],
+    "tech": [
+     "blink"
+    ],
+    "lifestyle": [
+     "qol"
+    ]
+   }
+  },
+  {
+   "name": "Cairo",
+   "country": "Egypt",
+   "cc": "EG",
+   "group": "Africa",
+   "lat": 30.0444,
+   "lon": 31.2357,
+   "road": false,
+   "tags": [
+    "Government",
+    "Startups",
+    "Outsourcing"
+   ],
+   "description": "The Arab world's biggest city, with a growing startup and outsourcing scene.",
+   "cost": 40,
+   "scores": {
+    "career": 80,
+    "network": 77,
+    "entrepreneurship": 69,
+    "tech": 70,
+    "lifestyle": 43
+   },
+   "tier": "base",
+   "used": {
+    "career": [
+     "gci"
+    ],
+    "network": [
+     "gci"
+    ],
+    "entrepreneurship": [
+     "blink"
+    ],
+    "tech": [
+     "blink"
+    ],
+    "lifestyle": [
+     "qol"
+    ]
+   }
+  },
+  {
+   "name": "Singapore",
+   "country": "Singapore",
+   "cc": "SG",
+   "group": "Asia",
+   "lat": 1.3521,
+   "lon": 103.8198,
+   "road": false,
+   "tags": [
+    "Finance",
+    "Trade",
+    "Tech"
+   ],
+   "description": "Asia's HQ city: rule of law, low tax, and a top-five global financial centre.",
+   "cost": 200,
+   "scores": {
+    "career": 93,
+    "network": 94,
+    "entrepreneurship": 82,
+    "tech": 84,
+    "lifestyle": 70
+   },
+   "tier": "expansion",
+   "used": {
+    "career": [
+     "gci",
+     "gfci"
+    ],
+    "network": [
+     "gci"
+    ],
+    "entrepreneurship": [
+     "blink"
+    ],
+    "tech": [
+     "gser",
+     "blink"
+    ],
+    "lifestyle": [
+     "qol"
+    ]
+   }
+  },
+  {
+   "name": "Hong Kong",
+   "country": "China (SAR)",
+   "cc": "HK",
+   "group": "Asia",
+   "lat": 22.3193,
+   "lon": 114.1694,
+   "road": false,
+   "tags": [
+    "Finance",
+    "Trade",
+    "Law"
+   ],
+   "description": "The capital-markets gateway to China, now shifting under Beijing's tighter hold.",
+   "cost": 170,
+   "scores": {
+    "career": 93,
+    "network": 92,
+    "entrepreneurship": 75,
+    "tech": 78,
+    "lifestyle": 58
+   },
+   "tier": "base",
+   "used": {
+    "career": [
+     "gci",
+     "gfci"
+    ],
+    "network": [
+     "gci"
+    ],
+    "entrepreneurship": [
+     "blink"
+    ],
+    "tech": [
+     "gser",
+     "blink"
+    ],
+    "lifestyle": [
+     "qol"
+    ]
+   }
+  },
+  {
+   "name": "Tokyo",
+   "country": "Japan",
+   "cc": "JP",
+   "group": "Asia",
+   "lat": 35.6762,
+   "lon": 139.6503,
+   "road": false,
+   "tags": [
+    "Finance",
+    "Manufacturing",
+    "Media"
+   ],
+   "description": "The world's largest metro economy: corporate Japan's HQ, safe and efficient.",
+   "cost": 100,
+   "scores": {
+    "career": 92,
+    "network": 95,
+    "entrepreneurship": 82,
+    "tech": 84,
+    "lifestyle": 84
+   },
+   "tier": "expansion",
+   "used": {
+    "career": [
+     "gci",
+     "gfci"
+    ],
+    "network": [
+     "gci"
+    ],
+    "entrepreneurship": [
+     "blink"
+    ],
+    "tech": [
+     "gser",
+     "blink"
+    ],
+    "lifestyle": [
+     "qol"
+    ]
+   }
+  },
+  {
+   "name": "Seoul",
+   "country": "South Korea",
+   "cc": "KR",
+   "group": "Asia",
+   "lat": 37.5665,
+   "lon": 126.978,
+   "road": false,
+   "tags": [
+    "Electronics",
+    "Gaming",
+    "Media"
+   ],
+   "description": "Samsung, Hyundai, and K-culture: hardware and entertainment at world scale.",
+   "cost": 125,
+   "scores": {
+    "career": 89,
+    "network": 88,
+    "entrepreneurship": 79,
+    "tech": 83,
+    "lifestyle": 72
+   },
+   "tier": "expansion",
+   "used": {
+    "career": [
+     "gci",
+     "gfci"
+    ],
+    "network": [
+     "gci"
+    ],
+    "entrepreneurship": [
+     "blink"
+    ],
+    "tech": [
+     "gser",
+     "blink"
+    ],
+    "lifestyle": [
+     "qol"
+    ]
+   }
+  },
+  {
+   "name": "Shanghai",
+   "country": "China",
+   "cc": "CN",
+   "group": "Asia",
+   "lat": 31.2304,
+   "lon": 121.4737,
+   "road": false,
+   "tags": [
+    "Finance",
+    "Manufacturing",
+    "Trade"
+   ],
+   "description": "Mainland China's finance and trade capital, with the world's busiest container port.",
+   "cost": 80,
+   "scores": {
+    "career": 91,
+    "network": 91,
+    "entrepreneurship": 86,
+    "tech": 86,
+    "lifestyle": 63
+   },
+   "tier": "expansion",
+   "used": {
+    "career": [
+     "gci",
+     "gfci"
+    ],
+    "network": [
+     "gci"
+    ],
+    "entrepreneurship": [
+     "blink"
+    ],
+    "tech": [
+     "gser",
+     "blink"
+    ],
+    "lifestyle": [
+     "qol"
+    ]
+   }
+  },
+  {
+   "name": "Bengaluru",
+   "country": "India",
+   "cc": "IN",
+   "group": "Asia",
+   "lat": 12.9716,
+   "lon": 77.5946,
+   "road": false,
+   "tags": [
+    "Software",
+    "Startups",
+    "R&D"
+   ],
+   "description": "India's tech capital: global R&D centres and most of India's unicorns.",
+   "cost": 40,
+   "scores": {
+    "career": 78,
+    "network": 75,
+    "entrepreneurship": 84,
+    "tech": 84,
+    "lifestyle": 62
+   },
+   "tier": "base",
+   "used": {
+    "career": [
+     "gci"
+    ],
+    "network": [
+     "gci"
+    ],
+    "entrepreneurship": [
+     "blink"
+    ],
+    "tech": [
+     "gser",
+     "blink"
+    ],
+    "lifestyle": [
+     "qol"
+    ]
+   }
+  },
+  {
+   "name": "Mumbai",
+   "country": "India",
+   "cc": "IN",
+   "group": "Asia",
+   "lat": 19.076,
+   "lon": 72.8777,
+   "road": false,
+   "tags": [
+    "Finance",
+    "Media",
+    "Trade"
+   ],
+   "description": "India's finance and film capital, home to the BSE, the NSE, and Bollywood.",
+   "cost": 55,
+   "scores": {
+    "career": 81,
+    "network": 78,
+    "entrepreneurship": 80,
+    "tech": 80,
+    "lifestyle": 48
+   },
+   "tier": "base",
+   "used": {
+    "career": [
+     "gci",
+     "gfci"
+    ],
+    "network": [
+     "gci"
+    ],
+    "entrepreneurship": [
+     "blink"
+    ],
+    "tech": [
+     "gser",
+     "blink"
+    ],
+    "lifestyle": [
+     "qol"
+    ]
+   }
+  },
+  {
+   "name": "Sydney",
+   "country": "Australia",
+   "cc": "AU",
+   "group": "Oceania",
+   "lat": -33.8688,
+   "lon": 151.2093,
+   "road": false,
+   "tags": [
+    "Finance",
+    "Tech",
+    "Tourism"
+   ],
+   "description": "Australia's finance and tech hub, with Atlassian and Canva, and a harbour lifestyle.",
+   "cost": 175,
+   "scores": {
+    "career": 86,
+    "network": 85,
+    "entrepreneurship": 76,
+    "tech": 79,
+    "lifestyle": 79
+   },
+   "tier": "expansion",
+   "used": {
+    "career": [
+     "gci",
+     "gfci"
+    ],
+    "network": [
+     "gci"
+    ],
+    "entrepreneurship": [
+     "blink"
+    ],
+    "tech": [
+     "gser",
+     "blink"
+    ],
+    "lifestyle": [
+     "qol"
+    ]
+   }
+  },
+  {
+   "name": "Melbourne",
+   "country": "Australia",
+   "cc": "AU",
+   "group": "Oceania",
+   "lat": -37.8136,
+   "lon": 144.9631,
+   "road": false,
+   "tags": [
+    "Education",
+    "Health",
+    "Culture"
+   ],
+   "description": "Universities, medical research, and culture. A perennial top-liveability city.",
+   "cost": 155,
+   "scores": {
+    "career": 85,
+    "network": 86,
+    "entrepreneurship": 74,
+    "tech": 77,
+    "lifestyle": 83
+   },
+   "tier": "expansion",
+   "used": {
+    "career": [
+     "gci",
+     "gfci"
+    ],
+    "network": [
+     "gci"
+    ],
+    "entrepreneurship": [
+     "blink"
+    ],
+    "tech": [
+     "gser",
+     "blink"
+    ],
+    "lifestyle": [
+     "qol"
+    ]
+   }
+  }
+ ],
+ "DESTINATIONS": [
+  {
+   "continent": "Asia",
+   "tier": "S",
+   "destination": "Thailand",
+   "cost": 45,
+   "why": "5-star resorts, spas, and food at a fraction of Western prices; strong tourism infrastructure."
+  },
+  {
+   "continent": "Asia",
+   "tier": "S",
+   "destination": "Vietnam",
+   "cost": 40,
+   "why": "Boutique hotels, private tours, and top-tier dining still land far under $50/day."
+  },
+  {
+   "continent": "Asia",
+   "tier": "S",
+   "destination": "Indonesia (Bali)",
+   "cost": 55,
+   "why": "Private villas with pools, wellness retreats, stunning coastline."
+  },
+  {
+   "continent": "Asia",
+   "tier": "S",
+   "destination": "Sri Lanka",
+   "cost": 45,
+   "why": "Tea-country boutique stays, safaris, and beach resorts at low cost."
+  },
+  {
+   "continent": "Asia",
+   "tier": "S",
+   "destination": "Nepal",
+   "cost": 35,
+   "why": "Luxury trekking lodges and Kathmandu boutique hotels are still very cheap."
+  },
+  {
+   "continent": "Asia",
+   "tier": "A",
+   "destination": "Malaysia",
+   "cost": 55,
+   "why": "Modern cities (KL) plus tropical island resorts; strong value across the board."
+  },
+  {
+   "continent": "Asia",
+   "tier": "A",
+   "destination": "Philippines",
+   "cost": 50,
+   "why": "Private island resorts and diving luxury without the price tag."
+  },
+  {
+   "continent": "Asia",
+   "tier": "A",
+   "destination": "Cambodia",
+   "cost": 40,
+   "why": "High-end Siem Reap/Angkor stays and boutique riverside hotels are affordable."
+  },
+  {
+   "continent": "Asia",
+   "tier": "A",
+   "destination": "Laos",
+   "cost": 40,
+   "why": "Boutique French-colonial hotels and river lodges, low cost of living."
+  },
+  {
+   "continent": "Asia",
+   "tier": "A",
+   "destination": "Türkiye",
+   "cost": 50,
+   "why": "Cappadocia cave hotels, Bosphorus views, rich culture at reasonable prices."
+  },
+  {
+   "continent": "Asia",
+   "tier": "A",
+   "destination": "Jordan",
+   "cost": 60,
+   "why": "Petra, Wadi Rum luxury camps, Dead Sea resorts — good value for the experience."
+  },
+  {
+   "continent": "Asia",
+   "tier": "A",
+   "destination": "India",
+   "cost": 55,
+   "why": "Palace hotels and heritage stays can be surprisingly affordable outside peak season."
+  },
+  {
+   "continent": "Asia",
+   "tier": "B",
+   "destination": "China",
+   "cost": 75,
+   "why": "Great value outside Shanghai/Beijing; luxury rail and resort options need planning."
+  },
+  {
+   "continent": "Asia",
+   "tier": "B",
+   "destination": "Taiwan",
+   "cost": 70,
+   "why": "Excellent food and hot-spring resorts; costs creep up in Taipei."
+  },
+  {
+   "continent": "Asia",
+   "tier": "B",
+   "destination": "South Korea",
+   "cost": 90,
+   "why": "Seoul luxury and spa culture (jjimjilbang to 5-star) at mid-tier pricing."
+  },
+  {
+   "continent": "Asia",
+   "tier": "B",
+   "destination": "Oman",
+   "cost": 70,
+   "why": "Desert luxury camps and Muscat resorts — quieter and pricier than Jordan."
+  },
+  {
+   "continent": "Asia",
+   "tier": "C",
+   "destination": "Japan",
+   "cost": 130,
+   "why": "Ryokans and omakase are iconic, but rarely the cheapest version of “luxury.”"
+  },
+  {
+   "continent": "Asia",
+   "tier": "C",
+   "destination": "Saudi Arabia",
+   "cost": 140,
+   "why": "New luxury developments (AlUla, Red Sea) still carry premium price tags."
+  },
+  {
+   "continent": "Asia",
+   "tier": "D",
+   "destination": "Singapore",
+   "cost": 190,
+   "why": "World-class, but hotel and dining prices sit near Western capital-city levels."
+  },
+  {
+   "continent": "Asia",
+   "tier": "D",
+   "destination": "Hong Kong",
+   "cost": 170,
+   "why": "Skyline and service are 5-star, but so is the cost of a room and a meal."
+  },
+  {
+   "continent": "Asia",
+   "tier": "D",
+   "destination": "United Arab Emirates (Dubai)",
+   "cost": 180,
+   "why": "Iconic luxury, but daily costs rival or exceed Europe's expensive tier."
+  },
+  {
+   "continent": "Asia",
+   "tier": "D",
+   "destination": "Qatar",
+   "cost": 170,
+   "why": "Doha's luxury hotels and dining are priced for a global business crowd."
+  },
+  {
+   "continent": "Asia",
+   "tier": "D",
+   "destination": "Maldives",
+   "cost": 450,
+   "why": "The bar for overwater luxury — and priced accordingly per night."
+  },
+  {
+   "continent": "Africa",
+   "tier": "S",
+   "destination": "Morocco",
+   "cost": 45,
+   "why": "Riads, hammams, and Marrakech/Fes culture at an unbeatable price point."
+  },
+  {
+   "continent": "Africa",
+   "tier": "S",
+   "destination": "Egypt",
+   "cost": 40,
+   "why": "Nile cruises, Red Sea resorts, and ancient history for very little per day."
+  },
+  {
+   "continent": "Africa",
+   "tier": "S",
+   "destination": "Tunisia",
+   "cost": 40,
+   "why": "Mediterranean coastline and medina luxury stays without the crowds or cost."
+  },
+  {
+   "continent": "Africa",
+   "tier": "A",
+   "destination": "South Africa",
+   "cost": 70,
+   "why": "Cape Town wine-country luxury and coastal stays are excellent value."
+  },
+  {
+   "continent": "Africa",
+   "tier": "A",
+   "destination": "Zanzibar (Tanzania)",
+   "cost": 80,
+   "why": "Beachfront luxury resorts on Zanzibar are well below Indian Ocean averages."
+  },
+  {
+   "continent": "Africa",
+   "tier": "A",
+   "destination": "Cape Verde",
+   "cost": 75,
+   "why": "All-inclusive island resorts at a lower price than most Atlantic destinations."
+  },
+  {
+   "continent": "Africa",
+   "tier": "B",
+   "destination": "Kenya",
+   "cost": 110,
+   "why": "Mid-range safari lodges deliver a premium experience with planning."
+  },
+  {
+   "continent": "Africa",
+   "tier": "B",
+   "destination": "Namibia",
+   "cost": 120,
+   "why": "Desert lodges and dramatic scenery; remoteness adds to the daily cost."
+  },
+  {
+   "continent": "Africa",
+   "tier": "B",
+   "destination": "Mauritius",
+   "cost": 150,
+   "why": "Polished resort luxury, priced above its African neighbors."
+  },
+  {
+   "continent": "Africa",
+   "tier": "C",
+   "destination": "Botswana",
+   "cost": 220,
+   "why": "Exclusive-use safari camps are stunning but rarely “budget” luxury."
+  },
+  {
+   "continent": "Africa",
+   "tier": "C",
+   "destination": "Rwanda",
+   "cost": 200,
+   "why": "Gorilla trekking permits alone push daily costs well above the region's average."
+  },
+  {
+   "continent": "Africa",
+   "tier": "D",
+   "destination": "Seychelles",
+   "cost": 350,
+   "why": "Private-island luxury among the most expensive in Africa or the Indian Ocean."
+  },
+  {
+   "continent": "Europe",
+   "tier": "S",
+   "destination": "Albania",
+   "cost": 40,
+   "why": "Riviera coastline and boutique stays at some of Europe's lowest prices."
+  },
+  {
+   "continent": "Europe",
+   "tier": "S",
+   "destination": "Bulgaria",
+   "cost": 35,
+   "why": "Black Sea escapes and Sofia luxury hotels on a real budget."
+  },
+  {
+   "continent": "Europe",
+   "tier": "S",
+   "destination": "North Macedonia",
+   "cost": 35,
+   "why": "Emerging boutique hotel scene with very low daily costs."
+  },
+  {
+   "continent": "Europe",
+   "tier": "A",
+   "destination": "Montenegro",
+   "cost": 50,
+   "why": "Adriatic beauty and yacht-town glamour without the Amalfi Coast price tag."
+  },
+  {
+   "continent": "Europe",
+   "tier": "A",
+   "destination": "Portugal (outside Lisbon)",
+   "cost": 60,
+   "why": "Coastal towns, wine regions, and boutique hotels are still great value."
+  },
+  {
+   "continent": "Europe",
+   "tier": "A",
+   "destination": "Poland",
+   "cost": 45,
+   "why": "Charming historic cities with high-quality, low-cost luxury stays."
+  },
+  {
+   "continent": "Europe",
+   "tier": "A",
+   "destination": "Hungary",
+   "cost": 50,
+   "why": "Budapest thermal-bath luxury and Danube views at a fair price."
+  },
+  {
+   "continent": "Europe",
+   "tier": "A",
+   "destination": "Romania",
+   "cost": 40,
+   "why": "Castles and mountain lodges are beautiful but light on true 5-star density."
+  },
+  {
+   "continent": "Europe",
+   "tier": "B",
+   "destination": "Greece (non-Santorini/Mykonos)",
+   "cost": 60,
+   "why": "Excellent islands and mainland stays if you avoid the two priciest spots."
+  },
+  {
+   "continent": "Europe",
+   "tier": "B",
+   "destination": "Czech Republic",
+   "cost": 45,
+   "why": "Prague and countryside luxury hold up well with some planning."
+  },
+  {
+   "continent": "Europe",
+   "tier": "B",
+   "destination": "Croatia",
+   "cost": 65,
+   "why": "Dalmatian Coast luxury, but prices are rising fast in peak season."
+  },
+  {
+   "continent": "Europe",
+   "tier": "B",
+   "destination": "Spain",
+   "cost": 65,
+   "why": "Great destinations throughout, though costs add up in the big cities."
+  },
+  {
+   "continent": "Europe",
+   "tier": "C",
+   "destination": "Italy",
+   "cost": 70,
+   "why": "Iconic and reliably excellent, but rarely the cheapest luxury option."
+  },
+  {
+   "continent": "Europe",
+   "tier": "C",
+   "destination": "Malta",
+   "cost": 80,
+   "why": "Boutique Mediterranean luxury at a premium versus its neighbors."
+  },
+  {
+   "continent": "Europe",
+   "tier": "D",
+   "destination": "France",
+   "cost": 110,
+   "why": "World-class, but Paris and the Riviera are priced to match the reputation."
+  },
+  {
+   "continent": "Europe",
+   "tier": "D",
+   "destination": "Switzerland",
+   "cost": 150,
+   "why": "Breathtaking, but consistently one of Europe's most expensive countries."
+  },
+  {
+   "continent": "Europe",
+   "tier": "D",
+   "destination": "Iceland",
+   "cost": 120,
+   "why": "Incredible landscapes; food and lodging costs are famously high."
+  },
+  {
+   "continent": "Europe",
+   "tier": "D",
+   "destination": "Norway",
+   "cost": 130,
+   "why": "Stunning fjords, but daily costs rarely feel like a bargain."
+  },
+  {
+   "continent": "North America",
+   "tier": "S",
+   "destination": "Mexico",
+   "cost": 50,
+   "why": "Outside the big resort zones, boutique hotels and food are excellent value."
+  },
+  {
+   "continent": "North America",
+   "tier": "A",
+   "destination": "Costa Rica",
+   "cost": 80,
+   "why": "Eco-luxury lodges and beach resorts, priced fairly for the experience."
+  },
+  {
+   "continent": "North America",
+   "tier": "A",
+   "destination": "Belize",
+   "cost": 90,
+   "why": "Private jungle and reef lodges, smaller-scale but high-quality."
+  },
+  {
+   "continent": "North America",
+   "tier": "A",
+   "destination": "Dominican Republic",
+   "cost": 75,
+   "why": "All-inclusive luxury resorts at strong value versus other Caribbean spots."
+  },
+  {
+   "continent": "North America",
+   "tier": "B",
+   "destination": "Panama",
+   "cost": 85,
+   "why": "City and rainforest luxury with reasonable, if unglamorous, costs."
+  },
+  {
+   "continent": "North America",
+   "tier": "B",
+   "destination": "Guatemala",
+   "cost": 60,
+   "why": "Boutique colonial-town stays are cheap; true luxury density is lower."
+  },
+  {
+   "continent": "North America",
+   "tier": "B",
+   "destination": "Jamaica",
+   "cost": 110,
+   "why": "All-inclusive resort luxury, priced above its Central American neighbors."
+  },
+  {
+   "continent": "North America",
+   "tier": "C",
+   "destination": "Cuba",
+   "cost": 70,
+   "why": "Unique and atmospheric, but infrastructure limits true 5-star options."
+  },
+  {
+   "continent": "North America",
+   "tier": "C",
+   "destination": "Bahamas",
+   "cost": 180,
+   "why": "Close to the U.S., which keeps resort and dining prices elevated."
+  },
+  {
+   "continent": "North America",
+   "tier": "D",
+   "destination": "Canada",
+   "cost": 180,
+   "why": "High-quality lodges and cities, priced like the rest of North America."
+  },
+  {
+   "continent": "North America",
+   "tier": "D",
+   "destination": "Turks and Caicos",
+   "cost": 350,
+   "why": "Some of the Caribbean's most exclusive resorts and matching price tags."
+  },
+  {
+   "continent": "South America",
+   "tier": "S",
+   "destination": "Colombia",
+   "cost": 45,
+   "why": "Cartagena boutique hotels and coffee-region luxury at a low price."
+  },
+  {
+   "continent": "South America",
+   "tier": "S",
+   "destination": "Peru",
+   "cost": 50,
+   "why": "Sacred Valley and Cusco luxury stays, plus Machu Picchu, for very little."
+  },
+  {
+   "continent": "South America",
+   "tier": "S",
+   "destination": "Bolivia",
+   "cost": 40,
+   "why": "Salt-flat lodges and colonial-city hotels are a hidden luxury bargain."
+  },
+  {
+   "continent": "South America",
+   "tier": "A",
+   "destination": "Ecuador",
+   "cost": 55,
+   "why": "Andes and Amazon lodges are high quality without a high price."
+  },
+  {
+   "continent": "South America",
+   "tier": "A",
+   "destination": "Argentina",
+   "cost": 60,
+   "why": "Wine country and Patagonia lodges have offered strong value for travelers."
+  },
+  {
+   "continent": "South America",
+   "tier": "A",
+   "destination": "Brazil",
+   "cost": 65,
+   "why": "Beach and rainforest luxury, priced well outside peak Rio season."
+  },
+  {
+   "continent": "South America",
+   "tier": "B",
+   "destination": "Chile",
+   "cost": 80,
+   "why": "Atacama and Patagonia lodges are excellent but priced for their remoteness."
+  },
+  {
+   "continent": "South America",
+   "tier": "B",
+   "destination": "Uruguay",
+   "cost": 90,
+   "why": "Punta del Este glamour sits above its South American neighbors."
+  },
+  {
+   "continent": "South America",
+   "tier": "C",
+   "destination": "Paraguay",
+   "cost": 70,
+   "why": "Affordable, but the luxury hotel scene is thin outside the capital."
+  },
+  {
+   "continent": "South America",
+   "tier": "C",
+   "destination": "French Guiana",
+   "cost": 100,
+   "why": "Remote and pricier than nearby countries, with limited luxury infrastructure."
+  },
+  {
+   "continent": "South America",
+   "tier": "D",
+   "destination": "Galápagos Islands (Ecuador)",
+   "cost": 500,
+   "why": "World-class small-ship cruises and lodges come at a steep daily cost."
+  },
+  {
+   "continent": "Oceania",
+   "tier": "A",
+   "destination": "Fiji",
+   "cost": 150,
+   "why": "Private-island resorts are iconic and still reachable at a mid-range cost."
+  },
+  {
+   "continent": "Oceania",
+   "tier": "A",
+   "destination": "Vanuatu",
+   "cost": 130,
+   "why": "Quieter, less developed, and cheaper than its Pacific neighbors."
+  },
+  {
+   "continent": "Oceania",
+   "tier": "A",
+   "destination": "Samoa",
+   "cost": 140,
+   "why": "Beach-bungalow luxury without Fiji or Tahiti-level prices."
+  },
+  {
+   "continent": "Oceania",
+   "tier": "B",
+   "destination": "Cook Islands",
+   "cost": 200,
+   "why": "Postcard lagoons, but remoteness pushes costs up quickly."
+  },
+  {
+   "continent": "Oceania",
+   "tier": "B",
+   "destination": "New Caledonia",
+   "cost": 220,
+   "why": "French Pacific luxury, priced closer to mainland France than the region."
+  },
+  {
+   "continent": "Oceania",
+   "tier": "C",
+   "destination": "New Zealand",
+   "cost": 190,
+   "why": "Excellent lodges and scenery, but rarely the region's cheapest option."
+  },
+  {
+   "continent": "Oceania",
+   "tier": "D",
+   "destination": "Australia",
+   "cost": 230,
+   "why": "World-class cities and coastline, priced like other developed nations."
+  },
+  {
+   "continent": "Oceania",
+   "tier": "D",
+   "destination": "French Polynesia (Bora Bora, Tahiti)",
+   "cost": 650,
+   "why": "The overwater-bungalow benchmark — and the cost to match."
+  },
+  {
+   "continent": "Asia",
+   "tier": "S",
+   "destination": "Myanmar",
+   "cost": 35,
+   "why": "Boutique river cruises and Bagan temple stays remain some of Asia's cheapest true luxury."
+  },
+  {
+   "continent": "Asia",
+   "tier": "D",
+   "destination": "Bhutan",
+   "cost": 250,
+   "why": "A mandatory daily tourism fee bundles guide, lodging, and meals — high floor, no true budget tier."
+  },
+  {
+   "continent": "Asia",
+   "tier": "A",
+   "destination": "Uzbekistan",
+   "cost": 55,
+   "why": "Silk Road boutique hotels in Samarkand and Bukhara, restored caravanserais at a fraction of European prices."
+  },
+  {
+   "continent": "Asia",
+   "tier": "A",
+   "destination": "Georgia",
+   "cost": 45,
+   "why": "Tbilisi wine-country luxury and mountain lodges, still one of the best-value trips in the region."
+  },
+  {
+   "continent": "Asia",
+   "tier": "B",
+   "destination": "Mongolia",
+   "cost": 90,
+   "why": "Luxury ger camps and Gobi expeditions are premium, but logistics and remoteness add up fast."
+  },
+  {
+   "continent": "Asia",
+   "tier": "S",
+   "destination": "Kyrgyzstan",
+   "cost": 35,
+   "why": "Yurt-stay luxury and alpine lake lodges at some of Central Asia's lowest prices."
+  },
+  {
+   "continent": "Asia",
+   "tier": "D",
+   "destination": "Israel",
+   "cost": 160,
+   "why": "Tel Aviv and Jerusalem hotels and dining sit at Western European price levels."
+  },
+  {
+   "continent": "Asia",
+   "tier": "B",
+   "destination": "Kazakhstan",
+   "cost": 85,
+   "why": "Almaty's rising boutique hotel scene, priced above its Central Asian neighbors."
+  },
+  {
+   "continent": "Africa",
+   "tier": "S",
+   "destination": "Ethiopia",
+   "cost": 40,
+   "why": "Historic Lalibela and Gondar boutique lodges, plus Rift Valley luxury camps, at very low cost."
+  },
+  {
+   "continent": "Africa",
+   "tier": "A",
+   "destination": "Ghana",
+   "cost": 60,
+   "why": "Coastal resorts and Accra boutique hotels — accessible West African luxury."
+  },
+  {
+   "continent": "Africa",
+   "tier": "A",
+   "destination": "Senegal",
+   "cost": 65,
+   "why": "Dakar and Saly beach resorts offer French colonial charm without French colonial prices."
+  },
+  {
+   "continent": "Africa",
+   "tier": "B",
+   "destination": "Uganda",
+   "cost": 120,
+   "why": "Gorilla-trekking lodges are excellent but permit fees push the daily rate up."
+  },
+  {
+   "continent": "Africa",
+   "tier": "C",
+   "destination": "Tanzania (mainland safari)",
+   "cost": 250,
+   "why": "Serengeti and Ngorongoro luxury camps are iconic — and priced for it, permits included."
+  },
+  {
+   "continent": "Africa",
+   "tier": "B",
+   "destination": "Madagascar",
+   "cost": 100,
+   "why": "Remote eco-luxury lodges; getting there is half the cost."
+  },
+  {
+   "continent": "Africa",
+   "tier": "D",
+   "destination": "Réunion (France)",
+   "cost": 200,
+   "why": "French-department pricing on a volcanic island — Indian Ocean luxury at European rates."
+  },
+  {
+   "continent": "Europe",
+   "tier": "S",
+   "destination": "Serbia",
+   "cost": 40,
+   "why": "Belgrade nightlife and countryside estates at some of Europe's lowest prices."
+  },
+  {
+   "continent": "Europe",
+   "tier": "S",
+   "destination": "Bosnia and Herzegovina",
+   "cost": 38,
+   "why": "Sarajevo and Mostar boutique stays, Ottoman-era charm at rock-bottom cost."
+  },
+  {
+   "continent": "Europe",
+   "tier": "A",
+   "destination": "Slovenia",
+   "cost": 65,
+   "why": "Lake Bled luxury and Ljubljana boutique hotels — polished, still under Western Europe pricing."
+  },
+  {
+   "continent": "Europe",
+   "tier": "A",
+   "destination": "Slovakia",
+   "cost": 50,
+   "why": "Bratislava and High Tatras lodges, an underrated low-cost alternative to Austria."
+  },
+  {
+   "continent": "Europe",
+   "tier": "A",
+   "destination": "Estonia",
+   "cost": 60,
+   "why": "Tallinn's medieval old town hides genuinely 5-star boutique stays at Baltic prices."
+  },
+  {
+   "continent": "Europe",
+   "tier": "C",
+   "destination": "Germany",
+   "cost": 100,
+   "why": "Reliable quality across the board, but rarely the cheapest version of luxury in Europe."
+  },
+  {
+   "continent": "Europe",
+   "tier": "D",
+   "destination": "United Kingdom",
+   "cost": 160,
+   "why": "London anchors the average — outside it, still priced like a major Western capital."
+  },
+  {
+   "continent": "Europe",
+   "tier": "D",
+   "destination": "Netherlands",
+   "cost": 150,
+   "why": "Amsterdam canal-house hotels are gorgeous and priced to match Western Europe's top tier."
+  },
+  {
+   "continent": "North America",
+   "tier": "S",
+   "destination": "Nicaragua",
+   "cost": 45,
+   "why": "Colonial Granada and Pacific coast lodges — Central America's best-kept value secret."
+  },
+  {
+   "continent": "North America",
+   "tier": "S",
+   "destination": "Honduras",
+   "cost": 45,
+   "why": "Roatán dive resorts and colonial towns, priced well below its Caribbean neighbors."
+  },
+  {
+   "continent": "North America",
+   "tier": "A",
+   "destination": "El Salvador",
+   "cost": 55,
+   "why": "Surf-town boutique stays and volcano lodges, opening up fast and still cheap."
+  },
+  {
+   "continent": "North America",
+   "tier": "B",
+   "destination": "Puerto Rico",
+   "cost": 130,
+   "why": "US territory convenience (no passport, USD) at a price premium over the rest of the Caribbean."
+  },
+  {
+   "continent": "North America",
+   "tier": "C",
+   "destination": "Aruba",
+   "cost": 180,
+   "why": "Reliable, developed, and priced like it — one of the pricier ABC islands."
+  },
+  {
+   "continent": "North America",
+   "tier": "D",
+   "destination": "Barbados",
+   "cost": 220,
+   "why": "Polished British-Caribbean luxury, among the region's most expensive."
+  },
+  {
+   "continent": "South America",
+   "tier": "S",
+   "destination": "Venezuela",
+   "cost": 30,
+   "why": "Extraordinarily cheap due to the currency crisis — genuine luxury at rock-bottom cost, but check current safety guidance before booking."
+  },
+  {
+   "continent": "South America",
+   "tier": "B",
+   "destination": "Suriname",
+   "cost": 90,
+   "why": "Dutch-Caribbean rainforest lodges, remote and lightly touristed."
+  },
+  {
+   "continent": "South America",
+   "tier": "B",
+   "destination": "Guyana",
+   "cost": 95,
+   "why": "Pristine rainforest eco-lodges; limited infrastructure keeps volume — and discounts — low."
+  },
+  {
+   "continent": "Oceania",
+   "tier": "A",
+   "destination": "Tonga",
+   "cost": 140,
+   "why": "Whale-swim season luxury without Fiji-level pricing."
+  },
+  {
+   "continent": "Oceania",
+   "tier": "B",
+   "destination": "Papua New Guinea",
+   "cost": 180,
+   "why": "World-class diving and highland lodges; remoteness is the main cost driver."
+  },
+  {
+   "continent": "Oceania",
+   "tier": "C",
+   "destination": "Palau",
+   "cost": 220,
+   "why": "Rock Islands diving is bucket-list tier, priced for how few beds exist."
+  },
+  {
+   "continent": "Oceania",
+   "tier": "B",
+   "destination": "Marshall Islands",
+   "cost": 170,
+   "why": "Remote atoll luxury for the truly off-grid traveler; getting there costs as much as staying."
+  }
+ ],
+ "PLACES_RAW": [
+  [
+   "Hartford",
+   "CT",
+   41.7658,
+   -72.6734
+  ],
+  [
+   "New Haven",
+   "CT",
+   41.3083,
+   -72.9279
+  ],
+  [
+   "Stamford",
+   "CT",
+   41.0534,
+   -73.5387
+  ],
+  [
+   "Bridgeport",
+   "CT",
+   41.1792,
+   -73.1894
+  ],
+  [
+   "New York",
+   "NY",
+   40.7128,
+   -74.006
+  ],
+  [
+   "Albany",
+   "NY",
+   42.6526,
+   -73.7562
+  ],
+  [
+   "Buffalo",
+   "NY",
+   42.8864,
+   -78.8784
+  ],
+  [
+   "Rochester",
+   "NY",
+   43.1566,
+   -77.6088
+  ],
+  [
+   "Syracuse",
+   "NY",
+   43.0481,
+   -76.1474
+  ],
+  [
+   "Yonkers",
+   "NY",
+   40.9312,
+   -73.8988
+  ],
+  [
+   "Boston",
+   "MA",
+   42.3601,
+   -71.0589
+  ],
+  [
+   "Worcester",
+   "MA",
+   42.2626,
+   -71.8023
+  ],
+  [
+   "Springfield",
+   "MA",
+   42.1015,
+   -72.5898
+  ],
+  [
+   "Cambridge",
+   "MA",
+   42.3736,
+   -71.1097
+  ],
+  [
+   "Providence",
+   "RI",
+   41.824,
+   -71.4128
+  ],
+  [
+   "Warwick",
+   "RI",
+   41.7001,
+   -71.4162
+  ],
+  [
+   "Manchester",
+   "NH",
+   42.9956,
+   -71.4548
+  ],
+  [
+   "Concord",
+   "NH",
+   43.2081,
+   -71.5376
+  ],
+  [
+   "Nashua",
+   "NH",
+   42.7654,
+   -71.4676
+  ],
+  [
+   "Burlington",
+   "VT",
+   44.4759,
+   -73.2121
+  ],
+  [
+   "Montpelier",
+   "VT",
+   44.2601,
+   -72.5754
+  ],
+  [
+   "Portland",
+   "ME",
+   43.6591,
+   -70.2568
+  ],
+  [
+   "Augusta",
+   "ME",
+   44.3106,
+   -69.7795
+  ],
+  [
+   "Bangor",
+   "ME",
+   44.8012,
+   -68.7778
+  ],
+  [
+   "Newark",
+   "NJ",
+   40.7357,
+   -74.1724
+  ],
+  [
+   "Jersey City",
+   "NJ",
+   40.7178,
+   -74.0431
+  ],
+  [
+   "Trenton",
+   "NJ",
+   40.2171,
+   -74.7429
+  ],
+  [
+   "Atlantic City",
+   "NJ",
+   39.3643,
+   -74.4229
+  ],
+  [
+   "Camden",
+   "NJ",
+   39.9259,
+   -75.1196
+  ],
+  [
+   "Philadelphia",
+   "PA",
+   39.9526,
+   -75.1652
+  ],
+  [
+   "Pittsburgh",
+   "PA",
+   40.4406,
+   -79.9959
+  ],
+  [
+   "Harrisburg",
+   "PA",
+   40.2732,
+   -76.8867
+  ],
+  [
+   "Allentown",
+   "PA",
+   40.6084,
+   -75.4902
+  ],
+  [
+   "Erie",
+   "PA",
+   42.1292,
+   -80.0851
+  ],
+  [
+   "Scranton",
+   "PA",
+   41.409,
+   -75.6624
+  ],
+  [
+   "Wilmington",
+   "DE",
+   39.7447,
+   -75.5484
+  ],
+  [
+   "Dover",
+   "DE",
+   39.1582,
+   -75.5244
+  ],
+  [
+   "Baltimore",
+   "MD",
+   39.2904,
+   -76.6122
+  ],
+  [
+   "Annapolis",
+   "MD",
+   38.9784,
+   -76.4922
+  ],
+  [
+   "Silver Spring",
+   "MD",
+   38.9907,
+   -77.0261
+  ],
+  [
+   "Washington",
+   "DC",
+   38.9072,
+   -77.0369
+  ],
+  [
+   "Richmond",
+   "VA",
+   37.5407,
+   -77.436
+  ],
+  [
+   "Virginia Beach",
+   "VA",
+   36.8529,
+   -75.978
+  ],
+  [
+   "Norfolk",
+   "VA",
+   36.8508,
+   -76.2859
+  ],
+  [
+   "Arlington",
+   "VA",
+   38.8799,
+   -77.1068
+  ],
+  [
+   "Charlottesville",
+   "VA",
+   38.0293,
+   -78.4767
+  ],
+  [
+   "Roanoke",
+   "VA",
+   37.271,
+   -79.9414
+  ],
+  [
+   "Charleston",
+   "WV",
+   38.3498,
+   -81.6326
+  ],
+  [
+   "Huntington",
+   "WV",
+   38.4192,
+   -82.4452
+  ],
+  [
+   "Charlotte",
+   "NC",
+   35.2271,
+   -80.8431
+  ],
+  [
+   "Raleigh",
+   "NC",
+   35.7796,
+   -78.6382
+  ],
+  [
+   "Greensboro",
+   "NC",
+   36.0726,
+   -79.792
+  ],
+  [
+   "Durham",
+   "NC",
+   35.994,
+   -78.8986
+  ],
+  [
+   "Wilmington",
+   "NC",
+   34.2257,
+   -77.9447
+  ],
+  [
+   "Asheville",
+   "NC",
+   35.5951,
+   -82.5515
+  ],
+  [
+   "Columbia",
+   "SC",
+   34.0007,
+   -81.0348
+  ],
+  [
+   "Charleston",
+   "SC",
+   32.7765,
+   -79.9311
+  ],
+  [
+   "Greenville",
+   "SC",
+   34.8526,
+   -82.394
+  ],
+  [
+   "Myrtle Beach",
+   "SC",
+   33.6891,
+   -78.8867
+  ],
+  [
+   "Atlanta",
+   "GA",
+   33.749,
+   -84.388
+  ],
+  [
+   "Savannah",
+   "GA",
+   32.0809,
+   -81.0912
+  ],
+  [
+   "Augusta",
+   "GA",
+   33.4735,
+   -81.9748
+  ],
+  [
+   "Columbus",
+   "GA",
+   32.461,
+   -84.9877
+  ],
+  [
+   "Jacksonville",
+   "FL",
+   30.3322,
+   -81.6557
+  ],
+  [
+   "Miami",
+   "FL",
+   25.7617,
+   -80.1918
+  ],
+  [
+   "Orlando",
+   "FL",
+   28.5383,
+   -81.3792
+  ],
+  [
+   "Tampa",
+   "FL",
+   27.9506,
+   -82.4572
+  ],
+  [
+   "Tallahassee",
+   "FL",
+   30.4383,
+   -84.2807
+  ],
+  [
+   "Fort Lauderdale",
+   "FL",
+   26.1224,
+   -80.1373
+  ],
+  [
+   "St. Petersburg",
+   "FL",
+   27.7676,
+   -82.6403
+  ],
+  [
+   "Key West",
+   "FL",
+   24.5551,
+   -81.78
+  ],
+  [
+   "Nashville",
+   "TN",
+   36.1627,
+   -86.7816
+  ],
+  [
+   "Memphis",
+   "TN",
+   35.1495,
+   -90.049
+  ],
+  [
+   "Knoxville",
+   "TN",
+   35.9606,
+   -83.9207
+  ],
+  [
+   "Chattanooga",
+   "TN",
+   35.0456,
+   -85.3097
+  ],
+  [
+   "Louisville",
+   "KY",
+   38.2527,
+   -85.7585
+  ],
+  [
+   "Lexington",
+   "KY",
+   38.0406,
+   -84.5037
+  ],
+  [
+   "Frankfort",
+   "KY",
+   38.2009,
+   -84.8733
+  ],
+  [
+   "Indianapolis",
+   "IN",
+   39.7684,
+   -86.1581
+  ],
+  [
+   "Fort Wayne",
+   "IN",
+   41.0793,
+   -85.1394
+  ],
+  [
+   "Columbus",
+   "OH",
+   39.9612,
+   -82.9988
+  ],
+  [
+   "Cleveland",
+   "OH",
+   41.4993,
+   -81.6944
+  ],
+  [
+   "Cincinnati",
+   "OH",
+   39.1031,
+   -84.512
+  ],
+  [
+   "Toledo",
+   "OH",
+   41.6528,
+   -83.5379
+  ],
+  [
+   "Akron",
+   "OH",
+   41.0814,
+   -81.519
+  ],
+  [
+   "Dayton",
+   "OH",
+   39.7589,
+   -84.1916
+  ],
+  [
+   "Detroit",
+   "MI",
+   42.3314,
+   -83.0458
+  ],
+  [
+   "Grand Rapids",
+   "MI",
+   42.9634,
+   -85.6681
+  ],
+  [
+   "Lansing",
+   "MI",
+   42.7325,
+   -84.5555
+  ],
+  [
+   "Ann Arbor",
+   "MI",
+   42.2808,
+   -83.743
+  ],
+  [
+   "Flint",
+   "MI",
+   43.0125,
+   -83.6875
+  ],
+  [
+   "Chicago",
+   "IL",
+   41.8781,
+   -87.6298
+  ],
+  [
+   "Springfield",
+   "IL",
+   39.7817,
+   -89.6501
+  ],
+  [
+   "Peoria",
+   "IL",
+   40.6936,
+   -89.589
+  ],
+  [
+   "Rockford",
+   "IL",
+   42.2711,
+   -89.094
+  ],
+  [
+   "Milwaukee",
+   "WI",
+   43.0389,
+   -87.9065
+  ],
+  [
+   "Madison",
+   "WI",
+   43.0731,
+   -89.4012
+  ],
+  [
+   "Green Bay",
+   "WI",
+   44.5133,
+   -88.0133
+  ],
+  [
+   "Minneapolis",
+   "MN",
+   44.9778,
+   -93.265
+  ],
+  [
+   "St. Paul",
+   "MN",
+   44.9537,
+   -93.09
+  ],
+  [
+   "Duluth",
+   "MN",
+   46.7867,
+   -92.1005
+  ],
+  [
+   "Rochester",
+   "MN",
+   44.0121,
+   -92.4802
+  ],
+  [
+   "Des Moines",
+   "IA",
+   41.5868,
+   -93.625
+  ],
+  [
+   "Cedar Rapids",
+   "IA",
+   41.9779,
+   -91.6656
+  ],
+  [
+   "Davenport",
+   "IA",
+   41.5236,
+   -90.5776
+  ],
+  [
+   "Kansas City",
+   "MO",
+   39.0997,
+   -94.5786
+  ],
+  [
+   "St. Louis",
+   "MO",
+   38.627,
+   -90.1994
+  ],
+  [
+   "Springfield",
+   "MO",
+   37.209,
+   -93.2923
+  ],
+  [
+   "Jefferson City",
+   "MO",
+   38.5767,
+   -92.1735
+  ],
+  [
+   "Omaha",
+   "NE",
+   41.2565,
+   -95.9345
+  ],
+  [
+   "Lincoln",
+   "NE",
+   40.8136,
+   -96.7026
+  ],
+  [
+   "Wichita",
+   "KS",
+   37.6872,
+   -97.3301
+  ],
+  [
+   "Topeka",
+   "KS",
+   39.0473,
+   -95.6752
+  ],
+  [
+   "Kansas City",
+   "KS",
+   39.1141,
+   -94.6275
+  ],
+  [
+   "Fargo",
+   "ND",
+   46.8772,
+   -96.7898
+  ],
+  [
+   "Bismarck",
+   "ND",
+   46.8083,
+   -100.7837
+  ],
+  [
+   "Sioux Falls",
+   "SD",
+   43.546,
+   -96.7313
+  ],
+  [
+   "Pierre",
+   "SD",
+   44.3683,
+   -100.351
+  ],
+  [
+   "Billings",
+   "MT",
+   45.7833,
+   -108.5007
+  ],
+  [
+   "Helena",
+   "MT",
+   46.5891,
+   -112.0391
+  ],
+  [
+   "Missoula",
+   "MT",
+   46.8721,
+   -113.994
+  ],
+  [
+   "Cheyenne",
+   "WY",
+   41.14,
+   -104.8202
+  ],
+  [
+   "Casper",
+   "WY",
+   42.8501,
+   -106.3252
+  ],
+  [
+   "Denver",
+   "CO",
+   39.7392,
+   -104.9903
+  ],
+  [
+   "Colorado Springs",
+   "CO",
+   38.8339,
+   -104.8214
+  ],
+  [
+   "Boulder",
+   "CO",
+   40.015,
+   -105.2705
+  ],
+  [
+   "Fort Collins",
+   "CO",
+   40.5853,
+   -105.0844
+  ],
+  [
+   "Aspen",
+   "CO",
+   39.1911,
+   -106.8175
+  ],
+  [
+   "Salt Lake City",
+   "UT",
+   40.7608,
+   -111.891
+  ],
+  [
+   "Provo",
+   "UT",
+   40.2338,
+   -111.6585
+  ],
+  [
+   "Park City",
+   "UT",
+   40.6461,
+   -111.498
+  ],
+  [
+   "Albuquerque",
+   "NM",
+   35.0844,
+   -106.6504
+  ],
+  [
+   "Santa Fe",
+   "NM",
+   35.687,
+   -105.9378
+  ],
+  [
+   "Las Cruces",
+   "NM",
+   32.3199,
+   -106.7637
+  ],
+  [
+   "Phoenix",
+   "AZ",
+   33.4484,
+   -112.074
+  ],
+  [
+   "Tucson",
+   "AZ",
+   32.2226,
+   -110.9747
+  ],
+  [
+   "Scottsdale",
+   "AZ",
+   33.4942,
+   -111.9261
+  ],
+  [
+   "Flagstaff",
+   "AZ",
+   35.1983,
+   -111.6513
+  ],
+  [
+   "Las Vegas",
+   "NV",
+   36.1699,
+   -115.1398
+  ],
+  [
+   "Reno",
+   "NV",
+   39.5296,
+   -119.8138
+  ],
+  [
+   "Carson City",
+   "NV",
+   39.1638,
+   -119.7674
+  ],
+  [
+   "Boise",
+   "ID",
+   43.615,
+   -116.2023
+  ],
+  [
+   "Idaho Falls",
+   "ID",
+   43.4917,
+   -112.0339
+  ],
+  [
+   "Seattle",
+   "WA",
+   47.6062,
+   -122.3321
+  ],
+  [
+   "Spokane",
+   "WA",
+   47.6588,
+   -117.426
+  ],
+  [
+   "Tacoma",
+   "WA",
+   47.2529,
+   -122.4443
+  ],
+  [
+   "Olympia",
+   "WA",
+   47.0379,
+   -122.9007
+  ],
+  [
+   "Portland",
+   "OR",
+   45.5152,
+   -122.6784
+  ],
+  [
+   "Eugene",
+   "OR",
+   44.0521,
+   -123.0868
+  ],
+  [
+   "Salem",
+   "OR",
+   44.9429,
+   -123.0351
+  ],
+  [
+   "Bend",
+   "OR",
+   44.0582,
+   -121.3153
+  ],
+  [
+   "San Francisco",
+   "CA",
+   37.7749,
+   -122.4194
+  ],
+  [
+   "Los Angeles",
+   "CA",
+   34.0522,
+   -118.2437
+  ],
+  [
+   "San Diego",
+   "CA",
+   32.7157,
+   -117.1611
+  ],
+  [
+   "Sacramento",
+   "CA",
+   38.5816,
+   -121.4944
+  ],
+  [
+   "San Jose",
+   "CA",
+   37.3382,
+   -121.8863
+  ],
+  [
+   "Fresno",
+   "CA",
+   36.7378,
+   -119.7871
+  ],
+  [
+   "Oakland",
+   "CA",
+   37.8044,
+   -122.2712
+  ],
+  [
+   "Long Beach",
+   "CA",
+   33.7701,
+   -118.1937
+  ],
+  [
+   "Santa Barbara",
+   "CA",
+   34.4208,
+   -119.6982
+  ],
+  [
+   "Palm Springs",
+   "CA",
+   33.8303,
+   -116.5453
+  ],
+  [
+   "Anaheim",
+   "CA",
+   33.8366,
+   -117.9143
+  ],
+  [
+   "Napa",
+   "CA",
+   38.2975,
+   -122.2869
+  ],
+  [
+   "Anchorage",
+   "AK",
+   61.2181,
+   -149.9003
+  ],
+  [
+   "Juneau",
+   "AK",
+   58.3019,
+   -134.4197
+  ],
+  [
+   "Fairbanks",
+   "AK",
+   64.8378,
+   -147.7164
+  ],
+  [
+   "Honolulu",
+   "HI",
+   21.3069,
+   -157.8583
+  ],
+  [
+   "Hilo",
+   "HI",
+   19.7297,
+   -155.09
+  ],
+  [
+   "Little Rock",
+   "AR",
+   34.7465,
+   -92.2896
+  ],
+  [
+   "Fayetteville",
+   "AR",
+   36.0626,
+   -94.1574
+  ],
+  [
+   "New Orleans",
+   "LA",
+   29.9511,
+   -90.0715
+  ],
+  [
+   "Baton Rouge",
+   "LA",
+   30.4515,
+   -91.1871
+  ],
+  [
+   "Shreveport",
+   "LA",
+   32.5252,
+   -93.7502
+  ],
+  [
+   "Lafayette",
+   "LA",
+   30.2241,
+   -92.0198
+  ],
+  [
+   "Jackson",
+   "MS",
+   32.2988,
+   -90.1848
+  ],
+  [
+   "Gulfport",
+   "MS",
+   30.3674,
+   -89.0928
+  ],
+  [
+   "Montgomery",
+   "AL",
+   32.3668,
+   -86.3
+  ],
+  [
+   "Birmingham",
+   "AL",
+   33.5207,
+   -86.8025
+  ],
+  [
+   "Huntsville",
+   "AL",
+   34.7304,
+   -86.5861
+  ],
+  [
+   "Mobile",
+   "AL",
+   30.6954,
+   -88.0399
+  ],
+  [
+   "Oklahoma City",
+   "OK",
+   35.4676,
+   -97.5164
+  ],
+  [
+   "Tulsa",
+   "OK",
+   36.154,
+   -95.9928
+  ],
+  [
+   "Austin",
+   "TX",
+   30.2672,
+   -97.7431
+  ],
+  [
+   "Houston",
+   "TX",
+   29.7604,
+   -95.3698
+  ],
+  [
+   "Dallas",
+   "TX",
+   32.7767,
+   -96.797
+  ],
+  [
+   "San Antonio",
+   "TX",
+   29.4241,
+   -98.4936
+  ],
+  [
+   "Fort Worth",
+   "TX",
+   32.7555,
+   -97.3308
+  ],
+  [
+   "El Paso",
+   "TX",
+   31.7619,
+   -106.485
+  ],
+  [
+   "Corpus Christi",
+   "TX",
+   27.8006,
+   -97.3964
+  ],
+  [
+   "Lubbock",
+   "TX",
+   33.5779,
+   -101.8552
+  ]
+ ],
+ "GEO": {
+  "Thailand": {
+   "hub": "Bangkok",
+   "lat": 13.7563,
+   "lon": 100.5018
+  },
+  "Vietnam": {
+   "hub": "Hanoi",
+   "lat": 21.0285,
+   "lon": 105.8542
+  },
+  "Indonesia (Bali)": {
+   "hub": "Denpasar",
+   "lat": -8.6705,
+   "lon": 115.2126
+  },
+  "Sri Lanka": {
+   "hub": "Colombo",
+   "lat": 6.9271,
+   "lon": 79.8612
+  },
+  "Nepal": {
+   "hub": "Kathmandu",
+   "lat": 27.7172,
+   "lon": 85.324
+  },
+  "Malaysia": {
+   "hub": "Kuala Lumpur",
+   "lat": 3.139,
+   "lon": 101.6869
+  },
+  "Philippines": {
+   "hub": "Manila",
+   "lat": 14.5995,
+   "lon": 120.9842
+  },
+  "Cambodia": {
+   "hub": "Siem Reap",
+   "lat": 13.3671,
+   "lon": 103.8448
+  },
+  "Laos": {
+   "hub": "Luang Prabang",
+   "lat": 19.8856,
+   "lon": 102.1347
+  },
+  "Türkiye": {
+   "hub": "Istanbul",
+   "lat": 41.0082,
+   "lon": 28.9784
+  },
+  "Jordan": {
+   "hub": "Amman",
+   "lat": 31.9454,
+   "lon": 35.9284
+  },
+  "India": {
+   "hub": "New Delhi",
+   "lat": 28.6139,
+   "lon": 77.209
+  },
+  "China": {
+   "hub": "Beijing",
+   "lat": 39.9042,
+   "lon": 116.4074
+  },
+  "Taiwan": {
+   "hub": "Taipei",
+   "lat": 25.033,
+   "lon": 121.5654
+  },
+  "South Korea": {
+   "hub": "Seoul",
+   "lat": 37.5665,
+   "lon": 126.978
+  },
+  "Oman": {
+   "hub": "Muscat",
+   "lat": 23.588,
+   "lon": 58.3829
+  },
+  "Japan": {
+   "hub": "Tokyo",
+   "lat": 35.6762,
+   "lon": 139.6503
+  },
+  "Saudi Arabia": {
+   "hub": "Riyadh",
+   "lat": 24.7136,
+   "lon": 46.6753
+  },
+  "Singapore": {
+   "hub": "Singapore",
+   "lat": 1.3521,
+   "lon": 103.8198
+  },
+  "Hong Kong": {
+   "hub": "Hong Kong",
+   "lat": 22.3193,
+   "lon": 114.1694
+  },
+  "United Arab Emirates (Dubai)": {
+   "hub": "Dubai",
+   "lat": 25.2048,
+   "lon": 55.2708
+  },
+  "Qatar": {
+   "hub": "Doha",
+   "lat": 25.2854,
+   "lon": 51.531
+  },
+  "Maldives": {
+   "hub": "Malé",
+   "lat": 4.1755,
+   "lon": 73.5093
+  },
+  "Myanmar": {
+   "hub": "Yangon",
+   "lat": 16.8409,
+   "lon": 96.1735
+  },
+  "Bhutan": {
+   "hub": "Thimphu",
+   "lat": 27.4728,
+   "lon": 89.639
+  },
+  "Uzbekistan": {
+   "hub": "Samarkand",
+   "lat": 39.627,
+   "lon": 66.975
+  },
+  "Georgia": {
+   "hub": "Tbilisi",
+   "lat": 41.7151,
+   "lon": 44.8271
+  },
+  "Mongolia": {
+   "hub": "Ulaanbaatar",
+   "lat": 47.8864,
+   "lon": 106.9057
+  },
+  "Kyrgyzstan": {
+   "hub": "Bishkek",
+   "lat": 42.8746,
+   "lon": 74.5698
+  },
+  "Israel": {
+   "hub": "Tel Aviv",
+   "lat": 32.0853,
+   "lon": 34.7818
+  },
+  "Kazakhstan": {
+   "hub": "Almaty",
+   "lat": 43.222,
+   "lon": 76.8512
+  },
+  "Morocco": {
+   "hub": "Marrakech",
+   "lat": 31.6295,
+   "lon": -7.9811
+  },
+  "Egypt": {
+   "hub": "Cairo",
+   "lat": 30.0444,
+   "lon": 31.2357
+  },
+  "Tunisia": {
+   "hub": "Tunis",
+   "lat": 36.8065,
+   "lon": 10.1815
+  },
+  "South Africa": {
+   "hub": "Cape Town",
+   "lat": -33.9249,
+   "lon": 18.4241
+  },
+  "Zanzibar (Tanzania)": {
+   "hub": "Stone Town",
+   "lat": -6.1659,
+   "lon": 39.2026
+  },
+  "Cape Verde": {
+   "hub": "Santa Maria, Sal",
+   "lat": 16.599,
+   "lon": -22.905
+  },
+  "Kenya": {
+   "hub": "Nairobi",
+   "lat": -1.2921,
+   "lon": 36.8219
+  },
+  "Namibia": {
+   "hub": "Windhoek",
+   "lat": -22.5609,
+   "lon": 17.0658
+  },
+  "Mauritius": {
+   "hub": "Port Louis",
+   "lat": -20.1609,
+   "lon": 57.5012
+  },
+  "Botswana": {
+   "hub": "Maun",
+   "lat": -19.9833,
+   "lon": 23.4167
+  },
+  "Rwanda": {
+   "hub": "Kigali",
+   "lat": -1.9441,
+   "lon": 30.0619
+  },
+  "Seychelles": {
+   "hub": "Victoria, Mahé",
+   "lat": -4.6191,
+   "lon": 55.4513
+  },
+  "Ethiopia": {
+   "hub": "Addis Ababa",
+   "lat": 9.0054,
+   "lon": 38.7636
+  },
+  "Ghana": {
+   "hub": "Accra",
+   "lat": 5.6037,
+   "lon": -0.187
+  },
+  "Senegal": {
+   "hub": "Dakar",
+   "lat": 14.7167,
+   "lon": -17.4677
+  },
+  "Uganda": {
+   "hub": "Kampala",
+   "lat": 0.3476,
+   "lon": 32.5825
+  },
+  "Tanzania (mainland safari)": {
+   "hub": "Arusha",
+   "lat": -3.3869,
+   "lon": 36.683
+  },
+  "Madagascar": {
+   "hub": "Antananarivo",
+   "lat": -18.8792,
+   "lon": 47.5079
+  },
+  "Réunion (France)": {
+   "hub": "Saint-Denis",
+   "lat": -20.8823,
+   "lon": 55.4504
+  },
+  "Albania": {
+   "hub": "Tirana",
+   "lat": 41.3275,
+   "lon": 19.8187
+  },
+  "Bulgaria": {
+   "hub": "Sofia",
+   "lat": 42.6977,
+   "lon": 23.3219
+  },
+  "North Macedonia": {
+   "hub": "Skopje",
+   "lat": 41.9981,
+   "lon": 21.4254
+  },
+  "Montenegro": {
+   "hub": "Kotor",
+   "lat": 42.4247,
+   "lon": 18.7712
+  },
+  "Portugal (outside Lisbon)": {
+   "hub": "Porto",
+   "lat": 41.1579,
+   "lon": -8.6291
+  },
+  "Poland": {
+   "hub": "Kraków",
+   "lat": 50.0647,
+   "lon": 19.945
+  },
+  "Hungary": {
+   "hub": "Budapest",
+   "lat": 47.4979,
+   "lon": 19.0402
+  },
+  "Romania": {
+   "hub": "Brașov",
+   "lat": 45.6427,
+   "lon": 25.5887
+  },
+  "Greece (non-Santorini/Mykonos)": {
+   "hub": "Athens",
+   "lat": 37.9838,
+   "lon": 23.7275
+  },
+  "Czech Republic": {
+   "hub": "Prague",
+   "lat": 50.0755,
+   "lon": 14.4378
+  },
+  "Croatia": {
+   "hub": "Split",
+   "lat": 43.5081,
+   "lon": 16.4402
+  },
+  "Spain": {
+   "hub": "Madrid",
+   "lat": 40.4168,
+   "lon": -3.7038
+  },
+  "Italy": {
+   "hub": "Rome",
+   "lat": 41.9028,
+   "lon": 12.4964
+  },
+  "Malta": {
+   "hub": "Valletta",
+   "lat": 35.8989,
+   "lon": 14.5146
+  },
+  "France": {
+   "hub": "Paris",
+   "lat": 48.8566,
+   "lon": 2.3522
+  },
+  "Switzerland": {
+   "hub": "Zurich",
+   "lat": 47.3769,
+   "lon": 8.5417
+  },
+  "Iceland": {
+   "hub": "Reykjavík",
+   "lat": 64.1466,
+   "lon": -21.9426
+  },
+  "Norway": {
+   "hub": "Bergen",
+   "lat": 60.3913,
+   "lon": 5.3221
+  },
+  "Serbia": {
+   "hub": "Belgrade",
+   "lat": 44.7866,
+   "lon": 20.4489
+  },
+  "Bosnia and Herzegovina": {
+   "hub": "Sarajevo",
+   "lat": 43.8563,
+   "lon": 18.4131
+  },
+  "Slovenia": {
+   "hub": "Ljubljana",
+   "lat": 46.0569,
+   "lon": 14.5058
+  },
+  "Slovakia": {
+   "hub": "Bratislava",
+   "lat": 48.1486,
+   "lon": 17.1077
+  },
+  "Estonia": {
+   "hub": "Tallinn",
+   "lat": 59.437,
+   "lon": 24.7536
+  },
+  "Germany": {
+   "hub": "Berlin",
+   "lat": 52.52,
+   "lon": 13.405
+  },
+  "United Kingdom": {
+   "hub": "London",
+   "lat": 51.5074,
+   "lon": -0.1278
+  },
+  "Netherlands": {
+   "hub": "Amsterdam",
+   "lat": 52.3676,
+   "lon": 4.9041
+  },
+  "Mexico": {
+   "hub": "Mexico City",
+   "lat": 19.4326,
+   "lon": -99.1332,
+   "road": true
+  },
+  "Costa Rica": {
+   "hub": "San José",
+   "lat": 9.9281,
+   "lon": -84.0907,
+   "road": true
+  },
+  "Belize": {
+   "hub": "Belize City",
+   "lat": 17.5046,
+   "lon": -88.1962,
+   "road": true
+  },
+  "Dominican Republic": {
+   "hub": "Punta Cana",
+   "lat": 18.5601,
+   "lon": -68.3725
+  },
+  "Panama": {
+   "hub": "Panama City",
+   "lat": 8.9824,
+   "lon": -79.5199,
+   "road": true
+  },
+  "Guatemala": {
+   "hub": "Antigua Guatemala",
+   "lat": 14.5586,
+   "lon": -90.7295,
+   "road": true
+  },
+  "Jamaica": {
+   "hub": "Montego Bay",
+   "lat": 18.4762,
+   "lon": -77.8939
+  },
+  "Cuba": {
+   "hub": "Havana",
+   "lat": 23.1136,
+   "lon": -82.3666
+  },
+  "Bahamas": {
+   "hub": "Nassau",
+   "lat": 25.0443,
+   "lon": -77.3504
+  },
+  "Canada": {
+   "hub": "Toronto",
+   "lat": 43.6532,
+   "lon": -79.3832,
+   "road": true
+  },
+  "Turks and Caicos": {
+   "hub": "Providenciales",
+   "lat": 21.78,
+   "lon": -72.26
+  },
+  "Nicaragua": {
+   "hub": "Granada",
+   "lat": 11.9344,
+   "lon": -85.956,
+   "road": true
+  },
+  "Honduras": {
+   "hub": "Roatán",
+   "lat": 16.3298,
+   "lon": -86.5299
+  },
+  "El Salvador": {
+   "hub": "San Salvador",
+   "lat": 13.6929,
+   "lon": -89.2182,
+   "road": true
+  },
+  "Puerto Rico": {
+   "hub": "San Juan",
+   "lat": 18.4655,
+   "lon": -66.1057
+  },
+  "Aruba": {
+   "hub": "Oranjestad",
+   "lat": 12.5092,
+   "lon": -70.0086
+  },
+  "Barbados": {
+   "hub": "Bridgetown",
+   "lat": 13.0975,
+   "lon": -59.6167
+  },
+  "Colombia": {
+   "hub": "Cartagena",
+   "lat": 10.391,
+   "lon": -75.4794
+  },
+  "Peru": {
+   "hub": "Cusco",
+   "lat": -13.532,
+   "lon": -71.9675
+  },
+  "Bolivia": {
+   "hub": "La Paz",
+   "lat": -16.4897,
+   "lon": -68.1193
+  },
+  "Ecuador": {
+   "hub": "Quito",
+   "lat": -0.1807,
+   "lon": -78.4678
+  },
+  "Argentina": {
+   "hub": "Buenos Aires",
+   "lat": -34.6037,
+   "lon": -58.3816
+  },
+  "Brazil": {
+   "hub": "Rio de Janeiro",
+   "lat": -22.9068,
+   "lon": -43.1729
+  },
+  "Chile": {
+   "hub": "Santiago",
+   "lat": -33.4489,
+   "lon": -70.6693
+  },
+  "Uruguay": {
+   "hub": "Punta del Este",
+   "lat": -34.9475,
+   "lon": -54.9338
+  },
+  "Paraguay": {
+   "hub": "Asunción",
+   "lat": -25.2637,
+   "lon": -57.5759
+  },
+  "French Guiana": {
+   "hub": "Cayenne",
+   "lat": 4.9224,
+   "lon": -52.3135
+  },
+  "Galápagos Islands (Ecuador)": {
+   "hub": "Puerto Ayora",
+   "lat": -0.7432,
+   "lon": -90.3168
+  },
+  "Venezuela": {
+   "hub": "Caracas",
+   "lat": 10.4806,
+   "lon": -66.9036
+  },
+  "Suriname": {
+   "hub": "Paramaribo",
+   "lat": 5.852,
+   "lon": -55.2038
+  },
+  "Guyana": {
+   "hub": "Georgetown",
+   "lat": 6.8013,
+   "lon": -58.1551
+  },
+  "Fiji": {
+   "hub": "Nadi",
+   "lat": -17.7765,
+   "lon": 177.4356
+  },
+  "Vanuatu": {
+   "hub": "Port Vila",
+   "lat": -17.7333,
+   "lon": 168.3273
+  },
+  "Samoa": {
+   "hub": "Apia",
+   "lat": -13.8333,
+   "lon": -171.7667
+  },
+  "Cook Islands": {
+   "hub": "Avarua, Rarotonga",
+   "lat": -21.2075,
+   "lon": -159.775
+  },
+  "New Caledonia": {
+   "hub": "Nouméa",
+   "lat": -22.2758,
+   "lon": 166.458
+  },
+  "New Zealand": {
+   "hub": "Auckland",
+   "lat": -36.8485,
+   "lon": 174.7633
+  },
+  "Australia": {
+   "hub": "Sydney",
+   "lat": -33.8688,
+   "lon": 151.2093
+  },
+  "French Polynesia (Bora Bora, Tahiti)": {
+   "hub": "Papeete",
+   "lat": -17.5516,
+   "lon": -149.5585
+  },
+  "Tonga": {
+   "hub": "Nukuʻalofa",
+   "lat": -21.1394,
+   "lon": -175.2018
+  },
+  "Papua New Guinea": {
+   "hub": "Port Moresby",
+   "lat": -9.4438,
+   "lon": 147.1803
+  },
+  "Palau": {
+   "hub": "Koror",
+   "lat": 7.3419,
+   "lon": 134.4792
+  },
+  "Marshall Islands": {
+   "hub": "Majuro",
+   "lat": 7.0897,
+   "lon": 171.3803
+  }
+ },
+ "INDEX": {
+  "Toronto": {
+   "gci": 13,
+   "gco": 24,
+   "gfci": 41,
+   "gfciRating": 718,
+   "gser": 20,
+   "gserE": null,
+   "blink": 21,
+   "qol": 178.1,
+   "safety": 56.3,
+   "pollution": 37.4,
+   "eiu": null,
+   "eiuRank": null,
+   "col": 63.6,
+   "rent": 35.6,
+   "colr": 50.5
+  },
+  "Vancouver": {
+   "gci": 47,
+   "gco": 29,
+   "gfci": 75,
+   "gfciRating": 681,
+   "gser": 36,
+   "gserE": null,
+   "blink": 39,
+   "qol": 194.1,
+   "safety": 57.2,
+   "pollution": 25.2,
+   "eiu": 95.8,
+   "eiuRank": 9,
+   "col": 64.6,
+   "rent": 40.1,
+   "colr": 53.1
+  },
+  "Montreal": {
+   "gci": 29,
+   "gco": 20,
+   "gfci": 50,
+   "gfciRating": 709,
+   "gser": 39,
+   "gserE": null,
+   "blink": 46,
+   "qol": 177.7,
+   "safety": 67.2,
+   "pollution": 33.7,
+   "eiu": null,
+   "eiuRank": null,
+   "col": 58,
+   "rent": 27,
+   "colr": 43.5
+  },
+  "Mexico City": {
+   "gci": 38,
+   "gco": 128,
+   "gfci": 90,
+   "gfciRating": 657,
+   "gser": null,
+   "gserE": "31-40",
+   "blink": 58,
+   "qol": 97.6,
+   "safety": 34.1,
+   "pollution": 80.4,
+   "eiu": null,
+   "eiuRank": null,
+   "col": 49.5,
+   "rent": 24.8,
+   "colr": 38
+  },
+  "São Paulo": {
+   "gci": 28,
+   "gco": 113,
+   "gfci": 99,
+   "gfciRating": 643,
+   "gser": 37,
+   "gserE": null,
+   "blink": 23,
+   "qol": 101,
+   "safety": 30.3,
+   "pollution": 78.9,
+   "eiu": null,
+   "eiuRank": null,
+   "col": 40.8,
+   "rent": 15.3,
+   "colr": 28.9
+  },
+  "Buenos Aires": {
+   "gci": 31,
+   "gco": 110,
+   "gfci": 117,
+   "gfciRating": 576,
+   "gser": null,
+   "gserE": "81-90",
+   "blink": 77,
+   "qol": 123.2,
+   "safety": 37.1,
+   "pollution": 51.3,
+   "eiu": null,
+   "eiuRank": null,
+   "col": 52.4,
+   "rent": 18.7,
+   "colr": 36.6
+  },
+  "Bogotá": {
+   "gci": 68,
+   "gco": 121,
+   "gfci": 116,
+   "gfciRating": 587,
+   "gser": null,
+   "gserE": "51-60",
+   "blink": 62,
+   "qol": 105.2,
+   "safety": 33.3,
+   "pollution": 69.3,
+   "eiu": null,
+   "eiuRank": null,
+   "col": 42.1,
+   "rent": 15.4,
+   "colr": 29.6
+  },
+  "Santiago": {
+   "gci": 59,
+   "gco": 69,
+   "gfci": 98,
+   "gfciRating": 644,
+   "gser": null,
+   "gserE": "61-70",
+   "blink": 75,
+   "qol": 112.3,
+   "safety": 35.9,
+   "pollution": 70.7,
+   "eiu": null,
+   "eiuRank": null,
+   "col": 41,
+   "rent": 12.6,
+   "colr": 27.7
+  },
+  "London": {
+   "gci": 2,
+   "gco": 13,
+   "gfci": 2,
+   "gfciRating": 757,
+   "gser": 3,
+   "gserE": null,
+   "blink": 3,
+   "qol": 148.5,
+   "safety": 44.9,
+   "pollution": 57.6,
+   "eiu": null,
+   "eiuRank": 54,
+   "col": 86,
+   "rent": 63.8,
+   "colr": 75.6
+  },
+  "Paris": {
+   "gci": 3,
+   "gco": 15,
+   "gfci": 23,
+   "gfciRating": 736,
+   "gser": 12,
+   "gserE": null,
+   "blink": 8,
+   "qol": 143.9,
+   "safety": 42,
+   "pollution": 62.8,
+   "eiu": null,
+   "eiuRank": null,
+   "col": 77.1,
+   "rent": 37.5,
+   "colr": 58.6
+  },
+  "Berlin": {
+   "gci": 21,
+   "gco": 33,
+   "gfci": 45,
+   "gfciRating": 714,
+   "gser": 24,
+   "gserE": null,
+   "blink": 14,
+   "qol": 176.2,
+   "safety": 55.2,
+   "pollution": 38.1,
+   "eiu": null,
+   "eiuRank": null,
+   "col": 71.8,
+   "rent": 33.4,
+   "colr": 53.8
+  },
+  "Amsterdam": {
+   "gci": 19,
+   "gco": 22,
+   "gfci": 26,
+   "gfciRating": 733,
+   "gser": 20,
+   "gserE": null,
+   "blink": 26,
+   "qol": 205.8,
+   "safety": 70.1,
+   "pollution": 26.8,
+   "eiu": null,
+   "eiuRank": null,
+   "col": 80,
+   "rent": 52.8,
+   "colr": 67.3
+  },
+  "Dublin": {
+   "gci": 44,
+   "gco": 8,
+   "gfci": 30,
+   "gfciRating": 729,
+   "gser": null,
+   "gserE": "8",
+   "blink": 55,
+   "qol": 154.6,
+   "safety": 45.9,
+   "pollution": 41.4,
+   "eiu": null,
+   "eiuRank": null,
+   "col": 76.4,
+   "rent": 57.1,
+   "colr": 67.4
+  },
+  "Zurich": {
+   "gci": 37,
+   "gco": 10,
+   "gfci": 10,
+   "gfciRating": 749,
+   "gser": 33,
+   "gserE": null,
+   "blink": 57,
+   "qol": 199.5,
+   "safety": 75.7,
+   "pollution": 26.9,
+   "eiu": 96.4,
+   "eiuRank": 5,
+   "col": 121.4,
+   "rent": 71.2,
+   "colr": 97.9
+  },
+  "Stockholm": {
+   "gci": 35,
+   "gco": 17,
+   "gfci": 35,
+   "gfciRating": 724,
+   "gser": 31,
+   "gserE": null,
+   "blink": 24,
+   "qol": 178.5,
+   "safety": 53.9,
+   "pollution": 18.1,
+   "eiu": null,
+   "eiuRank": null,
+   "col": 77.2,
+   "rent": 35.2,
+   "colr": 57.5
+  },
+  "Lisbon": {
+   "gci": 41,
+   "gco": 66,
+   "gfci": 61,
+   "gfciRating": 698,
+   "gser": null,
+   "gserE": "21-30",
+   "blink": 87,
+   "qol": 157.5,
+   "safety": 67.1,
+   "pollution": 37.1,
+   "eiu": null,
+   "eiuRank": null,
+   "col": 55.4,
+   "rent": 34.8,
+   "colr": 45.8
+  },
+  "Madrid": {
+   "gci": 11,
+   "gco": 44,
+   "gfci": 43,
+   "gfciRating": 716,
+   "gser": 40,
+   "gserE": null,
+   "blink": 51,
+   "qol": 181,
+   "safety": 70.3,
+   "pollution": 38.3,
+   "eiu": null,
+   "eiuRank": null,
+   "col": 58.8,
+   "rent": 33.3,
+   "colr": 46.9
+  },
+  "Munich": {
+   "gci": 40,
+   "gco": 1,
+   "gfci": 58,
+   "gfciRating": 701,
+   "gser": 34,
+   "gserE": null,
+   "blink": 36,
+   "qol": 203.2,
+   "safety": 78.4,
+   "pollution": 24.9,
+   "eiu": null,
+   "eiuRank": null,
+   "col": 76.2,
+   "rent": 37.8,
+   "colr": 58.2
+  },
+  "Dubai": {
+   "gci": 23,
+   "gco": 25,
+   "gfci": 9,
+   "gfciRating": 750,
+   "gser": null,
+   "gserE": "19",
+   "blink": 44,
+   "qol": 172.9,
+   "safety": 83.8,
+   "pollution": 49.4,
+   "eiu": null,
+   "eiuRank": 79,
+   "col": 62.6,
+   "rent": 51.2,
+   "colr": 57.3
+  },
+  "Abu Dhabi": {
+   "gci": 49,
+   "gco": 40,
+   "gfci": 13,
+   "gfciRating": 746,
+   "gser": null,
+   "gserE": "51-60",
+   "blink": 175,
+   "qol": 177.4,
+   "safety": 88.7,
+   "pollution": 45.5,
+   "eiu": null,
+   "eiuRank": 76,
+   "col": 55.4,
+   "rent": 45.2,
+   "colr": 50.6
+  },
+  "Tel Aviv": {
+   "gci": 63,
+   "gco": 62,
+   "gfci": 94,
+   "gfciRating": 650,
+   "gser": 4,
+   "gserE": null,
+   "blink": 9,
+   "qol": 166.4,
+   "safety": 73.9,
+   "pollution": 46.5,
+   "eiu": null,
+   "eiuRank": null,
+   "col": 102,
+   "rent": 46.2,
+   "colr": 75.9
+  },
+  "Riyadh": {
+   "gci": 56,
+   "gco": 60,
+   "gfci": 46,
+   "gfciRating": 713,
+   "gser": null,
+   "gserE": "21-30",
+   "blink": 72,
+   "qol": 153.6,
+   "safety": 75.5,
+   "pollution": 63.5,
+   "eiu": null,
+   "eiuRank": null,
+   "col": 50.3,
+   "rent": 24.5,
+   "colr": 38.2
+  },
+  "Lagos": {
+   "gci": 132,
+   "gco": 157,
+   "gfci": 113,
+   "gfciRating": 602,
+   "gser": null,
+   "gserE": "61-70",
+   "blink": 76,
+   "qol": null,
+   "safety": 31.1,
+   "pollution": 88.7,
+   "eiu": 44,
+   "eiuRank": 168,
+   "col": 27.3,
+   "rent": 24.7,
+   "colr": 26.1
+  },
+  "Nairobi": {
+   "gci": 103,
+   "gco": 126,
+   "gfci": 105,
+   "gfciRating": 627,
+   "gser": null,
+   "gserE": "71-80",
+   "blink": 107,
+   "qol": 101.9,
+   "safety": 40.9,
+   "pollution": 79.8,
+   "eiu": null,
+   "eiuRank": null,
+   "col": 33.2,
+   "rent": 10.3,
+   "colr": 22.5
+  },
+  "Johannesburg": {
+   "gci": 73,
+   "gco": 135,
+   "gfci": 95,
+   "gfciRating": 647,
+   "gser": null,
+   "gserE": null,
+   "blink": 122,
+   "qol": 144.1,
+   "safety": 19.2,
+   "pollution": 62.1,
+   "eiu": null,
+   "eiuRank": null,
+   "col": 44.3,
+   "rent": 12.9,
+   "colr": 29.6
+  },
+  "Cairo": {
+   "gci": 70,
+   "gco": 141,
+   "gfci": null,
+   "gfciRating": null,
+   "gser": null,
+   "gserE": "71-80",
+   "blink": 90,
+   "qol": 80,
+   "safety": 50.3,
+   "pollution": 90.6,
+   "eiu": null,
+   "eiuRank": null,
+   "col": 23.7,
+   "rent": 5.9,
+   "colr": 15.3
+  },
+  "Singapore": {
+   "gci": 5,
+   "gco": 3,
+   "gfci": 4,
+   "gfciRating": 755,
+   "gser": 9,
+   "gserE": null,
+   "blink": 12,
+   "qol": 155.7,
+   "safety": 77.7,
+   "pollution": 32.3,
+   "eiu": null,
+   "eiuRank": 26,
+   "col": 91.8,
+   "rent": 66.8,
+   "colr": 80.1
+  },
+  "Hong Kong": {
+   "gci": 7,
+   "gco": 81,
+   "gfci": 3,
+   "gfciRating": 756,
+   "gser": 27,
+   "gserE": null,
+   "blink": 37,
+   "qol": 122,
+   "safety": 78.3,
+   "pollution": 66.4,
+   "eiu": null,
+   "eiuRank": 44,
+   "col": 79.7,
+   "rent": 56.1,
+   "colr": 68.7
+  },
+  "Tokyo": {
+   "gci": 4,
+   "gco": 6,
+   "gfci": 6,
+   "gfciRating": 753,
+   "gser": 11,
+   "gserE": null,
+   "blink": 13,
+   "qol": 194.8,
+   "safety": 75.7,
+   "pollution": 42.4,
+   "eiu": 95.7,
+   "eiuRank": 10,
+   "col": 51.2,
+   "rent": 26,
+   "colr": 39.4
+  },
+  "Seoul": {
+   "gci": 12,
+   "gco": 2,
+   "gfci": 7,
+   "gfciRating": 752,
+   "gser": 8,
+   "gserE": null,
+   "blink": 20,
+   "qol": 162.2,
+   "safety": 74.6,
+   "pollution": 47.5,
+   "eiu": null,
+   "eiuRank": 57,
+   "col": 72.8,
+   "rent": 23.3,
+   "colr": 49.6
+  },
+  "Shanghai": {
+   "gci": 8,
+   "gco": 59,
+   "gfci": 5,
+   "gfciRating": 754,
+   "gser": 10,
+   "gserE": null,
+   "blink": 7,
+   "qol": 136.4,
+   "safety": 73.8,
+   "pollution": 68,
+   "eiu": null,
+   "eiuRank": null,
+   "col": 39.8,
+   "rent": 23.4,
+   "colr": 32.1
+  },
+  "Bengaluru": {
+   "gci": 100,
+   "gco": 102,
+   "gfci": null,
+   "gfciRating": null,
+   "gser": 14,
+   "gserE": null,
+   "blink": 10,
+   "qol": 133.8,
+   "safety": 46.4,
+   "pollution": 82.5,
+   "eiu": null,
+   "eiuRank": 127,
+   "col": 21.8,
+   "rent": 8.1,
+   "colr": 15.4
+  },
+  "Mumbai": {
+   "gci": 62,
+   "gco": 63,
+   "gfci": 49,
+   "gfciRating": 710,
+   "gser": 40,
+   "gserE": null,
+   "blink": 18,
+   "qol": 94.8,
+   "safety": 56.1,
+   "pollution": 83.1,
+   "eiu": null,
+   "eiuRank": 121,
+   "col": 25.2,
+   "rent": 16.9,
+   "colr": 21.3
+  },
+  "Sydney": {
+   "gci": 20,
+   "gco": 23,
+   "gfci": 24,
+   "gfciRating": 735,
+   "gser": 25,
+   "gserE": null,
+   "blink": 31,
+   "qol": 181.7,
+   "safety": 66.3,
+   "pollution": 28.7,
+   "eiu": 96.6,
+   "eiuRank": 4,
+   "col": 82.6,
+   "rent": 56.4,
+   "colr": 70.3
+  },
+  "Melbourne": {
+   "gci": 16,
+   "gco": 30,
+   "gfci": 32,
+   "gfciRating": 727,
+   "gser": 32,
+   "gserE": null,
+   "blink": 42,
+   "qol": 191.7,
+   "safety": 55.7,
+   "pollution": 28.7,
+   "eiu": 97,
+   "eiuRank": 3,
+   "col": 79.1,
+   "rent": 40.8,
+   "colr": 61.2
+  },
+  "Boston": {
+   "gci": 26,
+   "gco": 16,
+   "gfci": 18,
+   "gfciRating": 741,
+   "gser": 5,
+   "gserE": null,
+   "blink": 6,
+   "qol": 181.1,
+   "safety": 59.9,
+   "pollution": 32.5,
+   "eiu": null,
+   "eiuRank": null,
+   "col": 90.4,
+   "rent": 71.4,
+   "colr": 81.6
+  },
+  "New York": {
+   "gci": 1,
+   "gco": 7,
+   "gfci": 1,
+   "gfciRating": 761,
+   "gser": 2,
+   "gserE": null,
+   "blink": 2,
+   "qol": 135.8,
+   "safety": 49.2,
+   "pollution": 58.1,
+   "eiu": null,
+   "eiuRank": 66,
+   "col": 100,
+   "rent": 100,
+   "colr": 100
+  },
+  "Philadelphia": {
+   "gci": 54,
+   "gco": 53,
+   "gfci": null,
+   "gfciRating": null,
+   "gser": 13,
+   "gserE": null,
+   "blink": 38,
+   "qol": 169.7,
+   "safety": 34.7,
+   "pollution": 47.1,
+   "eiu": null,
+   "eiuRank": null,
+   "col": 79.4,
+   "rent": 43.5,
+   "colr": 62.6
+  },
+  "Providence": {
+   "gci": null,
+   "gco": null,
+   "gfci": null,
+   "gfciRating": null,
+   "gser": null,
+   "gserE": null,
+   "blink": 236,
+   "qol": null,
+   "safety": null,
+   "pollution": null,
+   "eiu": null,
+   "eiuRank": null,
+   "col": null,
+   "rent": null,
+   "colr": null
+  },
+  "Hartford": {
+   "gci": null,
+   "gco": null,
+   "gfci": null,
+   "gfciRating": null,
+   "gser": null,
+   "gserE": "21-30",
+   "blink": 214,
+   "qol": null,
+   "safety": null,
+   "pollution": null,
+   "eiu": null,
+   "eiuRank": null,
+   "col": null,
+   "rent": null,
+   "colr": null
+  },
+  "Baltimore": {
+   "gci": null,
+   "gco": null,
+   "gfci": null,
+   "gfciRating": null,
+   "gser": null,
+   "gserE": null,
+   "blink": 82,
+   "qol": 176.3,
+   "safety": 28.9,
+   "pollution": 52,
+   "eiu": null,
+   "eiuRank": null,
+   "col": 74.3,
+   "rent": 32.8,
+   "colr": 54.9
+  },
+  "Pittsburgh": {
+   "gci": null,
+   "gco": null,
+   "gfci": null,
+   "gfciRating": null,
+   "gser": null,
+   "gserE": "51-60",
+   "blink": 67,
+   "qol": 190.9,
+   "safety": 60.7,
+   "pollution": 46.6,
+   "eiu": null,
+   "eiuRank": null,
+   "col": 68.7,
+   "rent": 31.3,
+   "colr": 51.2
+  },
+  "Albany": {
+   "gci": null,
+   "gco": null,
+   "gfci": null,
+   "gfciRating": null,
+   "gser": null,
+   "gserE": null,
+   "blink": 367,
+   "qol": null,
+   "safety": null,
+   "pollution": null,
+   "eiu": null,
+   "eiuRank": null,
+   "col": 78.2,
+   "rent": 37,
+   "colr": 58.9
+  },
+  "Burlington (VT)": {
+   "gci": null,
+   "gco": null,
+   "gfci": null,
+   "gfciRating": null,
+   "gser": null,
+   "gserE": null,
+   "blink": 108,
+   "qol": null,
+   "safety": null,
+   "pollution": null,
+   "eiu": null,
+   "eiuRank": null,
+   "col": null,
+   "rent": null,
+   "colr": null
+  },
+  "Portland (ME)": {
+   "gci": null,
+   "gco": null,
+   "gfci": null,
+   "gfciRating": null,
+   "gser": null,
+   "gserE": null,
+   "blink": null,
+   "qol": null,
+   "safety": null,
+   "pollution": null,
+   "eiu": null,
+   "eiuRank": null,
+   "col": null,
+   "rent": null,
+   "colr": null
+  },
+  "Chicago": {
+   "gci": 10,
+   "gco": 45,
+   "gfci": 15,
+   "gfciRating": 744,
+   "gser": 16,
+   "gserE": null,
+   "blink": 19,
+   "qol": 164.1,
+   "safety": 34.8,
+   "pollution": 50.3,
+   "eiu": null,
+   "eiuRank": null,
+   "col": 77.1,
+   "rent": 51.6,
+   "colr": 65.2
+  },
+  "Detroit": {
+   "gci": null,
+   "gco": null,
+   "gfci": null,
+   "gfciRating": null,
+   "gser": null,
+   "gserE": "12",
+   "blink": 65,
+   "qol": 142.1,
+   "safety": 27.2,
+   "pollution": 62.1,
+   "eiu": null,
+   "eiuRank": null,
+   "col": 68.1,
+   "rent": 31.5,
+   "colr": 51
+  },
+  "Minneapolis": {
+   "gci": 64,
+   "gco": 42,
+   "gfci": 40,
+   "gfciRating": 719,
+   "gser": null,
+   "gserE": "13",
+   "blink": 47,
+   "qol": 179.6,
+   "safety": 43.6,
+   "pollution": 28.7,
+   "eiu": null,
+   "eiuRank": null,
+   "col": 75.2,
+   "rent": 36.1,
+   "colr": 56.9
+  },
+  "Columbus": {
+   "gci": null,
+   "gco": null,
+   "gfci": null,
+   "gfciRating": null,
+   "gser": null,
+   "gserE": "51-60",
+   "blink": 100,
+   "qol": 189,
+   "safety": 51.2,
+   "pollution": 31.4,
+   "eiu": null,
+   "eiuRank": null,
+   "col": 71.2,
+   "rent": 30.9,
+   "colr": 52.3
+  },
+  "Indianapolis": {
+   "gci": null,
+   "gco": null,
+   "gfci": null,
+   "gfciRating": null,
+   "gser": null,
+   "gserE": "61-70",
+   "blink": 113,
+   "qol": 187.9,
+   "safety": 40.5,
+   "pollution": 43.5,
+   "eiu": null,
+   "eiuRank": null,
+   "col": 70.1,
+   "rent": 34.8,
+   "colr": 53.6
+  },
+  "Los Angeles": {
+   "gci": 9,
+   "gco": 39,
+   "gfci": 14,
+   "gfciRating": 745,
+   "gser": 7,
+   "gserE": null,
+   "blink": 4,
+   "qol": 131.8,
+   "safety": 46.1,
+   "pollution": 68.6,
+   "eiu": null,
+   "eiuRank": null,
+   "col": 86.6,
+   "rent": 64.6,
+   "colr": 76.3
+  },
+  "San Francisco": {
+   "gci": 14,
+   "gco": 4,
+   "gfci": 11,
+   "gfciRating": 748,
+   "gser": 1,
+   "gserE": null,
+   "blink": 1,
+   "qol": 167.8,
+   "safety": 39.6,
+   "pollution": 48.4,
+   "eiu": null,
+   "eiuRank": null,
+   "col": 92.1,
+   "rent": 78,
+   "colr": 85.5
+  },
+  "Seattle": {
+   "gci": 52,
+   "gco": 48,
+   "gfci": null,
+   "gfciRating": null,
+   "gser": 15,
+   "gserE": null,
+   "blink": 15,
+   "qol": 185.7,
+   "safety": 44.6,
+   "pollution": 38.6,
+   "eiu": null,
+   "eiuRank": null,
+   "col": 91.5,
+   "rent": 57.6,
+   "colr": 75.6
+  },
+  "Denver": {
+   "gci": null,
+   "gco": null,
+   "gfci": null,
+   "gfciRating": null,
+   "gser": 26,
+   "gserE": null,
+   "blink": 35,
+   "qol": 170.3,
+   "safety": 52.2,
+   "pollution": 44.9,
+   "eiu": null,
+   "eiuRank": null,
+   "col": 77.4,
+   "rent": 43.5,
+   "colr": 61.5
+  },
+  "Phoenix": {
+   "gci": 77,
+   "gco": 18,
+   "gfci": null,
+   "gfciRating": null,
+   "gser": null,
+   "gserE": "11",
+   "blink": 53,
+   "qol": 157,
+   "safety": 46.7,
+   "pollution": 58,
+   "eiu": null,
+   "eiuRank": null,
+   "col": 76.2,
+   "rent": 39.1,
+   "colr": 58.9
+  },
+  "Atlanta": {
+   "gci": 36,
+   "gco": 32,
+   "gfci": 27,
+   "gfciRating": 732,
+   "gser": 28,
+   "gserE": null,
+   "blink": 32,
+   "qol": 183,
+   "safety": 35.8,
+   "pollution": 44.9,
+   "eiu": null,
+   "eiuRank": null,
+   "col": 79.5,
+   "rent": 41.6,
+   "colr": 61.8
+  },
+  "Austin": {
+   "gci": null,
+   "gco": null,
+   "gfci": null,
+   "gfciRating": null,
+   "gser": 30,
+   "gserE": null,
+   "blink": 16,
+   "qol": 191,
+   "safety": 56,
+   "pollution": 43.3,
+   "eiu": null,
+   "eiuRank": null,
+   "col": 70.3,
+   "rent": 42.9,
+   "colr": 57.5
+  },
+  "Dallas": {
+   "gci": 45,
+   "gco": 54,
+   "gfci": null,
+   "gfciRating": null,
+   "gser": 38,
+   "gserE": null,
+   "blink": 27,
+   "qol": 179.7,
+   "safety": 48.4,
+   "pollution": 41.1,
+   "eiu": null,
+   "eiuRank": null,
+   "col": 76.6,
+   "rent": 42.2,
+   "colr": 60.5
+  },
+  "Houston": {
+   "gci": 32,
+   "gco": 52,
+   "gfci": null,
+   "gfciRating": null,
+   "gser": null,
+   "gserE": "17",
+   "blink": 52,
+   "qol": 177.2,
+   "safety": 37.3,
+   "pollution": 56.3,
+   "eiu": null,
+   "eiuRank": null,
+   "col": 64.6,
+   "rent": 38.1,
+   "colr": 52.2
+  },
+  "Miami": {
+   "gci": 24,
+   "gco": 51,
+   "gfci": 36,
+   "gfciRating": 723,
+   "gser": 22,
+   "gserE": null,
+   "blink": 28,
+   "qol": 159.5,
+   "safety": 46.7,
+   "pollution": 39.5,
+   "eiu": null,
+   "eiuRank": null,
+   "col": 84.6,
+   "rent": 67.6,
+   "colr": 76.6
+  },
+  "Washington DC": {
+   "gci": 15,
+   "gco": 46,
+   "gfci": 19,
+   "gfciRating": 740,
+   "gser": 17,
+   "gserE": null,
+   "blink": 22,
+   "qol": 178.7,
+   "safety": 40.5,
+   "pollution": 41.7,
+   "eiu": null,
+   "eiuRank": null,
+   "col": 92,
+   "rent": 65.9,
+   "colr": 79.8
+  },
+  "Charlotte": {
+   "gci": 76,
+   "gco": 31,
+   "gfci": null,
+   "gfciRating": null,
+   "gser": null,
+   "gserE": "41-50",
+   "blink": 93,
+   "qol": 189.4,
+   "safety": 50.4,
+   "pollution": 35.9,
+   "eiu": null,
+   "eiuRank": null,
+   "col": 71.3,
+   "rent": 40.8,
+   "colr": 57
+  },
+  "Nashville": {
+   "gci": null,
+   "gco": null,
+   "gfci": null,
+   "gfciRating": null,
+   "gser": null,
+   "gserE": "51-60",
+   "blink": 80,
+   "qol": 186.6,
+   "safety": 50.4,
+   "pollution": 37.7,
+   "eiu": null,
+   "eiuRank": null,
+   "col": 73.5,
+   "rent": 45.8,
+   "colr": 60.5
+  },
+  "Portland (OR)": {
+   "gci": null,
+   "gco": null,
+   "gfci": null,
+   "gfciRating": null,
+   "gser": null,
+   "gserE": "21-30",
+   "blink": 59,
+   "qol": 179.2,
+   "safety": 42,
+   "pollution": 35.7,
+   "eiu": null,
+   "eiuRank": null,
+   "col": 85.7,
+   "rent": 44.4,
+   "colr": 66.4
+  },
+  "Salt Lake City": {
+   "gci": null,
+   "gco": null,
+   "gfci": null,
+   "gfciRating": null,
+   "gser": null,
+   "gserE": "6",
+   "blink": 40,
+   "qol": 180,
+   "safety": 64.2,
+   "pollution": 61.7,
+   "eiu": null,
+   "eiuRank": null,
+   "col": 65.7,
+   "rent": 36.2,
+   "colr": 51.9
+  }
+ },
+ "INDEX_META": [
+  {
+   "name": "Kearney Global Cities Index (GCI)",
+   "edition": "2025 report, 158 cities",
+   "used": "network, and half of career",
+   "urls": [
+    "https://www.kearney.com/service/national-transformations-institute/gcr/2025-full-report",
+    "https://web.archive.org/web/20251212102347id_/https://www.kearney.com/documents/291362523/310489408/Accelerating-through-volatility--2025-Global-Cities-Report-PDF.pdf/5f45c084-42ed-9f23-cf18-69465a99bdd3"
+   ]
+  },
+  {
+   "name": "Global Financial Centres Index (GFCI)",
+   "edition": "GFCI 40 (September 2026), 117 centres",
+   "used": "the other half of career, where a city is ranked",
+   "urls": [
+    "https://www.longfinance.net/documents/4442/gfci40Rank.csv",
+    "https://www.longfinance.net/programmes/financial-centre-futures/global-financial-centres-index/gfci-40-explore-the-data/gfci-40-rank/"
+   ]
+  },
+  {
+   "name": "StartupBlink Global Startup Ecosystem Index",
+   "edition": "2025 (May 2025)",
+   "used": "entrepreneurship and tech",
+   "urls": [
+    "https://www.startupsg.gov.sg/public/inline-images/Startup_Blink_Global_Startup_Ecosystem_Index_2025_web.pdf",
+    "https://lp.startupblink.com/report/"
+   ]
+  },
+  {
+   "name": "Startup Genome GSER",
+   "edition": "2025 Top 40 (June 2025)",
+   "used": "tech, averaged in where a city is in the Top 40",
+   "urls": [
+    "https://startupgenome.com/contents/report/gser-2025_4786.pdf",
+    "https://startupgenome.com/report/gser2025/global-startup-ecosystem-ranking-2025-top-40"
+   ]
+  },
+  {
+   "name": "Numbeo Quality of Life Index",
+   "edition": "current rolling table, retrieved 2026-09-24",
+   "used": "lifestyle",
+   "urls": [
+    "https://www.numbeo.com/quality-of-life/rankings_current.jsp"
+   ]
+  },
+  {
+   "name": "Numbeo Cost of Living Plus Rent Index",
+   "edition": "current rolling table, retrieved 2026-09-24 (New York = 100)",
+   "used": "cost/day",
+   "urls": [
+    "https://www.numbeo.com/cost-of-living/rankings_current.jsp"
+   ]
+  },
+  {
+   "name": "EIU Global Liveability Index",
+   "edition": "2026, partial (the full table is paywalled)",
+   "used": "reference only, not used in any score",
+   "urls": [
+    "https://en.wikipedia.org/wiki/Global_Liveability_Index",
+    "https://www.visualcapitalist.com/ranked-the-worlds-most-and-least-livable-cities-in-2026/"
+   ]
+  }
+ ],
+ "METHOD": {
+  "domains": [
+   {
+    "label": "Career",
+    "means": "Depth of the professional job market: large employers, finance, corporate headquarters.",
+    "from": "Kearney GCI rank and GFCI rank (averaged when both exist): 99.4 − 4.59·ln(GCI rank); 99.5 − 4.43·ln(GFCI rank). Agreement with the US hand scores: r = 0.82 / 0.88."
+   },
+   {
+    "label": "Entrepreneurship",
+    "means": "How good a place it is to start and fund a company.",
+    "from": "StartupBlink rank: 99.2 − 6.80·ln(rank). r = 0.89."
+   },
+   {
+    "label": "Tech",
+    "means": "Size and strength of the tech sector and its talent.",
+    "from": "StartupBlink rank (99.6 − 6.49·ln(rank), r = 0.89), averaged with Startup Genome Top-40 rank (94.9 − 4.49·ln(rank), r = 0.66) where ranked."
+   },
+   {
+    "label": "Network",
+    "means": "Global connectedness: who comes through, what gets decided there.",
+    "from": "Kearney GCI rank: 104.0 − 6.36·ln(rank). r = 0.84."
+   },
+   {
+    "label": "Lifestyle",
+    "means": "Day-to-day quality of life: safety, health care, climate, pollution, commute.",
+    "from": "Numbeo Quality of Life, rescaled onto the US hand scores' spread: 76.2 + (QoL − 173.3) ÷ 16.4 × 5.9. Weak agreement with the hand scores (r = 0.25), so read these with care."
+   }
+  ],
+  "fit": "How the formulas were set: each index was compared with the 30 hand-set US scores, and a straight line was fitted between them (ranks on a log scale, because the gap between #1 and #10 matters more than the gap between #100 and #110). Those lines score the international cities, which puts both sets on one scale. As a check, rescoring the US cities with the same formulas lands within 2.7 (career), 3.8 (entrepreneurship), 3.3 (tech), 3.5 (network) and 5.5 (lifestyle) points of the hand scores on average. Scores are clamped to 35–99. Cost/day = 2.5 × Numbeo Cost of Living Plus Rent, rounded to $5; the US hand estimates run about 2.5× that index too (r = 0.95).",
+  "tier": "Tier rule: expansion if the universal score is 81 or higher, otherwise base. That line separates the 30 hand-set US cities exactly (every US expansion city is 81.6 or higher, every base city 80.8 or lower), so it is applied to the international cities unchanged. Lagos has no usable Numbeo Quality of Life figure (the table shows 0.0), so its lifestyle is left blank and its averages use the four domains it has."
+ },
+ "DATASETS": [
+  {
+   "name": "US business cities (30)",
+   "what": "Five domain scores (0–100), tier, Amtrak corridor, tags, one-line description, rating",
+   "origin": "Hand-set in the City2City desktop app (PyQt6, ~/Desktop/untitled folder/city2city_v2, April 2026). Ported unchanged on 2026-08-20.",
+   "method": "Judgment scores — no source is cited for them. The rating and rating count came with the app; where they came from is not recorded.",
+   "trust": "Opinion",
+   "kept": "archive/city2city_v2/data/cities.py"
+  },
+  {
+   "name": "US business cities: cost/day",
+   "what": "Estimated daily cost of living there, USD",
+   "origin": "Added 2026-09-09 when leisure mode was merged into City2City.",
+   "method": "Rough estimates, labelled as such at the time. The Index data table below shows each city's Numbeo index next to it for a check.",
+   "trust": "Estimate",
+   "kept": "archive/city2city.pre-fold.2026-09-24.html"
+  },
+  {
+   "name": "International business cities (35)",
+   "what": "The same five domain scores, tier, and cost/day",
+   "origin": "Added 2026-09-24. Each score is computed from published indices (listed below), using a formula fitted to the US cities, so the two sets share one scale.",
+   "method": "See \"How business cities are categorized\". Every input is in the Index data table, with its edition and a link.",
+   "trust": "Index-derived",
+   "kept": "data/destination-indices/ (raw index files + score.py); this page (INTL_CITIES, INDEX)"
+  },
+  {
+   "name": "Leisure destinations (119)",
+   "what": "S–D value tier, cost/day for a comfortable-luxury day, and a reason",
+   "origin": "83 from your \"Cheapest luxury destinations\" page, merged into City2City on 2026-09-09. Claude Sonnet 5 added 36 more the same day to fill thin regions.",
+   "method": "Editorial tiers and rough daily costs. Not live prices.",
+   "trust": "Editorial",
+   "kept": "archive/cheapest-luxury-destinations.html"
+  },
+  {
+   "name": "Leisure hub cities",
+   "what": "One hub city per leisure destination, with lat/lon",
+   "origin": "Added 2026-09-24 when Destination Intelligence was built.",
+   "method": "The city the \"why\" line names, else the capital or main gateway. Coordinates are the city centre. road:true only for Canada, Mexico, and mainland Central America.",
+   "trust": "Fact (hand-entered)",
+   "kept": "this page (GEO)"
+  },
+  {
+   "name": "US places (190)",
+   "what": "Name, state, lat/lon",
+   "origin": "Trip Mode's place list, 2026-08-27.",
+   "method": "Real coordinates for 190 cities covering every state.",
+   "trust": "Fact",
+   "kept": "templates/trip-mode-calculator.html (PLACES_RAW)"
+  },
+  {
+   "name": "Your saved list",
+   "what": "Status, notes, home city",
+   "origin": "You.",
+   "method": "Saved to the workspace server (blob destination-intel-v1), with a copy in this browser.",
+   "trust": "Yours",
+   "kept": "data/blobs/destination-intel-v1"
+  }
+ ],
+ "SERVICES": [
+  [
+   "OpenFreeMap (dark style) · OpenStreetMap data",
+   "Atlas map, and the vector map in Street & 3D",
+   "https://openfreemap.org"
+  ],
+  [
+   "Esri World Imagery",
+   "Satellite mode in Street & 3D",
+   "https://www.arcgis.com/home/item.html?id=10df2279f9684e4a9f6a7f08febac2a9"
+  ],
+  [
+   "Google Maps JS API (Street View, Photorealistic 3D)",
+   "Street and Photoreal modes — only with your key",
+   "https://developers.google.com/maps"
+  ],
+  [
+   "Mapillary",
+   "Street mode fallback — only with your token",
+   "https://www.mapillary.com"
+  ],
+  [
+   "OpenStreetMap Nominatim",
+   "Place search in Street & 3D",
+   "https://nominatim.org"
+  ],
+  [
+   "MapLibre GL JS 5.0.0 (unpkg)",
+   "Draws every map",
+   "https://maplibre.org"
+  ]
+ ],
+ "GOAL_WEIGHTS": {
+  "growth": {
+   "career": 2,
+   "entrepreneurship": 2,
+   "network": 2,
+   "tech": 1,
+   "lifestyle": 1
+  },
+  "entrepreneurship": {
+   "entrepreneurship": 3,
+   "network": 2,
+   "tech": 1,
+   "career": 1,
+   "lifestyle": 1
+  },
+  "tech": {
+   "tech": 3,
+   "career": 2,
+   "network": 1,
+   "entrepreneurship": 2,
+   "lifestyle": 1
+  },
+  "career": {
+   "career": 3,
+   "network": 2,
+   "tech": 1,
+   "entrepreneurship": 1,
+   "lifestyle": 1
+  },
+  "lifestyle": {
+   "lifestyle": 3,
+   "career": 1,
+   "network": 1,
+   "entrepreneurship": 1,
+   "tech": 1
+  }
+ },
+ "DOMAIN_LABELS": {
+  "career": "Career",
+  "entrepreneurship": "Entrepreneurship",
+  "tech": "Tech",
+  "network": "Network",
+  "lifestyle": "Lifestyle"
+ },
+ "LTIER_META": {
+  "S": {
+   "label": "Exceptional value",
+   "color": "#1B5E20",
+   "font": "#FFFFFF"
+  },
+  "A": {
+   "label": "Luxury on a budget",
+   "color": "#2E7D32",
+   "font": "#FFFFFF"
+  },
+  "B": {
+   "label": "Great if you plan well",
+   "color": "#C9A227",
+   "font": "#1B2430"
+  },
+  "C": {
+   "label": "Affordable but less “luxury”",
+   "color": "#D97B29",
+   "font": "#FFFFFF"
+  },
+  "D": {
+   "label": "Expensive for what you get",
+   "color": "#B23A2E",
+   "font": "#FFFFFF"
+  }
+ },
+ "STATUS": [
+  [
+   "shortlist",
+   "Shortlist"
+  ],
+  [
+   "want",
+   "Want to go"
+  ],
+  [
+   "base",
+   "Base candidate"
+  ],
+  [
+   "visited",
+   "Visited"
+  ]
+ ],
+ "KIND_LABEL": {
+  "city": "Business city",
+  "leisure": "Leisure destination",
+  "place": "US place"
+ },
+ "D": null
+}

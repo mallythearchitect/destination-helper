@@ -1,0 +1,82 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Trips · Destination Helper</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Barlow:wght@400;500;700&family=Barlow+Condensed:wght@400;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/ui-kit/tokens.css">
+<link rel="stylesheet" href="/ui-kit/shell.css">
+<link rel="stylesheet" href="/ui-kit/app.css">
+<style>
+.day{border:1px solid var(--line);background:var(--ink-3);margin-bottom:10px}
+.day .dh{display:flex;justify-content:space-between;align-items:baseline;gap:10px;padding:8px 12px;border-bottom:1px solid var(--line);font-family:var(--font-heading);font-size:17px}
+.day .dh .night{font-family:var(--font-body);font-size:12.5px;color:var(--mut)}
+.it{display:grid;grid-template-columns:78px 1fr auto;gap:10px;padding:8px 12px;border-top:1px solid var(--line);align-items:start;cursor:pointer}
+.it:first-of-type{border-top:0}.it:hover{background:rgba(217,169,60,.06)}
+.it .tm{font-family:ui-monospace,Menlo,monospace;font-size:12.5px;color:var(--paper-2)}
+.it .tm small{display:block;color:var(--mut);font-size:11px}
+.it .ti{font-weight:500}.it .su{font-size:12.5px;color:var(--mut)}
+.it .pr{text-align:right;font-family:var(--font-heading);font-size:17px;color:var(--gold);white-space:nowrap}
+.it .pr small{display:block;font-family:var(--font-body);font-size:11px;color:var(--mut)}
+.st{display:inline-block;font-size:10.5px;letter-spacing:.08em;text-transform:uppercase;padding:1px 6px;border:1px solid var(--line-2);border-radius:2px;margin-left:6px;vertical-align:middle}
+.st.booked,.st.confirmed,.st.done{border-color:#3f9a5f;color:#7fd39a}.st.to_book,.st.idea{border-color:var(--line-2);color:var(--mut)}.st.check_now{border-color:var(--gold);color:var(--gold)}.st.cancelled{text-decoration:line-through;color:var(--mut)}
+.fd{border-left:3px solid var(--line-2);padding:8px 12px;margin-bottom:8px;background:var(--ink-3)}
+.fd.blocker{border-left-color:#d9534f}.fd.warn{border-left-color:var(--gold)}.fd.info{border-left-color:#5b8bd6}
+.fd .fx{color:var(--paper-2);font-size:13px;margin-top:3px}.fd .rl{font-family:ui-monospace,Menlo,monospace;font-size:11px;color:var(--mut)}
+.links a{display:inline-block;font-size:12px;padding:3px 8px;border:1px solid var(--line-2);margin:0 6px 6px 0;text-decoration:none;color:var(--paper)}
+.links a:hover{border-color:var(--gold)}
+.stage-btns button.on{border-color:var(--gold);color:var(--gold)}
+.tk{display:flex;gap:10px;align-items:flex-start;padding:7px 0;border-top:1px solid var(--line)}
+.tk:first-child{border-top:0}.tk.done{opacity:.55}.tk .due{font-size:12px;color:var(--mut);white-space:nowrap;margin-left:auto}
+.q{padding:5px 0;border-top:1px solid var(--line);font-size:13.5px}.q code{font-family:ui-monospace,Menlo,monospace;font-size:11.5px;color:var(--gold);margin-right:8px}
+.wf{border:1px solid var(--line);background:var(--ink-3);padding:10px 12px;margin-bottom:8px}.wf h4{margin:0 0 4px;font-size:16px}
+.wf ol{margin:6px 0 4px 18px;padding:0;font-size:13.5px}.wf .tr{font-size:12.5px;color:var(--mut)}
+.msg{white-space:pre-wrap;font-size:13.5px;background:var(--ink);border:1px solid var(--line);padding:8px 10px}
+.leave{font-size:12px;color:var(--gold)}
+@media (max-width:760px){.it{grid-template-columns:64px 1fr}.it .pr{grid-column:2;text-align:left}}
+</style>
+</head>
+<body>
+<header class="band"><div class="appbar">
+ <span class="appbar-brand"><span class="appbar-eyebrow">Destination Helper</span>Trips</span>
+ <span class="appbar-right"><span class="pill" id="pill"></span><a href="/apps/destinations/web/">Destinations</a><a href="/apps/launcher/web/">‹ Home</a></span>
+</div></header>
+<main class="wrap">
+ <div class="side-layout">
+  <aside class="sidebar">
+   <div><h4>Trips</h4><div class="opts" id="trips"></div><button class="sbtn mini" id="new-trip" style="margin:8px 0 0 10px">+ New trip</button></div>
+   <div id="stage-box"><h4>Stage</h4><div class="opts stage-btns" id="stages"></div></div>
+   <div><h4>Show</h4><nav class="sidenav" id="tabs"><a href="#timeline" class="on">Timeline</a><a href="#checks">Checks</a><a href="#costs">Costs</a><a href="#prepare">Prepare</a><a href="#run">Run</a><a href="#confirm">Confirm</a><a href="#helper">Helper</a><a href="#region">Region</a></nav></div>
+  </aside>
+  <div class="content">
+   <section class="panel on" id="p-timeline"></section>
+   <section class="panel" id="p-checks"></section>
+   <section class="panel" id="p-costs"></section>
+   <section class="panel" id="p-prepare"></section>
+   <section class="panel" id="p-run"></section>
+   <section class="panel" id="p-confirm"></section>
+   <section class="panel" id="p-helper"></section>
+   <section class="panel" id="p-region"></section>
+  </div>
+ </div>
+</main>
+<dialog class="form-dialog" id="form"></dialog>
+<script src="/ui-kit/app.js"></script>
+<script src="trips.js"></script>
+<script src="/ui-kit/tour.js"></script>
+<script>
+Tour.init({ page: 'trips', steps: [
+  { title: 'Trips: the Destination Helper', text: 'A trip co-pilot. It plans the trip, then helps you run it: <b>Plan</b> (routes, timing, costs and the checks), <b>Prepare</b> (confirm bookings, the before-you-go list, deadlines), <b>Run</b> (the day\'s legs with leave-by times and live links). Work and personal, any size.' },
+  { target: '#trips', title: 'Your trips', text: 'Each trip is a record in the vault. New trip asks the setup questions first: who\'s going and how many, the dates, the budget caps, what it\'s for, the passport (G01, G02).' },
+  { target: '#stages', title: 'Stages', text: 'Move the trip along as you go. The Run tab is built for the days you are away.' },
+  { target: '#tabs a[href="#timeline"]', title: 'Timeline', text: 'Every leg, stay, activity and pickup by day, colour-coded Booked / To book / Check now, with the night\'s stay on each day. Click an item to edit it or open its live links: directions, flights, all ways, the region\'s booking site.' },
+  { target: '#tabs a[href="#checks"]', title: 'Checks', text: 'The part other planners skip. Pickups booked before the flight lands, prices that don\'t say per person or group, nights with no stay, tight connections, the last ferry, budget caps, passport validity, deadlines. Every threshold is in Settings → Logic.' },
+  { target: '#tabs a[href="#costs"]', title: 'Costs', text: 'Per person and for the group, local and home currency, company pays vs I pay, work vs personal, planned vs actually spent.' },
+  { target: '#tabs a[href="#confirm"]', title: 'Confirm', text: 'W27: message the business first (WhatsApp, LINE, text, email), call only if there is no reply, and the call says it\'s automated. The engine drafts; you send and log the answer.' },
+  { target: '#tabs a[href="#helper"]', title: 'The helper', text: 'The capability list itself: 93 question codes, 29 workflows with their steps, 12 guardrails with why each exists, and this trip\'s track record. A Claude chat can read the same list through the plug.' },
+]});
+</script>
+</body>
+</html>

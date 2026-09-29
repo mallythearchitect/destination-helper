@@ -1,0 +1,2291 @@
+{
+ "meta": {
+  "title": "Destination Helper — Product Brief & Capability List (v7)",
+  "version": "v7",
+  "extracted": "2026-09-28",
+  "source_docx": "destination-helper-v7.docx",
+  "updated_line": "One file for the app. Part A is the product idea, decisions and open questions. Part B is what other companies do and where they fall short. Parts 1–5 are the capability list: questions, methods, workflows, guardrails and region packs. Updated Sep 28, 2026."
+ },
+ "brief": [
+  {
+   "heading": "What it is",
+   "lines": [
+    "A trip co-pilot: it plans the trip, then helps you run it. It covers work and leisure, and trips of any size, from two weeks abroad to a Saturday outing."
+   ]
+  },
+  {
+   "heading": "What keeps it from being \"Wanderlog part 2\"",
+   "lines": [
+    "It's only different if the center is what Wanderlog doesn't do:",
+    "1.  It checks the plan. It catches mistakes before they cost money: a taxi booked before you land, a price that's per person rather than total, the last ferry leaving before you arrive, the real door-to-door cost.",
+    "2.  It handles work travel and mixed trips. Every item is tagged work or personal, costs split into \"company pays\" and \"I pay\", and a work trip can be stretched into vacation days.",
+    "3.  It runs the trip. Live notices, confirmations and checklists, not just a stored plan.",
+    "Test: would a happy Wanderlog user switch for it? If only the basics are there, no."
+   ]
+  },
+  {
+   "heading": "How it works: three stages",
+   "lines": [
+    "Plan: routes, timing, costs, and the checks.",
+    "Prepare: confirm bookings, run the before-you-go checklist, flag deadlines.",
+    "Run: live notices tied to your plan. \"Traffic's heavy, leave 20 minutes early.\" \"Your ferry was cancelled; here's the next one.\""
+   ]
+  },
+  {
+   "heading": "Decisions so far (Sep 28, 2026)",
+   "lines": [
+    "Confirmations: a message first (a text, or LINE or WhatsApp where businesses use those), then an AI call only if there's no reply. The call says up front that it's an AI.",
+    "First test: the Thailand trip (Nov 13–28, 2026).",
+    "After that: micro trips for activities, meaning short outings that happen weekly.",
+    "Scope: all types of travel and activities, big or small. Start narrow, then widen.",
+    "Who it's for first: trip organizers, the person who plans for the group. Small-business owners and freelancers become the paid tier later; everyday vacationers arrive as the friends organizers invite.",
+    "How we reach them: through clubs and organizations, starting with schools.",
+    "Build or partner: build our own. Wingman City Guide is a possible partner later, once the app works and has users."
+   ]
+  },
+  {
+   "heading": "Open questions",
+   "lines": [
+    "When do business travelers come in? Organizers come first. Small-business owners and freelancers who handle their own receipts are the later paid tier. Companies booking for staff (Navan and SAP Concur territory) stay out of scope.",
+    "What's the name? \"Copilot\" belongs to Microsoft, and Wingman, Legwork and Right Seat are taken or crowded. First Officer looked clean in a quick check. Run a real trademark search before committing.",
+    "How does it make money? Leisure planners earn little per user (Wanderlog Pro is $39.99 a year). Company tools earn a lot per company. An app for individuals who travel for both sits in between.",
+    "Which kind of trip should it be great at first?",
+    "Will people pay to replace what they use now (Wanderlog + TripIt + a receipts app)?"
+   ]
+  },
+  {
+   "heading": "Gap, or a headache nobody wants?",
+   "lines": [
+    "Checking the plan: mostly a real gap. The headache is messy data (ferries, vans and small hotels don't come in clean feeds) and false alarms. It's still solvable: the traveler forwards their own confirmations, and most checks are simple rules. Travel Sane shows a small version works.",
+    "Work/personal split: the headache is mostly the company's. Insurance, taxes, company policy and duty of care make it hard for employers. An app for the individual can skip most of that: tag, split costs, export receipts.",
+    "Money: the real headache. This is the most likely reason the space is empty, and the biggest thing to test."
+   ]
+  },
+  {
+   "heading": "Why the big apps don't do it yet (our read)",
+   "lines": [
+    "1.  They each serve one customer. Wanderlog and Google earn from leisure travelers; Navan and SAP Concur sell to employers.",
+    "2.  Mixing work and personal is messy: who pays for extra nights, insurance that stops when the work part ends, taxes, and keeping personal bookings private from employers.",
+    "3.  Checking needs data that's hard to get. Flights come in standard data feeds; taxis, ferries, vans and hostels come as scattered emails and local sites. Local knowledge (last ferry, which pier) is hard to scale, and wrong alerts kill trust.",
+    "4.  Planners focus on the fun part, the dreaming and mapping before you book. Most mistakes show up after booking, in the logistics."
+   ]
+  },
+  {
+   "heading": "Risks",
+   "lines": [
+    "Too wide to start. Being okay at every kind of trip loses to apps that are great at one.",
+    "Google is heading here. At I/O 2026 it announced calling businesses for you (starting with home repair, beauty and pet care), booking local experiences, and agents that watch the web around the clock, all rolling out in the US this summer. Maps already does live traffic. Don't compete on the pieces Google gives away; compete on tying them to the whole plan.",
+    "Running the trip means owning the mistakes. One wrong \"leave now\" and someone misses a flight. Alerts have to be right almost every time.",
+    "Calling is the hardest piece. Rules on AI calls vary, some places require saying it's an AI, and abroad there are language barriers. Many small businesses prefer messaging anyway.",
+    "It needs a lot of trust: access to location, email and calendar.",
+    "One user isn't proof. Building it for your own trips is great for building, but it doesn't show other people want it."
+   ]
+  },
+  {
+   "heading": "Where it wins",
+   "lines": [
+    "One brain that knows the whole plan and ties live updates to it. Example from the Thailand planning: it caught an airport taxi booked for 12:00 PM against a 6:45 PM landing."
+   ]
+  },
+  {
+   "heading": "First questions (onboarding)",
+   "lines": [
+    "Five questions at the start narrow the scope and make the app easy to use. If only three fit, use 1–3. Everything else (passport country, bags, room preferences) is asked later, only when a step needs it.",
+    "1.  \"Who's going, and is it work, personal, or both?\" Sets group size, so every price shows per person and for the group, and turns work tagging on or off. (The Thailand planning assumed a couple and never settled the headcount.)",
+    "2.  \"Where and when, or not sure yet?\" Sets dates and trip size, from two weeks abroad to a Saturday outing. \"Not sure yet\" opens the same-trip-cheaper-place comparison and the season check; a known place and dates goes straight to planning, with a warning if it's a bad season.",
+    "3.  \"What's your budget, and what matters most?\" Sets a price cap and the trip's style (beaches, nightlife, hikes, gyms, meetings). Stops the app suggesting a $317 flight to someone who won't pay it, and tells it what \"similar\" means when comparing places.",
+    "4.  \"What's already booked?\" (forward the confirmations or connect email) The checks start right away. On day one the app can say \"your taxi is booked before you land,\" so the user sees the value before doing any planning. This is the most important of the five.",
+    "5.  \"How much should I handle?\" (plan it for me / check my plan / just remind me, plus whether it can message or call businesses for you) Organizers like control, so this answers it up front, and it's where the user gives permission for the text-then-call confirmations."
+   ]
+  },
+  {
+   "heading": "Planning-stage layout: data, filters, plan",
+   "lines": [
+    "The planning screen has the data on one side and the questions and filters on the other. The filters narrow the data, your picks go into the plan, and the checks run on the plan. The Prepare and Run stages work from that same plan (Prepare: W25, W27; Run: W28, W29)."
+   ]
+  },
+  {
+   "heading": "Left side: the data (what the app knows)",
+   "lines": [
+    "  -----------------------------------------------------------------------------------------------------------------------------------",
+    "  Bucket          What each item holds",
+    "  --------------- -------------------------------------------------------------------------------------------------------------------",
+    "  Places          area type (beach, city, nature), season by month (weather, crowds, price level), safety notes",
+    "  Stays           area, price per night, rating, check-in hours, holds bags, work-friendly (Wi-Fi, desk), distance to key spots",
+    "  Activities      type tags (snorkel, nightlife, hike, gym, tour), length, price per person, fees, open days and hours, best season",
+    "  Routes          from, to, mode (flight, bus, ferry, taxi), where it really leaves and ends, times, last departure, price, bags",
+    "  Price history   every price saved with the date it was checked; feeds comparisons now and predictions later",
+    "  Businesses      how to reach them (text, WhatsApp, LINE, call) and how reliably they answer",
+    "  -----------------------------------------------------------------------------------------------------------------------------------"
+   ]
+  },
+  {
+   "heading": "Right side: questions and filters (what narrows it down)",
+   "lines": [
+    "The five first questions set the defaults: group size (per person vs group price), work vs personal, place and dates (or \"not sure,\" which opens the comparison), budget cap and style tags, what's already booked (fixed times and places), and how much the app should handle.",
+    "Live filters on the map and list: type and tags, price range (per person or group), travel time from your base, open during your free time, season fit for your dates (good, okay, bad), rating and reliability, work-friendly, booked vs not booked."
+   ]
+  },
+  {
+   "heading": "Middle: the plan (what comes out)",
+   "lines": [
+    "Trip → days → items (stay, activity, ride).",
+    "Each item carries: time, cost, work or personal, must-attend or optional, status (idea, booked, confirmed), and check flags (conflict, gap, tight timing)."
+   ]
+  },
+  {
+   "heading": "Visual timeline (concept)",
+   "lines": [
+    "The timeline should feel like a journey, not a grid of boxes and letters:",
+    "One flowing route line through the whole trip, with stops as photo bubbles of the place. The line's style shows the mode: an arc for flights, a wave for ferries, a road for vans and taxis.",
+    "Distance on the line is real time, so travel and buffers are visible as space between stops. A tight connection looks tight.",
+    "Day and night shading behind the line (sunrise to sunset), so late arrivals and early starts stand out.",
+    "A weather and season strip above each day, colored by how good that season is for the place.",
+    "Color by meaning: work items in one color family, personal in another; must-attend solid, optional softer.",
+    "Checks as markers on the line: red for a conflict, amber for tight timing, a gray gap for \"no hotel tonight.\"",
+    "Zoom: the whole trip as chapters (one per place) down to a single day, hour by hour.",
+    "Linked to the map: tap a stop on the timeline and the map shows it, and the reverse.",
+    "During the trip: a \"you are here\" dot moves along the line, and a delay visibly pushes everything after it.",
+    "After the trip: the same line becomes the shareable recap, with photos, highlights and total spend.",
+    "Mockup (Thailand trip): the whole-trip view on top, Nov 17 zoomed hour by hour below, and the checks panel on the right."
+   ]
+  },
+  {
+   "heading": "[Timeline mockup]",
+   "lines": [
+    "Built from the Thailand plan as of Sep 28, 2026. Season labels are placeholders for the season data layer."
+   ]
+  },
+  {
+   "heading": "Building it: the phone app",
+   "lines": [
+    "1.  How it runs on phones. Start with a web app that works on phones: one build for iPhone and Android, installable to the home screen, no app store approval. Move to a store app (React Native or Flutter) once it works. Apple's developer account is $99 a year; Google Play is $25 once.",
+    "2.  Phone screens first: trip setup (the five questions), a vertical timeline (top to bottom, pinch from whole trip to one day), a map toggle or split view, the checks list, and a travel-day screen with only what's next.",
+    "3.  Behind the scenes: accounts and a database for trips, days and items (the data, filters, plan layout above), plus sharing so the group sees one trip. Services like Supabase or Firebase cover this.",
+    "4.  Connections, easiest first:",
+    "    - Easy: maps (Google Maps or Mapbox); weather and season history.",
+    "    - Medium: bookings by forwarding confirmation emails to the app's own address (reading Gmail directly needs Google's security review); push notifications (web apps get them once added to the home screen).",
+    "    - Hard: live flight status (paid data), texting businesses (Twilio, WhatsApp Business), and AI phone calls last.",
+    "5.  Privacy and security: it stores people's bookings and travel dates, so it needs a privacy policy, a secure setup, and only the permissions it truly uses.",
+    "What Claude speeds up, and what it can't: code, screens, the checks logic and the data layout move fast. Other companies' approvals (Google, Apple, WhatsApp), paid data, real users' feedback, getting alerts right every time, and your own hours don't.",
+    "Realistic target for Nov 13: a phone web app with trip setup, the vertical timeline, forwarded-email import and the checks, tested on the Thailand trip. Live alerts, texting and calls come after."
+   ]
+  },
+  {
+   "heading": "Who it's for",
+   "lines": [
+    "First: trip organizers, the person who plans for the group, for big trips and micro trips.",
+    "  • They feel the pain most: logistics, confirmations, timing, splitting costs.",
+    "  • Each one brings a group of 3–8 people into the app for free.",
+    "  • They care about getting it right, so the checks and live help matter to them.",
+    "  • The catch: organizers like control and many already use Wanderlog or spreadsheets. The app has to back them up (check, remind, confirm), not take over.",
+    "Later, the paid tier: small-business owners and freelancers who travel for work, mix in leisure, and need receipts sorted.",
+    "Everyone else: vacationers arrive as the friends organizers invite.",
+    "Pitch to organizers: \"You plan it. We make sure nothing breaks.\""
+   ]
+  },
+  {
+   "heading": "How we reach them",
+   "lines": [
+    "Clubs and organizations, starting with schools. Club officers already organize trips, retreats and outings, so they're organizers by nature, and each club is a ready-made group.",
+    "Every shared trip is an invite. Friends who join a trip see the app working.",
+    "Launch on Product Hunt once there's something working to show.",
+    "Watch out: students have small budgets. Clubs are great for spreading the app, not for revenue, which is why the paid tier for business owners matters."
+   ]
+  },
+  {
+   "heading": "Our competitive advantage",
+   "lines": [
+    "In one line: it knows when your plan is wrong and helps you fix it, for work and personal trips, big or small.",
+    "1.  It checks the plan: the taxi booked before you land, the per-person price, the last ferry, the night with no hotel.",
+    "2.  It runs the trip: confirmations (message first, call if no reply) and live notices like \"leave 20 minutes early.\"",
+    "3.  Work and personal in one trip: tag items, split costs, stretch a work trip into vacation days.",
+    "4.  Local activities, small and large: micro trips, not just big vacations. This is the gap spotted in Wingman.",
+    "Each piece exists somewhere; nobody combines them for the individual traveler.",
+    "The map and timeline only become an advantage if they show what the checks find:",
+    "Map filters others don't have: booked vs not, work vs personal, open right now, fits your free time, reachable before the last ferry or train.",
+    "A timeline that reasons: conflicts in red, travel time and buffers between items, gaps flagged, items colored must-attend vs optional, and everything shifting when a flight is delayed.",
+    "Social import (TikTok, Reels): Wanderlog and Google Maps don't do it, but Wingman, Plotline, DocentPro, Rhyme and Wandereel already do. Add it, but don't pitch it. It becomes ours when a saved Reel turns into something that fits the plan: open when you're free, reachable in time, priced for the group, flagged if closed that day.",
+    "This is still a theory until other people use it. The Thailand trip is where the checks and live notices get proven."
+   ]
+  },
+  {
+   "heading": "Know the place before you go",
+   "lines": [
+    "Most planners let you build a trip without telling you what the place will be like when you get there, so you can book right into a bad season without knowing it. The app should show, and flag inside the plan:",
+    "Weather history for your exact dates: rain, heat, daylight.",
+    "Season: high, low, and monsoon; what closes in the off-season.",
+    "Crowds, holidays and events.",
+    "Prices by month: when the same trip costs less.",
+    "Flags in the plan itself, like \"You're booking the Gulf islands in November, their heaviest rain,\" which is exactly what came up in the Thailand planning.",
+    "Who does parts of this: Weather Spark (weather history by month), TripSeason (a season-by-month app, 100 destinations), Best Times to Visit (weather, crowds, prices and events for 300+ places), and Google Flights (price history for flights). All of them are reference tools you check separately; none of them looks at your actual plan.",
+    "Honest pushback: weather and price history are easy to get. Crowds, and whether a given business is open in low season, are hard. That knowledge belongs in region packs and builds up trip by trip."
+   ]
+  },
+  {
+   "heading": "Same trip, cheaper place",
+   "lines": [
+    "Compare what the same kind of trip really costs in different places. Beaches, snorkeling and nightlife in Phuket vs. Cancún vs. Bali: flights, stay, activities, local transport and fees, per person and door to door.",
+    "What exists: Google Flights Explore, Skyscanner's \"Everywhere\" search and Kayak compare flight prices across places, and Kayak and Hopper predict prices. One 2026 comparison found that no engine compared full trip costs.",
+    "Why it fits: it's the checks applied to comparison. Price comparisons usually mislead on per-person vs total, taxis, park fees and bag charges. It's also one of the few features people might pay for.",
+    "Pushback on \"predictive\": prediction needs years of price history. Start by comparing today's real prices, then add \"prices here usually rise in high season\" once there's enough data.",
+    "\"Similar\" has to be defined: every place and activity needs tags by type (snorkeling, nightlife, hikes, gyms, work-friendly). That tagging is work, and it's also what makes the feature hard to copy."
+   ]
+  },
+  {
+   "heading": "Ideas to consider (pick two or three)",
+   "lines": [
+    "A Michelin-style award for reliability, not taste. Nobody rates whether a place actually works for travelers: answers messages fast, honors bookings, starts on time, charges what it listed. The confirmation feature collects exactly that, and a \"Reliable\" badge gives businesses a reason to answer faster, which improves the data. It only means something with volume, so it's a later-stage idea. Never let anyone pay for it, and keep it positive (awards, not public bad scores).",
+    "Trip health score: one number for how solid a plan is.",
+    "Copy a real trip: share a trip, checks included, so friends can reuse it.",
+    "Group mode: roles, votes and cost splitting.",
+    "Local operators listed and bookable: small tours and activities, which also earns a commission.",
+    "Receipt capture for work trips.",
+    "Travel-day screen: only the next move, when to leave, and the confirmation code.",
+    "Trip recap: map, highlights and spend after the trip, worth sharing."
+   ]
+  },
+  {
+   "heading": "Wingman City Guide: partner or compete?",
+   "lines": [
+    "Decision: build our own, and consider partnering later.",
+    "We'd have nothing to trade yet. They're an established team with an app live since Oct 2024 and 100K+ downloads.",
+    "Pitching our plan now could hand them the idea.",
+    "We want different things: they do free city exploring and audio walking tours in Europe; we make the trip work.",
+    "Partnering later could make sense, once our app has users: their audio tours inside our plans, our trip-running for their users.",
+    "Their gap is real but thinly backed: their own team's Product Hunt review asks for more cities and more local content, but outside user reviews are too few to confirm it."
+   ]
+  },
+  {
+   "heading": "First test: the Thailand trip (cases already waiting)",
+   "lines": [
+    "Check: the rescheduled Krabi flight against the 6:45 PM airport taxi.",
+    "Confirm: bag holds at Nomads and Charlie House (message first, call if no reply).",
+    "Plan and book: Phuket → Bangkok, and the Bangkok hotel.",
+    "Checklist: the online arrival card (file Nov 12), and a driving permit if you'll ride scooters.",
+    "Run live: Bangkok traffic on the way to Don Mueang (Nov 17) and the afternoon boat to Phuket (Nov 20)."
+   ]
+  },
+  {
+   "heading": "Next step to validate",
+   "lines": [
+    "Talk to 5–10 people who travel for both work and leisure. Would they pay to replace Wanderlog + TripIt + a receipts app? Start with the guys on the Thailand trip."
+   ]
+  }
+ ],
+ "market": [
+  {
+   "heading": "Who does what",
+   "lines": [
+    "  --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------",
+    "  Company                                                            Plans the trip          Checks the plan                           Runs the trip live                    Work/personal split   Contacts businesses for you",
+    "  ------------------------------------------------------------------ ----------------------- ----------------------------------------- ------------------------------------- --------------------- -------------------------------------",
+    "  Wanderlog                                                          Yes                     No                                        No                                    No                    No",
+    "  Google (Travel, Maps, Search)                                      Yes (AI Mode, Canvas)   No                                        Partly (live traffic in Maps)         No                    Starting (some US categories, 2026)",
+    "  TripIt                                                             Organizes bookings      Flights only                              Flights only (Pro)                    No                    No",
+    "  Travel Sane                                                        Organizes bookings      Yes (gaps, tight connections, overlaps)   Flight alerts \"coming soon\"           No                    No",
+    "  Navan                                                              Company booking         Company policy                            Yes (rebooking, disruption support)   Yes, for companies    No",
+    "  Vacation Planner                                                   Yes                     Not checked                               Not checked                           Yes (light)           No",
+    "  Wingman City Guide                                                 Yes (AI city plans)     Not checked                               Partly (audio tours on the walk)      No                    No",
+    "  AI planners (Mindtrip, Gemini, Trip.com, Booking.com, GuideGeek)   Yes                     Not checked                               No (planning only)                    No                    No",
+    "  --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------",
+    "Nobody found combines all of it for the individual traveler."
+   ]
+  },
+  {
+   "heading": "Wanderlog",
+   "lines": [
+    "Focus: map-first planning before you book, together with friends. Aimed at leisure travelers who build the plan themselves, especially road trips and group trips.",
+    "Free: plan and map side by side with unlimited places and driving times; live group editing across devices; bookings added by forwarding confirmation emails; suggested restaurants and things to do (Tripadvisor data); budget tracking entered by hand; checklists and AI packing lists; user travel guides; hotel search and booking; directions sent to Google Maps.",
+    "Pro ($39.99 a year): offline maps and plans, AI assistant, route optimization, automatic Gmail scanning, unlimited attachments, Google Maps export, flight and rental deals, dark mode.",
+    "Shortcomings: nothing for business travel; no flight alerts, gate changes or seat tracking; the AI suggests places but doesn't write the whole plan (a 10-day trip takes 2–5 hours by hand); no budget-aware planning, currency conversion or weather-aware scheduling; nothing checks the plan for mistakes; slowdowns reported on very large trips.",
+    "Sources: Wanderlog, Monkey Eating Mango: pricing 2026, Monkey Eating Mango: Wanderlog vs TripIt 2026"
+   ]
+  },
+  {
+   "heading": "Google (Travel, Flights, Maps, Search, Gemini)",
+   "lines": [
+    "History: the Google Trips app shut down in August 2019; its pieces were split across Travel, Maps, Flights and Search.",
+    "Now:",
+    "  • Google Travel: bookings pulled from Gmail and grouped by trip, plus flight and hotel search. Android Police reports trip summaries are being phased out (date not confirmed).",
+    "  • Google Flights: price tracking and deal alerts.",
+    "  • Google Maps: saved place lists, a Timeline of where you've been, and Gemini that finds places from a screenshot.",
+    "  • AI Mode in Search with Canvas: one editable plan pulling in flights, hotels, attractions, Maps info and reviews.",
+    "  • AI Overviews: day-by-day trip guides.",
+    "  • Gemini Gems: custom travel assistants.",
+    "I/O 2026 (rolling out in the US this summer): booking for local experiences and services; Google calling businesses for you in some categories (home repair, beauty, pet care); information agents that watch the web around the clock.",
+    "Focus: search and booking, plus AI trip ideas. Not a planner you keep and manage through the trip.",
+    "Shortcomings: no live group editing, no budget tracking, and reviews say it lost the offline access and day-by-day planning the old Trips app had. Nothing for business travel.",
+    "Sources: Google: Search I/O 2026 updates, Tripstone: Google Trips is dead, Android Police: trip summaries, Shattered: Google AI travel tools 2026, AlternativeTo: Google Trips shutting down (2019), Skift: Google's AI trip planner"
+   ]
+  },
+  {
+   "heading": "TripIt",
+   "lines": [
+    "Focus: organizing booked trips, mostly for frequent business travelers.",
+    "Free and Pro: itineraries from forwarded emails, calendar sync, airport maps, neighborhood safety scores, nearby attractions, carbon footprint.",
+    "Pro ($49 a year): real-time flight alerts, alerts for trip disruptions, alternate flights, fare-refund monitoring, check-in reminders, \"Go Now\" to the airport, gate and terminal reminders, seat help, airport navigation, reward program tracking, passport renewal reminders, more document storage.",
+    "Shortcomings: the checks are about flights only; nothing on ground transport, hotels or prices; not a map-based planner.",
+    "Source: TripIt Pro pricing and features"
+   ]
+  },
+  {
+   "heading": "Travel Sane",
+   "lines": [
+    "Focus: turning scattered confirmation emails into one timeline, for independent travelers who book across many sites.",
+    "Checks: nights with no hotel booked, connections under 90 minutes, arriving at one airport but leaving from another, overlapping bookings.",
+    "Pricing: free tier (3 bookings per trip); Pro $75 one-time (unlimited bookings, PDF, share links, email forwarding; flight alerts \"coming soon\").",
+    "Shortcomings: only looks at bookings; no planning, live help, or price checks (per person vs total, last departures).",
+    "Source: Travel Sane"
+   ]
+  },
+  {
+   "heading": "Navan",
+   "lines": [
+    "Focus: company travel and expenses, sold to employers.",
+    "Work/personal: separates business and personal expenses automatically, keeps personal bookings private from the employer, blocks company charges on personal days, collects loyalty points.",
+    "Runs the trip: policy-aware booking and rebooking, itinerary changes, traveler support.",
+    "Shortcomings for this app's user: you only get it if your employer uses it; not built for freelancers or leisure trips on their own.",
+    "Its numbers (vendor source, so treat with care): 76% of business travelers have added leisure to a work trip at least once; 68% extend at least one trip a year (2.3 nights on average).",
+    "Sources: Navan: bleisure statistics, Thunderbit: AI travel agents 2026"
+   ]
+  },
+  {
+   "heading": "Vacation Planner",
+   "lines": [
+    "Focus: leisure planning, with a light work/personal split.",
+    "Work/personal: tags expenses as company card or personal card; separate work-day and leisure-day blocks in the plan.",
+    "Shortcomings: says itself it's \"not a business travel tool\" (no corporate booking or expense software link).",
+    "Source: Vacation Planner: bleisure planning"
+   ]
+  },
+  {
+   "heading": "AI trip planners",
+   "lines": [
+    "Who: Google Gemini (fast plans and research), Booking.com AI Trip Planner (hotel-centered), Trip.com Trip.Planner (multi-leg plans with flights, hotels, attractions), Mindtrip (visual, map-aware planning), GuideGeek (travel questions in messaging apps), Hopper (price prediction), Expedia's Romie (chat-based discovery inside Expedia).",
+    "Shortcoming: most stop at planning; handling changes during the trip is mainly done by company tools like Navan.",
+    "Source: Thunderbit: AI travel agents 2026"
+   ]
+  },
+  {
+   "heading": "Wingman City Guide",
+   "lines": [
+    "Focus: free city exploring: AI plans plus self-guided audio walking tours.",
+    "Does: AI city plans in under a minute; 650+ audio tours across 155+ European cities; turns saved TikToks and Reels into trips; planning with friends; city guides (food, transport, safety, budget). Free, iOS and Android.",
+    "Who: Safisoft kft. in Budapest. On the App Store since Oct 13, 2024; Google Play 100K+ downloads, 3.8 stars (144 ratings).",
+    "Shortcomings: Europe-focused and walking-tour-centered; thin on local tours and on small and large activities. Its only Product Hunt review, from a team member, asks for more cities, more local content and better place detection from videos. Nothing for checking plans, running the trip or work travel.",
+    "Name conflict: it's a trip planner called Wingman, so that name is out for us.",
+    "Sources: wman.com, App Store, Google Play, Product Hunt, Product Hunt reviews, Wingman itinerary creator"
+   ]
+  },
+  {
+   "heading": "Other tools we found (Sep 28, 2026)",
+   "lines": [
+    "  ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------",
+    "  Tool                              What it does                                                                           What it misses                                    Source",
+    "  --------------------------------- -------------------------------------------------------------------------------------- ------------------------------------------------- ---------------------------------------",
+    "  Plotline                          Share a TikTok or Reel; pins every place on a map; builds a day plan (iPhone only)     No checks, live help or work travel mentioned     Plotline blog",
+    "  DocentPro                         Pulls places from Instagram, TikTok and YouTube into an AI plan                        No checks, live help or work travel mentioned     DocentPro blog",
+    "  Wandereel                         Share a travel Reel or TikTok; plans and budgets the trip                              No checks, live help or work travel mentioned     Wandereel",
+    "  Weather Spark                     Weather history by month, day and hour for trip planning                               Not a planner; doesn't look at your plan          Weather Spark",
+    "  TripSeason                        Season charts (temperature, rain, daylight) and a tourism score for 100 destinations   Not a planner; weather only                       App Store",
+    "  Best Times to Visit               Best months for 300+ places: weather, crowds, prices, events                           Reference site; earns from hotel links            besttimestovisit.com",
+    "  Google Flights Explore            Cheapest flights to many places over the next six months; price history and alerts     Flights only; no full trip cost                   Going: how to use Google Flights",
+    "  Skyscanner \"Everywhere\" / Kayak   Cheapest places to fly; Kayak adds a buy-or-wait price forecast                        Flights only; no engine compared full trip cost   Truescho: flight search compared 2026",
+    "  ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------",
+    "Plotline and DocentPro's blogs rank their own apps, so treat their rankings with care. Both agree that Wanderlog and Google Maps can't import from social media."
+   ]
+  },
+  {
+   "heading": "Names already in use",
+   "lines": [
+    "Copilot: Microsoft (Copilot, GitHub Copilot). A travel app called Copilot2trip also exists: Product Hunt.",
+    "Wingman: Wingman City Guide (above).",
+    "Legwork: a travel app for discovering, planning and sharing trips: legwork-app.com.",
+    "Right Seat: RightSeat AI, an AI strategy firm: rightseat.ai."
+   ]
+  },
+  {
+   "heading": "Where to scout and launch: Product Hunt",
+   "lines": [
+    "A site where new apps and tech products launch and get upvoted and commented on daily; startups use it for early users and feedback. Its travel planning category is a quick way to see new competitors: Product Hunt travel planning."
+   ]
+  },
+  {
+   "heading": "Why mixing work and leisure is hard for companies",
+   "lines": [
+    "Duty of care gets blurry once the work part ends.",
+    "Companies lose track of where travelers are during personal days.",
+    "Insurance can stop covering the leisure days.",
+    "Working abroad can bring tax and visa problems.",
+    "Someone has to decide who pays for extra nights, upgrades and meals.",
+    "Source: Business Travel Executive: when business and leisure mix"
+   ]
+  }
+ ],
+ "how_it_is_built": [
+  {
+   "heading": "How it's built",
+   "lines": [
+    "Codes: every question, workflow and guardrail has a code (GET-01, W01, G01). New items take the next free number in their section. Never reuse a code.",
+    "Fill-ins: [A] = where you start, [B] = where you're going, [C] = a third option, [X] and [Y] = a place or stop, [base] = where you're staying. [activity], [venue], [price] and [day and time] mean what they say.",
+    "NEW: added so the helper works anywhere, but not tried on a real trip yet. Drop the tag once it's been used.",
+    "Track record: how a workflow did on each trip:",
+    "  • Proven: it worked, and you booked or decided with it",
+    "  • Adopted: you went with it, but nothing is booked yet",
+    "  • Open: it hit a wall or isn't finished",
+    "  • Rejected: you turned down what it came back with"
+   ]
+  },
+  {
+   "heading": "How to add more",
+   "lines": [
+    "A question: put it in the right section with the next code, write it with fill-ins, and put the place-specific example in that trip's region pack.",
+    "A method or check: if it works anywhere, add it to Part 2. If it only works in one country, add it to that region pack.",
+    "A workflow: use the same fields: Runs when, Steps, Track record (add Gives when the result isn't obvious).",
+    "A guardrail: write the rule, then \"Why\" with the trip it came from.",
+    "A new place: copy the region pack template in Part 5.",
+    "After every trip: run W26 (Wrap up a trip)."
+   ]
+  }
+ ],
+ "sections": [
+  {
+   "code": "GO",
+   "label": "Where to go"
+  },
+  {
+   "code": "READY",
+   "label": "Before you go"
+  },
+  {
+   "code": "GET",
+   "label": "Getting from place to place"
+  },
+  {
+   "code": "TIME",
+   "label": "Timing"
+  },
+  {
+   "code": "STAY",
+   "label": "Where to stay"
+  },
+  {
+   "code": "DO",
+   "label": "Things to do"
+  },
+  {
+   "code": "MONEY",
+   "label": "Money"
+  },
+  {
+   "code": "BOOK",
+   "label": "Booking help"
+  },
+  {
+   "code": "ADMIN",
+   "label": "Trip admin"
+  },
+  {
+   "code": "TALK",
+   "label": "Plain talk"
+  }
+ ],
+ "questions": [
+  {
+   "code": "GO-01",
+   "section": "GO",
+   "text": "What's a good second destination besides [X]?",
+   "new": false
+  },
+  {
+   "code": "GO-02",
+   "section": "GO",
+   "text": "Is there somewhere closer, or on the way back?",
+   "new": false
+  },
+  {
+   "code": "GO-03",
+   "section": "GO",
+   "text": "What's there? Is it really a good spot?",
+   "new": false
+  },
+  {
+   "code": "GO-04",
+   "section": "GO",
+   "text": "What is this area like, and what is it for?",
+   "new": false
+  },
+  {
+   "code": "GO-05",
+   "section": "GO",
+   "text": "Where's the better place to spend our time: [A], [B] or [C]?",
+   "new": false
+  },
+  {
+   "code": "GO-06",
+   "section": "GO",
+   "text": "What's the weather like during our dates? Is it a good season to go?",
+   "new": true
+  },
+  {
+   "code": "READY-01",
+   "section": "READY",
+   "text": "Do we need a visa or an arrival form? How long must our passports still be valid?",
+   "new": true
+  },
+  {
+   "code": "READY-02",
+   "section": "READY",
+   "text": "Are there any vaccines or health rules?",
+   "new": true
+  },
+  {
+   "code": "READY-03",
+   "section": "READY",
+   "text": "Do we need travel insurance, and does it cover what we'll actually do (scooters, water sports)?",
+   "new": true
+  },
+  {
+   "code": "READY-04",
+   "section": "READY",
+   "text": "Phone and data: local SIM, eSIM or roaming?",
+   "new": true
+  },
+  {
+   "code": "READY-05",
+   "section": "READY",
+   "text": "What plug type and voltage do they use?",
+   "new": true
+  },
+  {
+   "code": "READY-06",
+   "section": "READY",
+   "text": "Are there safety warnings or local laws we should know about?",
+   "new": true
+  },
+  {
+   "code": "READY-07",
+   "section": "READY",
+   "text": "What's the emergency number, and where's our embassy?",
+   "new": true
+  },
+  {
+   "code": "READY-08",
+   "section": "READY",
+   "text": "What should we pack for the weather and the activities?",
+   "new": true
+  },
+  {
+   "code": "GET-01",
+   "section": "GET",
+   "text": "How far is [A] from [B], and how long does each way of getting there take?",
+   "new": false
+  },
+  {
+   "code": "GET-02",
+   "section": "GET",
+   "text": "Compare every way from [A] to [B] on price and speed.",
+   "new": false
+  },
+  {
+   "code": "GET-03",
+   "section": "GET",
+   "text": "Are there ferries, trains or buses on this route? How much?",
+   "new": false
+  },
+  {
+   "code": "GET-04",
+   "section": "GET",
+   "text": "How much is the next leg?",
+   "new": false
+  },
+  {
+   "code": "GET-05",
+   "section": "GET",
+   "text": "Does this whole route work, start to finish?",
+   "new": false
+  },
+  {
+   "code": "GET-06",
+   "section": "GET",
+   "text": "Can we see [X] on the way instead of making a separate round trip? Is that cheaper?",
+   "new": false
+  },
+  {
+   "code": "GET-07",
+   "section": "GET",
+   "text": "Does it have to leave from [X], or can it leave from [Y]?",
+   "new": false
+  },
+  {
+   "code": "GET-08",
+   "section": "GET",
+   "text": "Is there a cheaper way, including by water?",
+   "new": false
+  },
+  {
+   "code": "GET-09",
+   "section": "GET",
+   "text": "Is there a third way, like going back to another airport and flying from there?",
+   "new": false
+  },
+  {
+   "code": "GET-10",
+   "section": "GET",
+   "text": "Is there a route that skips the big hub city?",
+   "new": false
+  },
+  {
+   "code": "GET-11",
+   "section": "GET",
+   "text": "Which option on this results page is best?",
+   "new": false
+  },
+  {
+   "code": "GET-12",
+   "section": "GET",
+   "text": "Is the drop-off in the same spot as the next pickup?",
+   "new": false
+  },
+  {
+   "code": "GET-13",
+   "section": "GET",
+   "text": "When we get off the bus, will the taxi meet us? Where does the driver meet us?",
+   "new": false
+  },
+  {
+   "code": "GET-14",
+   "section": "GET",
+   "text": "How do we get from the pier, station or airport to the hotel?",
+   "new": false
+  },
+  {
+   "code": "GET-15",
+   "section": "GET",
+   "text": "Will this arrival point put us in a good part of the city?",
+   "new": false
+  },
+  {
+   "code": "GET-16",
+   "section": "GET",
+   "text": "Is there a private option, and what does it cost?",
+   "new": false
+  },
+  {
+   "code": "GET-17",
+   "section": "GET",
+   "text": "Where is this cheaper to do from?",
+   "new": false
+  },
+  {
+   "code": "GET-18",
+   "section": "GET",
+   "text": "What's the best way to get around day to day (ride-hail apps, taxis, transit passes)?",
+   "new": true
+  },
+  {
+   "code": "GET-19",
+   "section": "GET",
+   "text": "Can we rent a car and drive? What permit do we need, which side of the road, tolls, parking?",
+   "new": true
+  },
+  {
+   "code": "TIME-01",
+   "section": "TIME",
+   "text": "What's the timing on moving day: when do we leave, land and get to the hotel?",
+   "new": false
+  },
+  {
+   "code": "TIME-02",
+   "section": "TIME",
+   "text": "What time of day will we get there, and what's left of that day?",
+   "new": false
+  },
+  {
+   "code": "TIME-03",
+   "section": "TIME",
+   "text": "How much time do we actually get at a stop between fixed departures?",
+   "new": false
+  },
+  {
+   "code": "TIME-04",
+   "section": "TIME",
+   "text": "Does this activity fit before an afternoon transfer?",
+   "new": false
+  },
+  {
+   "code": "TIME-05",
+   "section": "TIME",
+   "text": "Any holidays, festivals or closures during our dates?",
+   "new": true
+  },
+  {
+   "code": "TIME-06",
+   "section": "TIME",
+   "text": "When should we leave to get there on time? Tell us if traffic or delays change that.",
+   "new": true
+  },
+  {
+   "code": "STAY-01",
+   "section": "STAY",
+   "text": "Find a cheap, good place that's well placed for getting around and exploring.",
+   "new": false
+  },
+  {
+   "code": "STAY-02",
+   "section": "STAY",
+   "text": "Which place puts us in the best spot to catch the next ride?",
+   "new": false
+  },
+  {
+   "code": "STAY-03",
+   "section": "STAY",
+   "text": "What about this hotel? (name or link)",
+   "new": false
+  },
+  {
+   "code": "STAY-04",
+   "section": "STAY",
+   "text": "How far is it from the things to do?",
+   "new": false
+  },
+  {
+   "code": "STAY-05",
+   "section": "STAY",
+   "text": "What's the best area to stay in: beach, city, or something else?",
+   "new": false
+  },
+  {
+   "code": "STAY-06",
+   "section": "STAY",
+   "text": "Give me a price for each area.",
+   "new": false
+  },
+  {
+   "code": "STAY-07",
+   "section": "STAY",
+   "text": "Is it close to a specific place?",
+   "new": false
+  },
+  {
+   "code": "STAY-08",
+   "section": "STAY",
+   "text": "Does it store luggage? Are there storage places nearby?",
+   "new": false
+  },
+  {
+   "code": "STAY-09",
+   "section": "STAY",
+   "text": "Any reports of theft? Is it secure?",
+   "new": false
+  },
+  {
+   "code": "STAY-10",
+   "section": "STAY",
+   "text": "Where can we store luggage for the day, and which option is most reliable?",
+   "new": false
+  },
+  {
+   "code": "DO-01",
+   "section": "DO",
+   "text": "What is there to do here, on the water and on land?",
+   "new": false
+  },
+  {
+   "code": "DO-02",
+   "section": "DO",
+   "text": "Tell me more about the land activities.",
+   "new": false
+  },
+  {
+   "code": "DO-03",
+   "section": "DO",
+   "text": "What is there to do on [X], boat rides included?",
+   "new": false
+  },
+  {
+   "code": "DO-04",
+   "section": "DO",
+   "text": "Is there [activity], [activity] and [activity] near here? (e.g. jet skiing, boating, snorkeling)",
+   "new": false
+  },
+  {
+   "code": "DO-05",
+   "section": "DO",
+   "text": "Can one trip cover two activities?",
+   "new": false
+  },
+  {
+   "code": "DO-06",
+   "section": "DO",
+   "text": "Is [activity] available in another city?",
+   "new": false
+  },
+  {
+   "code": "DO-07",
+   "section": "DO",
+   "text": "What's the price for this one activity?",
+   "new": false
+  },
+  {
+   "code": "DO-08",
+   "section": "DO",
+   "text": "Walking up and haggling: is that normal here, and how does it work?",
+   "new": false
+  },
+  {
+   "code": "DO-09",
+   "section": "DO",
+   "text": "What if we skip [X] and do a day tour from [base] instead?",
+   "new": false
+  },
+  {
+   "code": "DO-10",
+   "section": "DO",
+   "text": "Scooter rentals: where, how much, and what are the rules?",
+   "new": false
+  },
+  {
+   "code": "DO-11",
+   "section": "DO",
+   "text": "Find a hike.",
+   "new": false
+  },
+  {
+   "code": "DO-12",
+   "section": "DO",
+   "text": "Are there other nightlife spots with the same vibe?",
+   "new": false
+  },
+  {
+   "code": "DO-13",
+   "section": "DO",
+   "text": "What should we eat, and where?",
+   "new": true
+  },
+  {
+   "code": "DO-14",
+   "section": "DO",
+   "text": "Any dress codes or customs for temples and other religious sites?",
+   "new": true
+  },
+  {
+   "code": "DO-15",
+   "section": "DO",
+   "text": "Plan a short outing: [activity] today or this weekend.",
+   "new": true
+  },
+  {
+   "code": "MONEY-01",
+   "section": "MONEY",
+   "text": "Can we pay now, or at the property?",
+   "new": false
+  },
+  {
+   "code": "MONEY-02",
+   "section": "MONEY",
+   "text": "Does this place have a history of overcharging?",
+   "new": false
+  },
+  {
+   "code": "MONEY-03",
+   "section": "MONEY",
+   "text": "Translate the prices to my home currency (USD).",
+   "new": false
+  },
+  {
+   "code": "MONEY-04",
+   "section": "MONEY",
+   "text": "How much is that for the whole group?",
+   "new": false
+  },
+  {
+   "code": "MONEY-05",
+   "section": "MONEY",
+   "text": "Is this cheaper? What about this one? (screenshot of a booking page)",
+   "new": false
+  },
+  {
+   "code": "MONEY-06",
+   "section": "MONEY",
+   "text": "You said about [price], so why is it [price]?",
+   "new": false
+  },
+  {
+   "code": "MONEY-07",
+   "section": "MONEY",
+   "text": "Price it all the way through, with the timing.",
+   "new": false
+  },
+  {
+   "code": "MONEY-08",
+   "section": "MONEY",
+   "text": "Verify the prices, each way.",
+   "new": false
+  },
+  {
+   "code": "MONEY-09",
+   "section": "MONEY",
+   "text": "Log this expense. / Change the log and rerun the numbers.",
+   "new": false
+  },
+  {
+   "code": "MONEY-10",
+   "section": "MONEY",
+   "text": "That's too much. Find something cheaper.",
+   "new": false
+  },
+  {
+   "code": "MONEY-11",
+   "section": "MONEY",
+   "text": "Cash or card here? What do ATMs charge, and how much cash should we carry?",
+   "new": true
+  },
+  {
+   "code": "MONEY-12",
+   "section": "MONEY",
+   "text": "What's the tipping norm?",
+   "new": true
+  },
+  {
+   "code": "MONEY-13",
+   "section": "MONEY",
+   "text": "How much spending money should we bring per day?",
+   "new": true
+  },
+  {
+   "code": "BOOK-01",
+   "section": "BOOK",
+   "text": "Give me the link(s).",
+   "new": false
+  },
+  {
+   "code": "BOOK-02",
+   "section": "BOOK",
+   "text": "What am I clicking here? (site filters)",
+   "new": false
+  },
+  {
+   "code": "BOOK-03",
+   "section": "BOOK",
+   "text": "What does this option do?",
+   "new": false
+  },
+  {
+   "code": "BOOK-04",
+   "section": "BOOK",
+   "text": "Nothing's showing. Do I need another site?",
+   "new": false
+  },
+  {
+   "code": "BOOK-05",
+   "section": "BOOK",
+   "text": "Which country do I pick in the nationality field? Does my home state matter?",
+   "new": false
+  },
+  {
+   "code": "BOOK-06",
+   "section": "BOOK",
+   "text": "Lock in the services and times I found.",
+   "new": false
+  },
+  {
+   "code": "BOOK-07",
+   "section": "BOOK",
+   "text": "Should we book now or wait? Is the price likely to go up?",
+   "new": true
+  },
+  {
+   "code": "BOOK-08",
+   "section": "BOOK",
+   "text": "What's the cancellation policy, and is flexibility worth paying for?",
+   "new": true
+  },
+  {
+   "code": "BOOK-09",
+   "section": "BOOK",
+   "text": "Confirm my reservation (message them; call if there's no reply).",
+   "new": true
+  },
+  {
+   "code": "ADMIN-01",
+   "section": "ADMIN",
+   "text": "Check my email and label everything trip-related.",
+   "new": false
+  },
+  {
+   "code": "ADMIN-02",
+   "section": "ADMIN",
+   "text": "Build a visual timeline of the trip, including what's still to do.",
+   "new": false
+  },
+  {
+   "code": "ADMIN-03",
+   "section": "ADMIN",
+   "text": "Add it to my calendar.",
+   "new": false
+  },
+  {
+   "code": "ADMIN-04",
+   "section": "ADMIN",
+   "text": "Remind me to follow up on [day and time].",
+   "new": false
+  },
+  {
+   "code": "ADMIN-05",
+   "section": "ADMIN",
+   "text": "Recap the plan, with flights and links.",
+   "new": false
+  },
+  {
+   "code": "ADMIN-06",
+   "section": "ADMIN",
+   "text": "Watch the trip while we're on it, and tell us when something changes.",
+   "new": true
+  },
+  {
+   "code": "TALK-01",
+   "section": "TALK",
+   "text": "Say it in simple terms. / What do you mean by that?",
+   "new": false
+  }
+ ],
+ "setup": [
+  "Who's going, and how many.",
+  "Dates.",
+  "Budget caps: per night, per leg, per day.",
+  "What the trip is for (e.g. active days, nightlife, gyms/saunas/spas, water sports).",
+  "Passport country and home currency. NEW"
+ ],
+ "defaults": [
+  "Prices in local currency and your home currency (USD), at today's exchange rate.",
+  "The per-person price and the total for the whole group, always saying which is which.",
+  "A link for every price. If a price can't be checked, say so or leave it out.",
+  "One clear pick, plus a runner-up.",
+  "Plain words. Answer the exact question first.",
+  "A \"Sources\" list at the end."
+ ],
+ "sources": [
+  {
+   "name": "Flight search (Expedia)",
+   "text": "adults set to the group size, sorted by price, nonstop filter on. Search each airport in a city on its own. Check the next page of results before calling something the cheapest.",
+   "new": false
+  },
+  {
+   "name": "Airlines' own sites",
+   "text": "some budget airlines don't show up on the big search sites, and promo fares are often only on the airline's own site. List those airlines in the region pack.",
+   "new": false
+  },
+  {
+   "name": "Hotel search (Expedia, Booking.com)",
+   "text": "the neighborhood as the destination (never the airport), exact nights and group size, a price cap per night, a minimum rating, a 3–5 km radius, property type, amenities (pool, ocean view), sorted cheapest, shown on a map.",
+   "new": false
+  },
+  {
+   "name": "The region's booking site for buses, vans, trains, ferries and taxis",
+   "text": "set the date and headcount on every search. Save the site's quirks in the region pack.",
+   "new": false
+  },
+  {
+   "name": "Rome2Rio",
+   "text": "quick map of every route between two places.",
+   "new": false
+  },
+  {
+   "name": "Ferry sites",
+   "text": "Direct Ferries plus the local pier or operator sites (schedules and the last departure of the day).",
+   "new": false
+  },
+  {
+   "name": "Tours",
+   "text": "GetYourGuide, Viator, Expedia Things to Do, Travelocity, and local operators' own sites.",
+   "new": false
+  },
+  {
+   "name": "Transfers",
+   "text": "Booking.com Taxi, Klook, GetYourGuide, Bookaway, local tour desks, and the region's ride-hail apps.",
+   "new": false
+  },
+  {
+   "name": "Luggage storage",
+   "text": "Bounce, Radical Storage, and local staffed counters (list them in the region pack).",
+   "new": false
+  },
+  {
+   "name": "Reviews",
+   "text": "Booking.com, Tripadvisor, Trip.com, Hotels.com, Hostelz, Wanderlog, Google, Viator.",
+   "new": false
+  },
+  {
+   "name": "Exchange rate",
+   "text": "TradingView or Yahoo Finance, looked up that day.",
+   "new": false
+  },
+  {
+   "name": "Parks",
+   "text": "the official park site for fees, hours and last entry.",
+   "new": false
+  },
+  {
+   "name": "Nightlife",
+   "text": "the venue's Instagram (which nights it's open), ticket sites, WhatsApp for VIP tables.",
+   "new": false
+  },
+  {
+   "name": "Scooters and cars",
+   "text": "rental apps that don't hold your passport; AAA for the International Driving Permit.",
+   "new": false
+  },
+  {
+   "name": "Entry rules, safety warnings and embassy details",
+   "text": "travel.state.gov country pages (for US passports) and the destination's official immigration site.",
+   "new": true
+  },
+  {
+   "name": "Health",
+   "text": "CDC Travelers' Health (for US travelers).",
+   "new": true
+  },
+  {
+   "name": "Weather",
+   "text": "monthly averages while planning; the forecast in the last week or two.",
+   "new": true
+  },
+  {
+   "name": "Holidays and closures",
+   "text": "the country's public holiday list and its official tourism site.",
+   "new": true
+  },
+  {
+   "name": "Gmail",
+   "text": "• Search with a block of trip words (places, airlines, hotels) plus a time window (e.g. the last 120 days).\n  • Skip threads that already have the trip label.\n  • Search the last 2 days to catch new confirmations.\n  • Reuse the existing trip label.\n  • Open confirmations to pull reference numbers, times and prices.",
+   "new": false
+  },
+  {
+   "name": "Google Calendar",
+   "text": "one event per booking with the confirmation number, PIN, check-in hours and notes; times in the destination's time zone; hotel stays as all-day events; a follow-up reminder with a checklist.",
+   "new": false
+  },
+  {
+   "name": "Trip log",
+   "text": "one running list of bookings and expenses. Read it at the start of each chat so plans carry over. Update the line when a booking changes.",
+   "new": false
+  },
+  {
+   "name": "Visual timeline",
+   "text": "color-coded Booked / To book / Check now.",
+   "new": false
+  },
+  {
+   "name": "Past chats",
+   "text": "search earlier chats to find a link you already sent.",
+   "new": false
+  },
+  {
+   "name": "Your screenshots and links",
+   "text": "booking pages, carts and listings you send.",
+   "new": false
+  }
+ ],
+ "checks": {
+  "Money": [
+   {
+    "text": "If a quote and a search don't match, say why: per person vs total, or an airline the site doesn't carry.",
+    "new": false
+   },
+   {
+    "text": "Budget airlines: check which fare includes a checked bag. Compare \"cheap fare + bag\" with the next fare up.",
+    "new": false
+   },
+   {
+    "text": "Turn off add-ons (insurance, mobile data, seats) before comparing totals.",
+    "new": false
+   },
+   {
+    "text": "Door-to-door cost: add the taxi from the pier, station or airport to the hotel.",
+    "new": false
+   },
+   {
+    "text": "Real hotel cost = room + taxis to where you'll spend your time.",
+    "new": false
+   },
+   {
+    "text": "Group size decides shared vs private: compare the per-person cost of a private car with shared van or bus tickets (the region pack notes where the cutoff fell).",
+    "new": false
+   },
+   {
+    "text": "A listing may show low-season prices when your dates are in high season.",
+    "new": false
+   },
+   {
+    "text": "Fares climb into high season. Book budget flights early (the region pack says how early).",
+    "new": false
+   },
+   {
+    "text": "At the card machine, pay in local currency, not your home currency.",
+    "new": false
+   },
+   {
+    "text": "Note cancellation deadlines and no-show charges.",
+    "new": false
+   },
+   {
+    "text": "\"Most reliable\": staffed counters beat shop networks. Trust independent reviews over the company's own claims.",
+    "new": false
+   }
+  ],
+  "Time": [
+   {
+    "text": "Check the last departure of the day against when you arrive.",
+    "new": false
+   },
+   {
+    "text": "Airports: get there about 2 hours early for domestic flights.",
+    "new": false
+   },
+   {
+    "text": "Count the real hours at a stop between fixed departures.",
+    "new": false
+   },
+   {
+    "text": "Full-day tours get back around 4–6 PM, so only half-day tours fit before an afternoon transfer.",
+    "new": false
+   },
+   {
+    "text": "Late arrival: confirm the front desk is open when you get there.",
+    "new": false
+   },
+   {
+    "text": "Note the day of the week (markets, club nights, busy park days).",
+    "new": false
+   }
+  ],
+  "Place": [
+   {
+    "text": "Search hotels by neighborhood, not the airport.",
+    "new": false
+   },
+   {
+    "text": "Big cities can have more than one airport. Check which one each flight uses.",
+    "new": false
+   },
+   {
+    "text": "Check where a ride leaves from and where it really ends (which terminal or pier; town vs beach; a station on the edge of the city vs the center).",
+    "new": false
+   },
+   {
+    "text": "Check whether a stop is really on the way, or a detour through a hub.",
+    "new": false
+   },
+   {
+    "text": "Watch for places that share a name.",
+    "new": false
+   },
+   {
+    "text": "Check the season and weather for each region. One country can have different rainy seasons on different coasts.",
+    "new": false
+   },
+   {
+    "text": "Give walk times from each hotel option to the places you care about.",
+    "new": false
+   }
+  ],
+  "Bookings": [
+   {
+    "text": "Check the dates, nights and headcount in every link before judging it.",
+    "new": false
+   },
+   {
+    "text": "Check the passenger count on booking pages.",
+    "new": false
+   },
+   {
+    "text": "Nationality field = your passport country (for a US passport, \"USA\"), not your state.",
+    "new": false
+   },
+   {
+    "text": "Watch the countdown timer on checkout pages.",
+    "new": false
+   },
+   {
+    "text": "Airport taxis: add the flight number and set pickup to the landing time.",
+    "new": false
+   },
+   {
+    "text": "Separate bookings don't talk to each other. Put the bus name and arrival time in the taxi's notes, add a WhatsApp number, and message the operator.",
+    "new": false
+   },
+   {
+    "text": "Put room requests in the booking notes (e.g. high floor, away from noise).",
+    "new": false
+   },
+   {
+    "text": "If a listing doesn't confirm something (bag storage, late check-in), say so and give the message to send.",
+    "new": false
+   },
+   {
+    "text": "If a site blocks the page, search for the property by name.",
+    "new": false
+   },
+   {
+    "text": "When the plan changes, flag anything booked or sitting in a cart for the old plan.",
+    "new": false
+   }
+  ],
+  "Safety": [
+   {
+    "text": "Scan reviews for overcharging and theft. Say it's a sample, not a guarantee.",
+    "new": false
+   },
+   {
+    "text": "Jet skis: book a guided tour, video the whole ski with the operator in the shot, agree the price on video, never hand over your passport.",
+    "new": false
+   },
+   {
+    "text": "Skip touts at piers and stations. Compare airport taxi counters with shared shuttles and the region's ride-hail app (set it up with a card before the trip): in some places the counter costs several times more, in others it's the safe official choice.",
+    "new": false
+   },
+   {
+    "text": "Scooters and cars: never leave your passport. Check whether the country needs an International Driving Permit and get it before flying. The permit only covers what your home license covers: for scooters, your license needs a motorcycle endorsement first. Without a valid license, travel insurance may not cover a crash. Wear a helmet, video the bike, and don't ride after drinking.",
+    "new": false
+   },
+   {
+    "text": "Hostels: bring your own padlocks, lockers can be small, get a private room for the group.",
+    "new": false
+   },
+   {
+    "text": "Park days: check whether fees are cash only, know where the nearest ATM is, check hours and last entry, arrive early.",
+    "new": false
+   },
+   {
+    "text": "Carry the hotel's address, written in the local language, for drivers.",
+    "new": false
+   }
+  ],
+  "Before you go": [
+   {
+    "text": "Passport: check how long it must still be valid (often 6 months) and how many blank pages you need.",
+    "new": true
+   },
+   {
+    "text": "Entry: check visa and arrival-form rules for your passport, and any fees.",
+    "new": true
+   },
+   {
+    "text": "Insurance: check that it covers the activities you'll actually do.",
+    "new": true
+   },
+   {
+    "text": "Put every deadline (visa, forms, permits) on the calendar.",
+    "new": true
+   }
+  ]
+ },
+ "formats": [
+  "Comparison table: option · time · per person · group total · rating · does it fit?",
+  "Price table for each leg, with a source link on each row.",
+  "Hour-by-hour plan for moving days.",
+  "Visual timeline + calendar events + follow-up checklist."
+ ],
+ "run_order": "Run order: W24 (Start a new trip) first; W25 (Before-you-go check) once the route is set; W26 (Wrap up a trip) at the end. W27 and W28 run while the trip is happening; W29 is for short outings. The rest run whenever their question comes up.",
+ "workflows": [
+  {
+   "code": "W01",
+   "title": "Moving-day planner",
+   "new": false,
+   "runs_when": "\"What's the timing? When do we leave and when do we get there?\"",
+   "steps": [
+    "Pull the checkout time from the booking.",
+    "Travel time to the right airport for that part of town.",
+    "Add time to get through the airport.",
+    "List flights that fit (group price, bags included or not).",
+    "Landing time → shuttle vs taxi → arrival at the hotel → check-in hours.",
+    "Fill the gap between checkout and leaving (bag storage).",
+    "Check the first boats or tours the next morning."
+   ],
+   "gives": "hour-by-hour table, flight options, bag plan.",
+   "track_record": "Thailand 2026: Proven. Nov 17, Charlie House → Don Mueang → Krabi."
+  },
+  {
+   "code": "W02",
+   "title": "Every way from A to B",
+   "new": false,
+   "runs_when": "\"Compare price and speed.\" \"Cheaper option?\" \"By water?\" \"Alternative route?\"",
+   "steps": [
+    "List every option: flight, day bus, night bus, van, train, train + bus, ferry, speedboat, private car.",
+    "For each: time, per-person price, group total, rating, where it leaves from and where it drops you.",
+    "Add the last taxi to the hotel for a door-to-door total.",
+    "Check the last departures against arrival times.",
+    "Check how you get from the drop-off to the center.",
+    "Rank by cheapest and by fastest; give one pick and the links."
+   ],
+   "gives": "",
+   "track_record": "Thailand 2026: Proven. Bangkok → Krabi (flight booked), Krabi → Phuket (boat + Grab chosen). Phuket → Bangkok still open."
+  },
+  {
+   "code": "W03",
+   "title": "Verified prices, each way",
+   "new": false,
+   "runs_when": "\"I need the prices verified, each way.\"",
+   "steps": [
+    "Pull live fares for each leg (the region's ground-transport site; a flight search for flights).",
+    "One table per direction with the exact listed price.",
+    "Mark or drop anything that can't be verified.",
+    "Convert to your home currency; give group totals and the whole-loop total.",
+    "Link each leg, with a note to set the date."
+   ],
+   "gives": "",
+   "track_record": "Thailand 2026: Proven. Phuket → Kanchanaburi → Bangkok."
+  },
+  {
+   "code": "W04",
+   "title": "Price pushback",
+   "new": false,
+   "runs_when": "\"You said about [price], so why is it [price]?\"",
+   "steps": [
+    "Say whether the number is per person or for the group.",
+    "Check the next page of results.",
+    "Name the airlines the site doesn't carry, and point to their own sites.",
+    "Reality check: how much would you actually save?"
+   ],
+   "gives": "",
+   "track_record": "Thailand 2026: Proven. The $122 fare was for two ($61 each); AirAsia isn't on Expedia."
+  },
+  {
+   "code": "W05",
+   "title": "Add a stop / second destination",
+   "new": false,
+   "runs_when": "\"What's a good second destination besides X?\" \"Somewhere on the way back?\"",
+   "steps": [
+    "Suggest places that fit the trip style and the season.",
+    "For each: how to get there, time, cost.",
+    "If the price is too high: a cheaper nearby airport + a bus, closer places with no flight, ground routes.",
+    "Check whether it's really on the way.",
+    "What's there, and how many nights it needs."
+   ],
+   "gives": "",
+   "track_record": "Thailand 2026: Rejected. Chiang Mai turned down at $317; Kanchanaburi and Hua Hin dropped; now going straight from Phuket to Bangkok. Gap: it suggested places before checking them against a budget."
+  },
+  {
+   "code": "W06",
+   "title": "Stop on the way vs round trip",
+   "new": false,
+   "runs_when": "\"Can we go to X before we get to Y?\"",
+   "steps": [
+    "Check that X is on the ferry or bus line between the two stops.",
+    "Compare splitting the ride with a separate round trip.",
+    "Check the times in and out (the last departure of the day) and the hours on the ground.",
+    "Compare with a day tour from the base."
+   ],
+   "gives": "",
+   "track_record": "Thailand 2026: Rejected. Phi Phi dropped in favor of day tours from Krabi."
+  },
+  {
+   "code": "W07",
+   "title": "Time-window fit",
+   "new": false,
+   "runs_when": "\"What can we do there before the next ride?\"",
+   "steps": [
+    "fixed times",
+    "usable hours",
+    "keep only what fits",
+    "flag anything that risks missing the ride"
+   ],
+   "gives": "",
+   "track_record": "Thailand 2026: Proven. Showed a Phi Phi stop left only ~4 hours (you then switched to a day tour from Krabi); showed only a half-day tour fits Nov 20."
+  },
+  {
+   "code": "W08",
+   "title": "Where to spend the time",
+   "new": false,
+   "runs_when": "\"What's better: A, B or C?\"",
+   "steps": [
+    "compare the places on what the trip is for (scenery, cost, activities, nightlife, gyms and spas)",
+    "suggest how many nights at each"
+   ],
+   "gives": "",
+   "track_record": "Thailand 2026: Proven. Krabi vs Phi Phi vs Phuket; you settled on Krabi 3 nights and Phuket 2 (both booked)."
+  },
+  {
+   "code": "W09",
+   "title": "Hotel finder (area first)",
+   "new": false,
+   "runs_when": "\"Find a cheap, good place near X.\"",
+   "steps": [
+    "Pick the area by what comes next (ferry pier, beach, clubs), not by the airport.",
+    "Search by neighborhood, exact nights, group size, price cap, minimum rating and radius.",
+    "Drop far-out or unreviewed places, and say why.",
+    "Table: total for the stay, per night, rating (number of reviews), walk time, link.",
+    "One pick."
+   ],
+   "gives": "",
+   "track_record": "Thailand 2026: Proven. Moved the airport-based search to Ao Nang; you booked your own finds in the areas it picked."
+  },
+  {
+   "code": "W10",
+   "title": "Vet a hotel you found",
+   "new": false,
+   "runs_when": "you send a hotel name or link.",
+   "steps": [
+    "Open the link (if it's blocked, search by name).",
+    "Check the dates, nights and headcount in the link.",
+    "Location vs the plan: distances to sights and venues, taxi costs.",
+    "Rating and number of reviews.",
+    "Complaints: theft, overcharging, noise.",
+    "Rules: check-in hours, bag storage, lockers, age limits.",
+    "Real total (room + taxis) vs the best alternative.",
+    "Verdict, plus what to message the property."
+   ],
+   "gives": "",
+   "track_record": "Thailand 2026: Proven. Nomads and Mazi booked; Vapa, Sai Rougn and the places near Erawan ruled out."
+  },
+  {
+   "code": "W11",
+   "title": "Pick a stay area",
+   "new": false,
+   "runs_when": "\"Beach, city, or what?\"",
+   "steps": [
+    "list the areas and who each suits",
+    "budget and mid-range price per night for each (say which prices are live)",
+    "add taxis to where your nights happen",
+    "total per area",
+    "pick"
+   ],
+   "gives": "",
+   "track_record": "Thailand 2026: Proven. Phuket → Patong."
+  },
+  {
+   "code": "W12",
+   "title": "Activity menu",
+   "new": false,
+   "runs_when": "\"What is there to do here?\"",
+   "steps": [
+    "Split into water, land and nightlife.",
+    "For each: what it is, time, per-person price, park fee, where it leaves from, link.",
+    "Walk-up/haggle price where that's normal, and how to haggle (per boat or per person, which stops, your ride time).",
+    "Park days: cash-only fees, nearest ATM, hours, last entry.",
+    "Mark what fits your time; suggest the best single day.",
+    "Where each activity is cheapest to do from."
+   ],
+   "gives": "",
+   "track_record": "Thailand 2026: Adopted. Krabi → half-day 4 Islands tour on Nov 20 (not booked); Nov 18–19 kept open (maybe a hike)."
+  },
+  {
+   "code": "W13",
+   "title": "Luggage gap planner",
+   "new": false,
+   "runs_when": "there's time between checkout and leaving.",
+   "steps": [
+    "find the gap",
+    "free option first (the hotel holds bags)",
+    "paid backup with the price in your home currency, hours, location, reliability and limits (no valuables)",
+    "in places with no storage shops: hostel desk, tour desk, van office"
+   ],
+   "gives": "",
+   "track_record": "Thailand 2026: Open. Asking Nomads to hold bags is on the follow-up list; Charlie House wasn't confirmed in the chats."
+  },
+  {
+   "code": "W14",
+   "title": "Checkout-page review",
+   "new": false,
+   "runs_when": "you send a screenshot of a booking page.",
+   "steps": [
+    "Read the total and the passenger count.",
+    "Is it per person or for the group?",
+    "Fare type, and whether bags are included.",
+    "Turn off add-ons.",
+    "Which airport, what times.",
+    "Compare with the best alternative and give price lines: below [price], take it; above [price], skip it.",
+    "Help with form fields (nationality) and watch the timer."
+   ],
+   "gives": "",
+   "track_record": "Thailand 2026: Open. Phuket → Bangkok isn't booked."
+  },
+  {
+   "code": "W15",
+   "title": "Booking-site filter help",
+   "new": false,
+   "runs_when": "\"What am I clicking here?\" \"Nothing's showing.\"",
+   "steps": [
+    "Say which filters to tick (hotel pickup vs meeting point).",
+    "Check the site's quirks in the region pack, like options that a filter hides.",
+    "Explain what an option really does, especially where it drops you.",
+    "Backups: book to the airport or town and message the operator; other sites (Klook, GetYourGuide, Bookaway, Booking.com Taxi); a tour desk in person."
+   ],
+   "gives": "",
+   "track_record": "Thailand 2026: Open. The private charter never showed up on 12Go; you switched to the boat."
+  },
+  {
+   "code": "W16",
+   "title": "Taxi meets the bus",
+   "new": false,
+   "runs_when": "\"Will the taxi meet me when I get off?\"",
+   "steps": [
+    "the bookings aren't linked",
+    "set pickup to the arrival terminal",
+    "set the time after the bus arrives",
+    "notes: bus company, arrival time, headcount, \"please wait if late\"",
+    "WhatsApp number",
+    "message the operator"
+   ],
+   "gives": "",
+   "track_record": "Thailand 2026: Proven. You fixed the booking with it; the Hua Hin route was dropped later."
+  },
+  {
+   "code": "W17",
+   "title": "Booking change + expense log",
+   "new": false,
+   "runs_when": "\"Log this.\" \"Change the log and rerun the numbers.\" \"Lock in what I found.\"",
+   "steps": [
+    "update the booking line (old",
+    "new)",
+    "show the price difference",
+    "re-check anything tied to the old time (bags, taxi pickup)"
+   ],
+   "gives": "",
+   "track_record": "Thailand 2026: Proven. Krabi flight moved from 6:15 AM ($99.84) to 5:20 PM ($105.93)."
+  },
+  {
+   "code": "W18",
+   "title": "Email sweep",
+   "new": false,
+   "runs_when": "\"Check my email and label everything for the trip.\"",
+   "steps": [
+    "Search with trip words and a time window; skip what's already labeled.",
+    "Label with the existing trip label.",
+    "Open confirmations; pull reference numbers, times, prices.",
+    "Compare against the plan and flag conflicts."
+   ],
+   "gives": "",
+   "track_record": "Thailand 2026: Proven. 12 threads labeled; caught the airport taxi set for 12:00 PM against a 6:45 PM landing, and the flight reschedule notice."
+  },
+  {
+   "code": "W19",
+   "title": "Timeline, calendar and follow-up",
+   "new": false,
+   "runs_when": "\"Build my timeline.\" \"Add it to my calendar.\" \"Remind me to follow up.\"",
+   "steps": [
+    "Recap table: date, item, time, price, status, link or confirmation number.",
+    "Visual timeline: Booked / To book / Check now.",
+    "One calendar event per item, with confirmation numbers, PINs, check-in hours and notes.",
+    "A follow-up reminder with a checklist of open items."
+   ],
+   "gives": "",
+   "track_record": "Thailand 2026: Proven. Timeline built; 11 calendar events; follow-up set for Tue Sep 29, 7 PM."
+  },
+  {
+   "code": "W20",
+   "title": "Nightlife finder",
+   "new": false,
+   "runs_when": "\"Is it close to [venue]?\" \"Other spots like it?\"",
+   "steps": [
+    "find the venue",
+    "walk times from each hotel option",
+    "which nights it's open (check its Instagram)",
+    "similar venues by music",
+    "entry, packages, bottles, VIP prices",
+    "plan by night, with a backup"
+   ],
+   "gives": "",
+   "track_record": "Thailand 2026: Adopted. Patong; AfroRoom being open on Friday isn't confirmed."
+  },
+  {
+   "code": "W21",
+   "title": "Scooter check",
+   "new": false,
+   "runs_when": "\"Scooter rentals?\"",
+   "steps": [
+    "price per day by bike size",
+    "deposit rules",
+    "license and permit (does your home license have a motorcycle endorsement?), fines, insurance",
+    "is one even needed (is the area walkable?)"
+   ],
+   "gives": "",
+   "track_record": "Thailand 2026: Open. Getting International Driving Permits is on the follow-up list. For scooters, the permit needs a US license with a motorcycle endorsement."
+  },
+  {
+   "code": "W22",
+   "title": "Safety and scam check",
+   "new": false,
+   "runs_when": "\"Any history of overcharging?\" \"Anything stolen?\" \"Is jet skiing safe?\"",
+   "steps": [
+    "known scams for the activity and how to avoid them",
+    "overcharging or theft in reviews",
+    "official transport vs touts"
+   ],
+   "gives": "",
+   "track_record": "Thailand 2026: Proven."
+  },
+  {
+   "code": "W23",
+   "title": "Payment check",
+   "new": false,
+   "runs_when": "\"Pay now or at the property?\"",
+   "steps": [
+    "who charges and when",
+    "which cards",
+    "pay in local currency",
+    "cancellation and no-show dates",
+    "what to bring at check-in"
+   ],
+   "gives": "",
+   "track_record": "Thailand 2026: Proven."
+  },
+  {
+   "code": "W24",
+   "title": "Start a new trip",
+   "new": true,
+   "runs_when": "a new trip starts.",
+   "steps": [
+    "Ask who's going and how many, the dates, the budget caps (per night, per leg, per day), what the trip is for, and passport country.",
+    "Start the trip log (bookings and expenses).",
+    "Make an email label for the trip.",
+    "New country or region? Copy the region pack template and start filling it in.",
+    "Look up today's exchange rate and note the date."
+   ],
+   "gives": "a trip log and a region pack ready to fill.",
+   "track_record": "not used yet."
+  },
+  {
+   "code": "W25",
+   "title": "Before-you-go check",
+   "new": true,
+   "runs_when": "the route is set.",
+   "steps": [
+    "Entry rules for your passport: visa, arrival form, fees, passport validity.",
+    "Health rules and vaccines.",
+    "Travel insurance that covers your activities.",
+    "Driving or scooter permits.",
+    "Phone and data plan; plug type.",
+    "Safety warnings, local laws, emergency number, embassy.",
+    "Put every deadline on the calendar."
+   ],
+   "gives": "a checklist, with the deadlines on the calendar.",
+   "track_record": "not used yet. Thailand 2026: the driving permit came up under W21, and the online arrival card was caught while writing v2 (see the Thailand pack)."
+  },
+  {
+   "code": "W26",
+   "title": "Wrap up a trip",
+   "new": true,
+   "runs_when": "the trip is over (or planning is done).",
+   "steps": [
+    "Add a track record line to each workflow you used.",
+    "Turn any mistakes into guardrails, with \"Why.\"",
+    "Finish that trip's region pack.",
+    "Remove the NEW tag from anything that got used.",
+    "Add any new questions you asked, with codes."
+   ],
+   "gives": "a helper that's better for the next trip.",
+   "track_record": "not used yet."
+  },
+  {
+   "code": "W27",
+   "title": "Confirm a booking",
+   "new": true,
+   "runs_when": "\"Confirm my reservation,\" or a booking needs a yes before the trip (bag hold, late check-in, pickup time).",
+   "steps": [
+    "Find how the business answers: text, WhatsApp, LINE, email or phone (see the region pack).",
+    "Send a short message with the booking details and the exact question.",
+    "No reply in time? Call, and say up front that it's an AI.",
+    "Log the answer on the booking and the timeline; flag anything that changed."
+   ],
+   "gives": "",
+   "track_record": "not used yet. Thailand 2026 test: bag holds at Nomads and Charlie House."
+  },
+  {
+   "code": "W28",
+   "title": "Live trip watch",
+   "new": true,
+   "runs_when": "the trip is happening.",
+   "steps": [
+    "Watch what affects the plan: traffic, flight and ferry changes, weather, closures.",
+    "Tie each change to the plan: what it breaks, and by how much.",
+    "Notify only when it matters, with the fix (\"leave 20 minutes early,\" \"the next ferry is at 3:30 PM\").",
+    "Update the timeline and calendar."
+   ],
+   "gives": "",
+   "track_record": "not used yet. Thailand 2026 tests: Bangkok traffic to Don Mueang (Nov 17), the afternoon boat to Phuket (Nov 20)."
+  },
+  {
+   "code": "W29",
+   "title": "Micro trip (short outing)",
+   "new": true,
+   "runs_when": "\"Plan [activity] today or this weekend.\"",
+   "steps": [
+    "what and where",
+    "when to leave (traffic)",
+    "book or confirm (W27)",
+    "what to bring",
+    "live notices on the day (W28)",
+    "log the cost"
+   ],
+   "gives": "",
+   "track_record": "not used yet."
+  }
+ ],
+ "guardrails": [
+  {
+   "code": "G01",
+   "rule": "Ask who's going and how many, first.",
+   "why": "Thailand 2026: it assumed a couple's trip; it was a guys' trip. Headcount was asked three times and never settled."
+  },
+  {
+   "code": "G02",
+   "rule": "Ask the budget cap before suggesting places.",
+   "why": "Thailand 2026: Chiang Mai came back at $317 and was turned down."
+  },
+  {
+   "code": "G03",
+   "rule": "Say \"per person\" or \"for the group\" on every price.",
+   "why": "Thailand 2026: $122 for two looked like a jump from the \"$28–62\" quoted per person."
+  },
+  {
+   "code": "G04",
+   "rule": "Confirm the passenger count on fare pages.",
+   "why": "Thailand 2026: it never settled whether a $101.59 fare was per person or for two."
+  },
+  {
+   "code": "G05",
+   "rule": "Re-check prices before the final pick, and note when they were checked.",
+   "why": "Thailand 2026: the same fare showed as $110.58 and then $113.04."
+  },
+  {
+   "code": "G06",
+   "rule": "Search hotels by neighborhood, never the airport.",
+   "why": "Thailand 2026: the first Krabi hotel search was set on Krabi Airport, far from the beach and the ferry pier."
+  },
+  {
+   "code": "G07",
+   "rule": "Confirm nights vs full days.",
+   "why": "Thailand 2026: with a late arrival, \"two days\" there meant three hotel nights."
+  },
+  {
+   "code": "G08",
+   "rule": "Check that every link opens the right place.",
+   "why": "Thailand 2026: an \"Expedia\" link opened Travelocity; a \"Booking\" link opened a different hotel."
+  },
+  {
+   "code": "G09",
+   "rule": "Carry links and confirmation numbers into every recap.",
+   "why": "Thailand 2026: one plan recap left the booked items without links."
+  },
+  {
+   "code": "G10",
+   "rule": "Answer the exact question first.",
+   "why": "Thailand 2026: it reviewed the cart when asked whether the taxi meets the bus, and jumped to Phuket hotels when asked about getting to Phuket."
+  },
+  {
+   "code": "G11",
+   "rule": "Go by the booking page, not memory.",
+   "why": "Thailand 2026: it named the wrong bus company."
+  },
+  {
+   "code": "G12",
+   "rule": "Know each site's quirks, and keep them in the region pack.",
+   "why": "Thailand 2026: 12Go opens on today's date, and its time filter hides private charters."
+  }
+ ],
+ "region_template": [
+  "Region and trip dates:",
+  "Money: currency, exchange rate (and the date checked), cash vs card, ATM fees, tipping.",
+  "Airports and airlines: cities with more than one airport; budget airlines missing from the big search sites (and their own sites); fare types and which include a bag; how early to book.",
+  "Ground transport: the main booking site for buses, vans, trains and ferries, and its quirks.",
+  "Piers, terminals and stations: where they really are, and the last departures.",
+  "Getting around: ride-hail apps, taxis, transit passes, scooter and car rules.",
+  "Messaging: how businesses prefer to be contacted (text, WhatsApp, LINE, email, phone), and the local rules on AI calls.",
+  "Luggage storage: networks and staffed counters.",
+  "Fees: park fees and other cash-only charges.",
+  "Seasons: rainy and dry months by area; high season.",
+  "Scams and safety: what to watch for.",
+  "Entry rules: visa, arrival form, passport validity.",
+  "Confusing names: places that share a name.",
+  "Stays: notes on specific hotels (room requests, check-in hours, bag holds).",
+  "Booking forms: anything odd about nationality or address fields.",
+  "Worked examples: question code → what it looked like on this trip."
+ ],
+ "region_packs": [
+  {
+   "name": "Thailand",
+   "intro": "Trip: Nov 13–28, 2026, Bangkok → Krabi (Ao Nang) → Phuket (Patong) → Bangkok. Prices and facts as found in Sep 2026.",
+   "sections": {
+    "Money": [
+     "Currency: Thai baht (฿). Rate used: about 33.4 baht per $1 (Sep 2026). Your card's rate is usually 1–3% worse.",
+     "Hotels may charge at check-in, in baht (Charlie House: Visa or Mastercard only). If the card machine offers USD, say no.",
+     "Haggling for a longtail boat at Tonsai Pier (Phi Phi): captains ask ฿2,500–3,000; counter around ฿1,500; a fair price is ฿1,800–2,200 per boat for 2–3 hours. Cash only; park fee separate.",
+     "ATM fees and tipping: not checked yet."
+    ],
+    "Airports and airlines": [
+     "Bangkok has two airports: Suvarnabhumi (BKK) and Don Mueang (DMK). Budget airlines like Nok Air and Thai Lion Air mostly fly from DMK. Search both.",
+     "AirAsia doesn't show up on Expedia; check airasia.com. Also compare nokair.com, lionairthai.com and vietjetair.com. Thai Vietjet didn't always show on Expedia either.",
+     "Fare types: Nok Air Lite / X-tra / Max; Thai Lion Air Saver / Value / Flexi. The cheapest fare is usually carry-on only. Vietjet's base fare usually covers only a small carry-on.",
+     "Thai Vietjet used BKK, not DMK, on the routes checked.",
+     "Budget domestic flights: book about 6 weeks out. Mid-November is the start of high season, so fares climb.",
+     "Krabi airport: the shared shuttle to Ao Nang is about ฿150 per person; the taxi counter was quoted at ฿1,200 or more (confirm on arrival)."
+    ],
+    "Ground transport: 12Go (12go.asia)": [
+     "Route page: /en/travel/A/B. Pages for one kind of ride: /en/bus/, /en/van/, /en/ferry/, /en/taxi/.",
+     "Add ?date=YYYY-MM-DD&people=N to the link (N = group size).",
+     "Pages open on today's date, so set the date.",
+     "A link to one exact trip only exists after you pick a date, so give the route page plus what to click.",
+     "Private charters show as \"00:00\", and the time filter hides them.",
+     "\"Ao Nang Hotel Transfer\" = pickup at your door; \"…except Krabi Town and Railay\" = the shared-van meeting point.",
+     "\"Phuket Town Charter\" drops you in Phuket Town, not at a Patong hotel.",
+     "Some vans end at the Phuket Bus Terminal in Phuket Town, about 40 minutes and a ฿300–500 taxi from Patong.",
+     "When 12Go has nothing: book to the airport or town and message the operator; try Klook, GetYourGuide, Bookaway or Booking.com Taxi; or a tour desk in Ao Nang."
+    ],
+    "Piers, terminals and stations": [
+     "Phuket ferries mostly use Rassada Pier in Phuket Town. Ferries and transfer speedboats don't dock at Patong. From Rassada: Grab or Bolt ฿350–500 (meet the driver outside the pier gate), taxi counter ฿500–650; skip the tuk-tuk touts (฿600+). From Bang Rong pier: ฿600–800.",
+     "Krabi piers: Klong Jilad (Krabi Town) and Nopparat Thara (Ao Nang). Phi Phi: Tonsai Pier.",
+     "Ferries stop running mid-afternoon; the last one from Phi Phi leaves around 3:30 PM.",
+     "Ferry sites: Direct Ferries, rassadapier.net and booking.rassadapier.org, King Ferry Phuket.",
+     "Phuket has two bus terminals (1 and 2). Check which one.",
+     "Bangkok's Mochit is the northern bus station in Chatuchak, not central. BTS Mo Chit is a short ride away, and the skytrain starts around 6 AM."
+    ],
+    "Getting around": [
+     "Ride-hail apps: Grab and Bolt. Set them up with a card before the trip.",
+     "Scooters: about ฿150–450 a day. Never leave your passport (offer a ฿1,000–3,000 cash deposit or a photocopy). You need an International Driving Permit with the motorcycle (\"A\") class, from AAA before you fly; AAA can only add that class if your US license has a motorcycle endorsement. Police checkpoints fine ฿500–1,000. Without a valid license, travel insurance won't cover a crash.",
+     "Tuk-tuk drivers often don't know addresses. Carry the hotel's address card.",
+     "Shared van vs private car: with 3 or fewer people the shared van was cheaper; with 4 or more, a private car."
+    ],
+    "Messaging": [
+     "Many Thai businesses answer on LINE or WhatsApp rather than text (check each one). Hotels booked on Booking.com can be messaged in the app."
+    ],
+    "Luggage storage": [
+     "AIRPORTELs: ฿100 per bag per day at the BKK and DMK airport counters (open 24 hours), ฿150 at city mall counters. Bags are x-rayed and insured. No valuables.",
+     "Bellugg: ฿150–200 by bag size at BKK. Bounce: from ฿65 a day in the city. Radical Storage: similar.",
+     "Hotels usually hold bags for free after checkout. Ao Nang has no storage shops, so use the hostel desk, a tour desk or the van office."
+    ],
+    "Fees": [
+     "Park fees: Phi Phi area ฿400 per adult; Hong Islands ฿300; Erawan ฿300 plus ฿20 per scooter (cash only; nearest ATM about 10 km away). Booked tours usually include the park fee; boats from the pier usually don't. Keep the receipt."
+    ],
+    "Seasons": [
+     "The Gulf side (Koh Samui, Koh Phangan, Koh Tao, Hua Hin) gets its heaviest rain October–December, so it was skipped for November. Krabi and Phuket, on the other coast, were the better pick for late November, but they have their own rainy season (roughly May–October), so check again for other dates.",
+     "The north (Chiang Mai, Pai) is cool and dry in late November."
+    ],
+    "Scams and safety": [
+     "Phuket is known for the jet ski damage scam: you're blamed for damage that was already there. Book a guided tour, video the ski, agree the price on video, keep your passport.",
+     "Pier touts and airport taxi counters charge far more than shuttles and apps.",
+     "Hostels: bring padlocks; lockers can be small."
+    ],
+    "Entry rules (US passport)": [
+     "Online arrival card (TDAC): required for all foreign visitors since May 1, 2025. File it at tdac.immigration.go.th no more than 3 days (72 hours) before you land. It's free; fake sites charge for it.",
+     "Visa-free stay: 30 days per entry from Sep 15, 2026 (it was 60). A 2-week trip fits.",
+     "Passport validity: not checked yet (6 months is the common rule; confirm on travel.state.gov)."
+    ],
+    "Confusing names": [
+     "There are two Ko Hong islands: one off Krabi (the lagoon and viewpoint trip, about 45 minutes by boat from Ao Nang) and one in Phang Nga Bay (trips from Phuket). Check which one a tour means."
+    ],
+    "Stays": [
+     "Mazi Design Hotel (Patong): a canal behind the hotel smells, so ask for a high, front room away from it (requested in the booking)."
+    ],
+    "Booking forms": [
+     "Nationality field: pick \"USA\" (between Uruguay and Uzbekistan), not \"United States Minor Outlying Islands\" or \"United States Virgin Islands\". Your state (CT) doesn't matter; it's about the passport."
+    ]
+   },
+   "worked_examples": [
+    {
+     "code": "GO-01",
+     "text": "Besides Chiang Mai → Pai, Chiang Rai"
+    },
+    {
+     "code": "GO-02",
+     "text": "Kanchanaburi, Hua Hin, Khao Sok, Koh Yao Noi"
+    },
+    {
+     "code": "GO-03",
+     "text": "Koh Lanta, Krabi, Kanchanaburi, Erawan"
+    },
+    {
+     "code": "GO-04",
+     "text": "Ao Nang"
+    },
+    {
+     "code": "GO-05",
+     "text": "Krabi vs Phi Phi vs Phuket"
+    },
+    {
+     "code": "GET-01",
+     "text": "Phuket → Phi Phi: ~45–50 km; 45–60 min by speedboat, 1.5–2 hr by ferry"
+    },
+    {
+     "code": "GET-02",
+     "text": "Bangkok → Krabi: flight vs night bus vs train + bus vs private car"
+    },
+    {
+     "code": "GET-03",
+     "text": "Krabi → Phi Phi"
+    },
+    {
+     "code": "GET-04",
+     "text": "Phi Phi → Phuket"
+    },
+    {
+     "code": "GET-05",
+     "text": "Bangkok → Krabi → Phi Phi → Phuket"
+    },
+    {
+     "code": "GET-06",
+     "text": "Phi Phi between Krabi and Phuket"
+    },
+    {
+     "code": "GET-07",
+     "text": "Phi Phi from Koh Lanta vs Krabi"
+    },
+    {
+     "code": "GET-08",
+     "text": "Krabi → Phuket by speedboat"
+    },
+    {
+     "code": "GET-09",
+     "text": "Phuket → van to Krabi → fly to Bangkok"
+    },
+    {
+     "code": "GET-10",
+     "text": "Phuket → Kanchanaburi without Bangkok"
+    },
+    {
+     "code": "GET-11",
+     "text": "12Go results page, Ao Nang → Phuket"
+    },
+    {
+     "code": "GET-12",
+     "text": "Hua Hin bus stop vs van stop"
+    },
+    {
+     "code": "GET-13",
+     "text": "Taxi meeting the bus in Hua Hin"
+    },
+    {
+     "code": "GET-14",
+     "text": "Rassada Pier → Patong"
+    },
+    {
+     "code": "GET-15",
+     "text": "Mochit bus station, Bangkok"
+    },
+    {
+     "code": "GET-16",
+     "text": "Private speedboat or longtail"
+    },
+    {
+     "code": "GET-17",
+     "text": "Hong Islands: Krabi vs Phuket"
+    },
+    {
+     "code": "TIME-01",
+     "text": "Checkout noon → Don Mueang → land Krabi 6:45 PM"
+    },
+    {
+     "code": "TIME-02",
+     "text": "Evening landing in Krabi, so night one is check-in and dinner"
+    },
+    {
+     "code": "TIME-03",
+     "text": "~3.5–4 hr on Phi Phi"
+    },
+    {
+     "code": "TIME-04",
+     "text": "Half-day 4 Islands tour before the ride to Phuket"
+    },
+    {
+     "code": "TIME-06",
+     "text": "Planned test: Charlie House → Don Mueang on Nov 17 (Bangkok traffic)"
+    },
+    {
+     "code": "STAY-01",
+     "text": "Ao Nang (Krabi)"
+    },
+    {
+     "code": "STAY-02",
+     "text": "Near the Phi Phi ferry pier"
+    },
+    {
+     "code": "STAY-03",
+     "text": "Banyan Tree, Nomads, D Hostel, Vapa, Sai Rougn, Mazi, two places near Erawan"
+    },
+    {
+     "code": "STAY-04",
+     "text": "D Hostel → Kanchanaburi sights"
+    },
+    {
+     "code": "STAY-05",
+     "text": "Phuket"
+    },
+    {
+     "code": "STAY-06",
+     "text": "Phuket areas: Patong, Karon, Kata, Kamala, Surin/Bang Tao, Old Town, Rawai"
+    },
+    {
+     "code": "STAY-07",
+     "text": "Patong → AfroRoom nightclub"
+    },
+    {
+     "code": "STAY-08",
+     "text": "Nomads Ao Nang"
+    },
+    {
+     "code": "STAY-09",
+     "text": "Nomads lockers"
+    },
+    {
+     "code": "STAY-10",
+     "text": "Bangkok"
+    },
+    {
+     "code": "DO-01",
+     "text": "Krabi"
+    },
+    {
+     "code": "DO-02",
+     "text": "Krabi on land: Railay, rock climbing, Tiger Cave Temple, Dragon Crest hike"
+    },
+    {
+     "code": "DO-03",
+     "text": "Phi Phi"
+    },
+    {
+     "code": "DO-04",
+     "text": "Phuket: jet skiing, boating, snorkeling"
+    },
+    {
+     "code": "DO-05",
+     "text": "Phi Phi = boating + snorkeling"
+    },
+    {
+     "code": "DO-06",
+     "text": "Boat rides in Chiang Mai"
+    },
+    {
+     "code": "DO-07",
+     "text": "Pileh Lagoon"
+    },
+    {
+     "code": "DO-08",
+     "text": "Tonsai Pier longtail boats"
+    },
+    {
+     "code": "DO-09",
+     "text": "Phi Phi tour from Krabi"
+    },
+    {
+     "code": "DO-10",
+     "text": "Ao Nang and Patong"
+    },
+    {
+     "code": "DO-11",
+     "text": "Krabi open days"
+    },
+    {
+     "code": "DO-12",
+     "text": "Hip-hop / pop / Afrobeats, Patong"
+    },
+    {
+     "code": "MONEY-01",
+     "text": "Charlie House: pay at the property"
+    },
+    {
+     "code": "MONEY-02",
+     "text": "Charlie House: no overcharging complaints found"
+    },
+    {
+     "code": "MONEY-03",
+     "text": "Baht → USD"
+    },
+    {
+     "code": "MONEY-04",
+     "text": "Fares for two people"
+    },
+    {
+     "code": "MONEY-05",
+     "text": "Nok Air, Thai Lion Air, Thai Vietjet and Thai AirAsia booking pages"
+    },
+    {
+     "code": "MONEY-06",
+     "text": "\"About $40, so why $122?\" ($122 was for two, $61 each)"
+    },
+    {
+     "code": "MONEY-07",
+     "text": "The whole Krabi leg"
+    },
+    {
+     "code": "MONEY-08",
+     "text": "Phuket → Kanchanaburi → Bangkok"
+    },
+    {
+     "code": "MONEY-09",
+     "text": "Bangkok → Krabi flight: $99.84 → $105.93"
+    },
+    {
+     "code": "MONEY-10",
+     "text": "$317 Chiang Mai flight turned down; cheaper Phuket → Bangkok options"
+    },
+    {
+     "code": "BOOK-01",
+     "text": "12Go and Booking.com links"
+    },
+    {
+     "code": "BOOK-02",
+     "text": "12Go filter panel"
+    },
+    {
+     "code": "BOOK-03",
+     "text": "12Go \"Phuket Town Charter\""
+    },
+    {
+     "code": "BOOK-04",
+     "text": "Private charter not showing on 12Go"
+    },
+    {
+     "code": "BOOK-05",
+     "text": "\"USA\" for a Connecticut resident"
+    },
+    {
+     "code": "BOOK-06",
+     "text": "Wonderly Travel bus + Than Car Service taxi (Hua Hin)"
+    },
+    {
+     "code": "BOOK-09",
+     "text": "Planned test: bag holds at Nomads and Charlie House"
+    },
+    {
+     "code": "ADMIN-01",
+     "text": "Gmail sweep: 12 threads labeled"
+    },
+    {
+     "code": "ADMIN-02",
+     "text": "Color-coded trip timeline"
+    },
+    {
+     "code": "ADMIN-03",
+     "text": "11 calendar events"
+    },
+    {
+     "code": "ADMIN-04",
+     "text": "Follow-up on Tue Sep 29, 7 PM"
+    },
+    {
+     "code": "ADMIN-05",
+     "text": "Plan recap with flights and links"
+    },
+    {
+     "code": "ADMIN-06",
+     "text": "Planned test: the afternoon boat to Phuket, Nov 20"
+    },
+    {
+     "code": "TALK-01",
+     "text": "\"Simple terms\"; \"what do you mean nothing for bags\""
+    }
+   ]
+  }
+ ],
+ "changelog": [
+  "v7 (Sep 28, 2026): added the timeline mockup image (Thailand trip) and \"Building it: the phone app\" (how it runs, screens, back end, connections, privacy, and the Nov 13 target).",
+  "v6 (Sep 28, 2026): added the planning-stage layout (data, filters, plan) and the visual timeline concept.",
+  "v5 (Sep 28, 2026): added the first five onboarding questions (three-question version = questions 1–3).",
+  "v4 (Sep 28, 2026): added who it's for (organizers first), how we reach them (clubs and schools), the competitive advantage, knowing the place before you go (seasonality and weather), same-trip-cheaper-place comparison, ideas to consider (including a reliability award), naming, and the Wingman partner-or-compete decision. Part B adds Wingman City Guide, social-import apps, seasonality tools, flight-price explorers, names in use, and Product Hunt. A separate competitor analysis prompt was written the same day.",
+  "v3 (Sep 28, 2026): one file for the app. Added Part A (product brief: the idea, decisions, open questions, risks, first test) and Part B (market scan of Wanderlog, Google, TripIt, Travel Sane, Navan, Vacation Planner and AI planners, with sources). Added 4 questions and 3 workflows for running the trip (tagged NEW), plus a messaging line in the region pack template and the Thailand pack.",
+  "v2 (Sep 27, 2026): made universal. Thailand examples, sites and prices moved to the Thailand pack; Thailand results kept as track records and \"Why\" lines. Added codes, fill-ins, a region pack template, and items tagged NEW (19 questions, 3 workflows, the passport/home-currency setup item, and sources and checks for before you go). The Thailand pack also holds details from the same chats that v1 didn't list (fare names, pier and taxi prices, park fees, storage prices, more worked examples), plus entry rules looked up on Sep 27, 2026.",
+  "v1 (Sep 27, 2026): capability list from the three Thailand planning chats in the \"thailand\" project: \"Payment and pricing questions\", \"Bangkok luggage storage options\" (which also covers Krabi and Phuket), and \"Secondary destination from Phuket\"."
+ ]
+}

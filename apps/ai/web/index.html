@@ -1,0 +1,57 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>AI inbox · Destination Helper</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Barlow:wght@400;500;700&family=Barlow+Condensed:wght@400;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/ui-kit/tokens.css">
+<link rel="stylesheet" href="/ui-kit/shell.css">
+<link rel="stylesheet" href="/ui-kit/app.css">
+<style>
+.sug{border-top:1px solid var(--line);padding:10px 0;display:grid;grid-template-columns:1fr auto;gap:10px;align-items:start}
+.sug:first-child{border-top:0}
+.sug .sum{font-size:14.5px}
+.sug .why{font-size:12.5px;color:var(--mut);margin-top:2px}
+.sug .meta{font-size:11.5px;color:var(--mut-2);margin-top:3px}
+.conf{display:inline-block;font-size:11px;padding:1px 7px;border:1px solid var(--line-2);border-radius:10px;color:var(--mut);margin-left:6px}
+.conf.hi{border-color:var(--ok);color:var(--ok)}.conf.lo{border-color:var(--warn);color:var(--warn)}
+select,input[type=text],input[type=number]{font:inherit;font-size:13px;color:var(--paper);background:var(--ink);border:1px solid var(--line-2);padding:4px 8px;border-radius:2px}
+</style>
+</head>
+<body>
+<header class="band"><div class="appbar">
+ <span class="appbar-brand"><span class="appbar-eyebrow">Destination Helper</span>AI inbox</span>
+ <span class="appbar-right"><span class="pill" id="pill"></span><a href="/apps/trips/web/">Trips</a><a href="/apps/system/web/settings.html#ai">Settings</a><a href="/apps/launcher/web/">‹ Home</a></span>
+</div></header>
+<main class="wrap">
+ <div class="side-layout">
+  <aside class="sidebar">
+   <div><h4>AI</h4><nav class="sidenav" id="tabs"><a href="#inbox" class="on">Inbox</a><a href="#workflows">Workflows</a><a href="#log">Log</a><a href="#tests">Test scores</a></nav></div>
+   <div><h4>Models</h4><div class="opts" id="models"></div></div>
+  </aside>
+  <div class="content">
+   <section class="panel on" id="p-inbox"></section>
+   <section class="panel" id="p-workflows"></section>
+   <section class="panel" id="p-log"></section>
+   <section class="panel" id="p-tests"></section>
+  </div>
+ </div>
+</main>
+<script src="/ui-kit/app.js"></script>
+<script src="inbox.js"></script>
+<script src="/ui-kit/tour.js"></script>
+<script>
+Tour.init({ page: 'ai', steps: [
+  { title: 'The AI inbox', text: 'The models are the brain; the engine is the hands. AI never changes anything itself: it suggests, and each suggestion waits here for your OK.' },
+  { target: '#models', title: 'Which model does what', text: 'Each job has a model and a backup, set in Settings → AI. The last line says whether the Claude key is in. Without it, nothing calls the AI.' },
+  { target: '#p-inbox .kpis', title: 'Spend and the cap', text: 'Every AI call is logged with its cost. When the month\'s cap is reached, background jobs stop.', before: () => showTab('inbox') },
+  { target: '#suglist', title: 'Approve, correct, or say no', text: 'Approve runs the real action (it lands in history, it can be undone). Change the category first and it learns from the correction. "No" rejects it.' },
+  { target: '#tabs a[href="#log"]', title: 'The log', text: 'Which model, for which job, what it saw, what it said, what it cost. The audit trail.' },
+  { target: '#tabs a[href="#tests"]', title: 'Test scores', text: 'Your approvals become labelled examples. Score any model against them before switching a job to it.' },
+  { target: '#tabs a[href="#workflows"]', title: 'The plug', text: 'One command registers the engine with Claude Code, and a chat can ask "check my trip" or run a helper workflow against the real plan. Details on the Workflows tab.' },
+]});
+</script>
+</body>
+</html>
