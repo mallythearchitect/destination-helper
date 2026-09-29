@@ -11,9 +11,27 @@ const tOf = iso => iso && iso.length > 10 ? new Date(iso).toLocaleTimeString([],
 const dOf = iso => iso ? new Date(iso.slice(0, 10) + 'T00:00:00').toLocaleDateString([], { weekday: 'short', month: 'short', day: 'numeric' }) : '';
 const home = () => S.plan.trip.home_currency;
 const statusTag = s => `<span class="st ${s}">${esc(label(words().statuses, s))}</span>`;
-const GLYPH = { flight: '✈️', train: '🚆', bus: '🚌', van: '🚐', ferry: '⛴️', taxi: '🚕', transfer: '🚕', drive: '🚗', stay: '🛏️', activity: '🎟️', storage: '🧳', meal: '🍜', other: '📍' };
-const glyph = k => GLYPH[k] || '📍';
-const healthColor = h => h >= 80 ? 'var(--ok)' : h >= 50 ? 'var(--sun)' : 'var(--bad)';
+const ICON = {
+  flight: '<path d="M2 16l20-6-4 8-3-2-3 4-1-4-4-1zM22 10l-8-6-3 2 6 5"/>',
+  train: '<rect x="5" y="3" width="14" height="14" rx="3"/><path d="M5 11h14M9 21l1.5-4M15 21l-1.5-4M9 7h6"/>',
+  bus: '<rect x="4" y="4" width="16" height="13" rx="3"/><path d="M4 11h16M8 21v-4M16 21v-4M8 8h8"/>',
+  van: '<path d="M3 16V8a2 2 0 0 1 2-2h9l5 5v5"/><circle cx="8" cy="17" r="2"/><circle cx="17" cy="17" r="2"/>',
+  ferry: '<path d="M3 17l2 3h14l2-3M5 17l-1-6h16l-1 6M8 11V7h8v4M12 7V4"/>',
+  taxi: '<path d="M5 16l1.5-6h11L19 16M3 16h18v3H3zM9 6h6l1 4H8z"/><circle cx="7" cy="19" r="1.5"/><circle cx="17" cy="19" r="1.5"/>',
+  transfer: '<path d="M5 16l1.5-6h11L19 16M3 16h18v3H3zM9 6h6l1 4H8z"/><circle cx="7" cy="19" r="1.5"/><circle cx="17" cy="19" r="1.5"/>',
+  drive: '<path d="M4 15l2-6h12l2 6M3 15h18v4H3z"/><circle cx="7" cy="19" r="1.5"/><circle cx="17" cy="19" r="1.5"/>',
+  stay: '<path d="M3 18V8M3 14h18v4M3 14V10h10v4M21 18v-6a2 2 0 0 0-2-2h-6"/><circle cx="7" cy="10" r="1.5"/>',
+  activity: '<path d="M4 9a2 2 0 0 0 2-2V5h12v2a2 2 0 0 0 2 2v6a2 2 0 0 0-2 2v2H6v-2a2 2 0 0 0-2-2z"/><path d="M12 5v14" stroke-dasharray="2 2"/>',
+  storage: '<rect x="4" y="7" width="16" height="13" rx="2"/><path d="M9 7V4h6v3M4 12h16"/>',
+  meal: '<path d="M6 3v8a2 2 0 0 0 4 0V3M8 3v18M16 3c-2 0-3 3-3 6s1 4 3 4v8"/>',
+  other: '<path d="M12 21s-6-5.5-6-11a6 6 0 0 1 12 0c0 5.5-6 11-6 11z"/><circle cx="12" cy="10" r="2"/>',
+  work: '<rect x="3" y="7" width="18" height="13" rx="2"/><path d="M9 7V5h6v2M3 12h18"/>',
+};
+const glyph = (k, tag) => `<svg viewBox="0 0 24 24">${ICON[tag === 'work' && k === 'activity' ? 'work' : k] || ICON.other}</svg>`;
+const healthColor = h => h >= 60 ? 'var(--color-accent-2-500)' : h >= 40 ? 'var(--color-accent-400)' : 'var(--color-accent)';
+const cur = (cents, c) => c === 'USD' || !c ? money(cents) : ({ THB: '฿', EUR: '€', GBP: '£', JPY: '¥' }[c] || c + ' ') + (cents / 100).toLocaleString([], { maximumFractionDigits: 0 });
+const cur0 = (cents, c) => c === 'USD' || !c ? money0(cents) : cur(cents, c);
+const paysWord = pb => pb === 'company' ? 'work pays' : pb === 'split' ? 'split' : 'you pay';
 const flagOf = it => it.findings.some(f => f.severity === 'blocker') ? 'blocker' : it.findings.some(f => f.severity === 'warn') ? 'warn' : 'none';
 
 const showTab = App.tabs({ render: { timeline: renderTimeline, checks: renderChecks, costs: renderCosts, prepare: renderPrepare, run: renderRun, confirm: renderConfirm, helper: renderHelper, region: renderRegion }, onShow: t => { S.tab = t; } });
@@ -39,18 +57,26 @@ function renderHero() {
   const p = S.plan, box = $('#hero');
   if (!p) { box.innerHTML = ''; return; }
   const t = p.trip, stages = words().stages, idx = stages.findIndex(([id]) => id === t.stage);
-  const days = t.start_date ? Math.ceil((new Date(t.start_date + 'T00:00:00') - Date.now()) / 864e5) : null;
+  const stageWord = { plan: 'Plan', prepare: 'Prepare', run: 'Run', done: 'Recap' };
+  const nights = t.start_date && t.end_date ? Math.round((new Date(t.end_date) - new Date(t.start_date)) / 864e5) : null;
+  const who = t.headcount === 1 ? 'just you' : `you + ${t.headcount - 1}`;
+  const money_line = t.local_currency && t.local_currency !== t.home_currency ? ` · prices in ${esc(t.local_currency)} and ${esc(t.home_currency)}${t.fx_rate ? ` (1 ${esc(t.home_currency)} = ${t.fx_rate} ${esc(t.local_currency)})` : ''}` : '';
+  const place = ((p.items.find(i => i.is_stay && i.from_place) || {}).from_place || '').split(/[,(]/)[0].trim() || (t.name.includes('·') ? t.name.split('·')[1].split(',')[0].trim() : t.name.split(',')[0]) || (p.region && p.region.name);
   box.innerHTML = `<div class="hero">
-    <div><h1>${esc(t.name)}</h1><div class="meta">${t.start_date ? esc(fmtD(t.start_date)) + (t.end_date ? ' → ' + esc(fmtD(t.end_date)) : '') : 'no dates yet'} · <b>${t.headcount}</b> going${t.travelers.length ? ' (' + esc(t.travelers.join(', ')) + ')' : ''} · ${esc(label(words().purposes, t.purpose))}${p.region ? ' · ' + esc(p.region.name) + ' pack' : ''}${days != null ? (days > 0 ? ` · <b>in ${days} days</b>` : days === 0 ? ' · <b>today</b>' : ' · under way') : ''}</div>
+    <div><div class="ph" id="hero-photo"></div></div>
+    <div><div class="stepper" id="stages">${stages.map(([id], i) => `${i ? '<span class="arrow">→</span>' : ''}<button class="${i < idx ? 'done' : ''} ${i === idx ? 'on' : ''}" data-stage="${id}"><i></i>${esc(stageWord[id] || id)}</button>`).join('')}</div>
+      <h1>${esc(t.name)}</h1>
+      <div class="meta">${t.start_date ? esc(fmtD(t.start_date)) + (t.end_date ? ' – ' + esc(fmtD(t.end_date)) : '') : 'no dates yet'}${nights ? ` · ${nights} days` : ''} · ${who}${money_line}</div>
       ${t.purpose_note ? `<div class="meta" style="margin-top:4px">${esc(t.purpose_note)}</div>` : ''}
-      <div class="acts"><button class="sbtn gold mini" id="add-item">+ Add to the plan</button><button class="sbtn mini" id="trip-settings">Trip settings</button><a class="sbtn mini" href="/v1/trips/${t.id}/calendar.ics">Add to calendar</a><a class="sbtn mini dev-only" href="/apps/system/web/browse.html#${t.entity_id}">Record</a></div></div>
+      <div class="acts"><button class="sbtn gold" id="add-item">Add something</button><button class="sbtn" id="check-now">Check my plan</button><a class="sbtn" href="/v1/trips/${t.id}/calendar.ics">Add to calendar</a><button class="sbtn ghost" id="trip-settings">Settings</button><a class="sbtn ghost dev-only" href="/apps/system/web/browse.html#${t.entity_id}">Record</a></div></div>
     <div class="health" style="--h:${p.health};--h-col:${healthColor(p.health)}" title="Starts at 100 and drops for every open problem the checker finds"><b>${p.health}</b><small>health</small></div>
-    <div class="stepper" id="stages">${stages.map(([id, l], i) => `${i ? '<span class="arrow">›</span>' : ''}<button class="${i < idx ? 'done' : ''} ${i === idx ? 'on' : ''}" data-stage="${id}"><i></i>${esc(l)}</button>`).join('')}</div>
   </div>`;
+  App.photo(place, $('#hero-photo'), 'circle');
   $('#add-item').onclick = () => itemForm(); $('#trip-settings').onclick = () => tripForm(t);
-  $('#stages').addEventListener('click', async e => { const b = e.target.closest('[data-stage]'); if (!b) return; try { await act('trips.set_stage', { id: S.id, stage: b.dataset.stage }); toast(`Stage: ${label(words().stages, b.dataset.stage)}`); await refresh(); } catch (x) { toast(x.message, 5000); } });
+  $('#check-now').onclick = async () => { const r = await act('trips.run_checks', { trip_id: S.id }); toast(r.counts.blocker ? `${r.counts.blocker} to fix now, ${r.counts.warn} worth a look` : r.counts.warn ? `Nothing to fix now; ${r.counts.warn} worth a look` : 'Nothing wrong that the checks can see'); await refresh(); };
+  $('#stages').addEventListener('click', async e => { const b = e.target.closest('[data-stage]'); if (!b) return; try { await act('trips.set_stage', { id: S.id, stage: b.dataset.stage }); toast(`Stage: ${stageWord[b.dataset.stage]}`); await refresh(); } catch (x) { toast(x.message, 5000); } });
+  if (window.Helper) Helper.setTrip(S.id);
 }
-$('#trips').addEventListener('click', async e => { const b = e.target.closest('[data-trip]'); if (!b) return; S.id = b.dataset.trip; try { localStorage.setItem('trips.id', S.id); } catch (x) {} await loadPlan(); renderSide(); showTab(S.tab); });
 $('#new-trip').onclick = () => tripWizard();
 
 // ---------- a small form builder --------------------------------------------------------
@@ -118,71 +144,90 @@ function tripForm(t) {
 
 // ---------- new trip: the five onboarding questions (v5 of the brief) ------------------
 function tripWizard() {
-  const d = words(), A = { purpose: 'personal', headcount: 2, name: '', region_pack: '', start_date: '', end_date: '', unsure: false, budget_night: '', purpose_note: '', booked: '', handling: 'check_my_plan', may_contact: false };
-  const dlg = $('#form'); let step = 0;
+  const d = words(), A = { purpose: 'personal', headcount: 2, travelers: '', name: '', region_pack: '', start_date: '', end_date: '', date_flex: 'fixed', budget_night: '', purpose_note: '', booked: '', handling: 'check_my_plan', may_contact: false };
+  const panel = $('#p-new'); let step = 0, region = null;
+  const TITLES = ["Who's going?", 'Where, and when?', 'Your budget', "What's already booked", 'How much help you want'];
+  const NEXT = ['Next: where and when', 'Next: budget', "Next: what's booked", 'Next: how much help', 'Start the trip'];
   const STEPS = [
-    { q: "Who's going, and is it work, personal, or both?", why: 'Sets the group size, so every price shows per person and for the group, and turns work tagging on or off.', body: () => `
-      <label>How many are going</label><input type="number" name="headcount" min="1" value="${A.headcount}">
-      <label>Names (optional, comma-separated)</label><input type="text" name="travelers" value="${esc(A.travelers || '')}" placeholder="Malachi, J">
-      <label>What kind of trip</label>${d.purposes.map(([v, l]) => `<label class="opt"><input type="radio" name="purpose" value="${v}" ${A.purpose === v ? 'checked' : ''}><div><b>${esc(l)}</b></div></label>`).join('')}`,
+    { q: "Who's going?", why: 'Sets the group size, so every price shows per person and for the group, and turns work tagging on or off.', body: () => `
+      <div class="grid"><div><label class="f">How many are going</label><input type="number" name="headcount" min="1" value="${A.headcount}"></div><div><label class="f">Names (optional)</label><input type="text" name="travelers" value="${esc(A.travelers)}" placeholder="you, and who else"></div></div>
+      <label class="f">What kind of trip</label>${d.purposes.map(([v, l]) => `<label class="opt"><input type="radio" name="purpose" value="${v}" ${A.purpose === v ? 'checked' : ''}><div><b>${esc(l)}</b><span>${v === 'work' ? 'Everything is tagged work and company pays unless you say otherwise.' : v === 'mixed' ? 'Tag each thing work or personal; costs split into company pays and you pay.' : 'Just you and yours.'}</span></div></label>`).join('')}`,
       take: fd => { A.headcount = Number(fd.get('headcount')) || 1; A.travelers = fd.get('travelers'); A.purpose = fd.get('purpose'); } },
-    { q: 'Where and when, or not sure yet?', why: '"Not sure yet" keeps the dates open and starts you on the same-trip-cheaper-place comparison in Destinations. A known place and dates goes straight to planning.', body: () => `
-      <label>Call the trip</label><input type="text" name="name" value="${esc(A.name)}" placeholder="Thailand, Nov 2026 · Saturday hike · Client week in Denver">
-      <label>Region pack (if there is one for the country)</label><select name="region_pack">${[['', 'none yet']].concat(S.opt.regions.map(r => [r.id, r.name])).map(([v, l]) => `<option value="${v}" ${A.region_pack === v ? 'selected' : ''}>${esc(l)}</option>`).join('')}</select>
-      <label class="opt" style="margin-top:12px"><input type="checkbox" name="unsure" ${A.unsure ? 'checked' : ''}><div><b>Not sure where or when yet</b><span>Leave the dates open; the checker will nag about them later, not now.</span></div></label>
-      <div class="grid"><div><label>From</label><input type="date" name="start_date" value="${A.start_date}"></div><div><label>To</label><input type="date" name="end_date" value="${A.end_date}"></div></div>`,
-      take: fd => { A.name = fd.get('name'); A.region_pack = fd.get('region_pack'); A.unsure = fd.has('unsure'); A.start_date = A.unsure ? '' : fd.get('start_date'); A.end_date = A.unsure ? '' : fd.get('end_date'); },
-      check: () => A.name && A.name.trim() ? null : 'Give the trip a name.' },
-    { q: "What's your budget, and what matters most?", why: "Stops the app suggesting a $317 flight to someone who won't pay it, and tells it what \"similar\" means when comparing places (G02).", body: () => `
-      <label>Cap per night for the group (${esc(d.home_currency)})</label><input type="number" name="budget_night" value="${A.budget_night}" placeholder="80">
-      <label>What matters most</label><input type="text" name="purpose_note" value="${esc(A.purpose_note)}" placeholder="beaches, snorkeling, nightlife, gyms, quiet mornings, meetings downtown">`,
+    { q: 'Where, and when?', why: "A rough idea is fine. If you're not sure, we'll show you where the same trip costs less and what the season is like.", body: () => `
+      <div class="grid"><div><label class="f">Where</label><input type="text" name="name" value="${esc(A.name)}" placeholder="Thailand · Bangkok, Krabi, Phuket"></div><div><label class="f">Local tips for</label><select name="region_pack">${[['', 'no pack yet']].concat(S.opt.regions.map(r => [r.id, r.name])).map(([v, l]) => `<option value="${v}" ${A.region_pack === v ? 'selected' : ''}>${esc(l)}</option>`).join('')}</select></div></div>
+      <div class="grid"><div><label class="f">From</label><input type="date" name="start_date" value="${A.start_date}"></div><div><label class="f">To</label><input type="date" name="end_date" value="${A.end_date}"></div></div>
+      <div style="margin-top:14px">${[['fixed', 'Dates are fixed', 'A client day or a wedding sets them.'], ['flexible', 'Dates can move a week or two', "We'll show you the cheaper weeks and what the weather is like."], ['unsure', 'Not sure where yet', 'See places where the same trip costs less, with the weather for your dates.']].map(([v, t, w]) => `<label class="opt"><input type="radio" name="date_flex" value="${v}" ${A.date_flex === v ? 'checked' : ''}><div><b>${t}</b><span>${w}</span></div></label>`).join('')}</div>`,
+      take: fd => { A.name = fd.get('name'); A.region_pack = fd.get('region_pack'); A.start_date = fd.get('start_date'); A.end_date = fd.get('end_date'); A.date_flex = fd.get('date_flex'); },
+      check: () => (A.name && A.name.trim()) || A.date_flex === 'unsure' ? null : 'Where to? A rough idea is fine, or pick "Not sure where yet".' },
+    { q: 'Your budget', why: "Stops the app suggesting a $317 flight to someone who won't pay it, and tells it what matters when comparing places.", body: () => `
+      <div class="grid"><div><label class="f">A night for everyone, at most (${esc(d.home_currency)})</label><input type="number" name="budget_night" value="${A.budget_night}" placeholder="80"></div></div>
+      <label class="f">What matters most</label><input type="text" name="purpose_note" value="${esc(A.purpose_note)}" placeholder="beaches, snorkeling, nightlife, gyms, quiet mornings, meetings downtown">`,
       take: fd => { A.budget_night = fd.get('budget_night'); A.purpose_note = fd.get('purpose_note'); } },
-    { q: "What's already booked?", why: 'The checks start right away: on day one the app can say "your taxi is booked before you land". Paste confirmation details here; they are kept as a note on the trip and a task to enter them as items. Forwarding emails comes later.', body: () => `
-      <label>Paste or list what is booked (optional)</label><textarea name="booked" rows="5" placeholder="Nok Air DD130 DMK→KBV Nov 17 5:20 PM, conf ABC123&#10;Nomads Ao Nang Nov 17–20, conf NM-778">${esc(A.booked)}</textarea>`,
+    { q: "What's already booked", why: 'The checks start right away: on day one the app can say "your taxi is booked before you land". Paste confirmation details here; they are kept on the trip with a task to enter them.', body: () => `
+      <label class="f">Paste or list what is booked (optional)</label><textarea name="booked" rows="6" placeholder="Nok Air DD130 DMK→KBV Nov 17 5:20 PM, conf ABC123&#10;Nomads Ao Nang Nov 17–20, conf NM-778">${esc(A.booked)}</textarea>`,
       take: fd => { A.booked = fd.get('booked'); } },
-    { q: 'How much should I handle?', why: 'Organizers like control, so this is answered up front. It is also where you allow the text-then-call confirmations (W27); nothing is sent without your OK each time.', body: () => `
+    { q: 'How much help you want', why: 'You plan it; we make sure nothing breaks. This is also where you allow the text-then-call confirmations; nothing is sent without your OK each time.', body: () => `
       ${d.handling.map(([v, l]) => `<label class="opt"><input type="radio" name="handling" value="${v}" ${A.handling === v ? 'checked' : ''}><div><b>${esc(l)}</b><span>${v === 'plan_for_me' ? 'Suggest routes, stays and activities; you approve.' : v === 'check_my_plan' ? 'You plan; it checks, reminds and confirms.' : 'Only deadlines and the day-of leave-by times.'}</span></div></label>`).join('')}
       <label class="opt" style="margin-top:8px"><input type="checkbox" name="may_contact" ${A.may_contact ? 'checked' : ''}><div><b>It may message, then call, businesses for me</b><span>Message first; a call only if there is no reply, and the call says it is automated.</span></div></label>`,
       take: fd => { A.handling = fd.get('handling'); A.may_contact = fd.has('may_contact'); } },
   ];
+  const wizPlace = () => { if (!A.name) return region ? region.name : ''; const parts = A.name.split('·'); return (parts[1] || parts[0]).split(',')[0].trim(); };
+  const side = () => {
+    const place = wizPlace();
+    const seasons = region && region.sections ? (region.sections['Seasons'] || []) : [];
+    const entry = region && region.sections ? Object.entries(region.sections).find(([k]) => k.startsWith('Entry rules')) : null;
+    return `<div class="ph" id="wiz-photo"></div>
+      ${seasons.length ? `<div class="info"><span class="k">Season${A.start_date ? ', ' + esc(fmtD(A.start_date)) + (A.end_date ? ' – ' + esc(fmtD(A.end_date)) : '') : ''}</span>${seasons.slice(0, 2).map(l => `<p>${esc(l)}</p>`).join('')}<div class="src">${esc(region.name)} local tips</div></div>` : place ? `<div class="info"><span class="k">Season</span><p>No season notes for ${esc(place)} yet. They arrive with a local-tips pack for the country.</p></div>` : ''}
+      ${entry ? `<div class="info"><span class="k">Before you go</span><p>${esc(entry[1][0])}</p><div class="src">${esc(entry[0])}</div></div>` : ''}`;
+  };
   const draw = () => {
     const st = STEPS[step];
-    dlg.innerHTML = `<form method="dialog" class="wiz"><div class="small">New trip · question ${step + 1} of ${STEPS.length}</div><div class="steps">${STEPS.map((_, i) => `<i class="${i <= step ? 'on' : ''}"></i>`).join('')}</div>
-      <h2 class="q1">${esc(st.q)}</h2><div class="why">${esc(st.why)}</div>${st.body()}
-      <div class="nav"><button type="button" class="sbtn" id="wz-back">${step ? '‹ Back' : 'Cancel'}</button><button type="submit" class="sbtn gold" id="wz-next">${step === STEPS.length - 1 ? 'Start the trip' : 'Next ›'}</button></div></form>`;
-    $('#wz-back').onclick = () => { if (!step) return dlg.close(); step--; draw(); };
-    dlg.querySelector('form').onsubmit = async e => {
-      e.preventDefault(); st.take(new FormData(e.target));
-      const bad = st.check && st.check(); if (bad) return toast(bad, 4000);
-      if (step < STEPS.length - 1) { step++; draw(); return; }
-      try {
-        const payload = { name: A.name.trim(), purpose: A.purpose, headcount: A.headcount, travelers: (A.travelers || '').split(',').map(x => x.trim()).filter(Boolean), purpose_note: A.purpose_note || null, handling: A.handling, may_contact: A.may_contact };
-        if (A.region_pack) payload.region_pack = A.region_pack;
-        if (A.start_date) payload.start_date = A.start_date; if (A.end_date) payload.end_date = A.end_date;
-        if (A.budget_night) payload.budget_night_cents = Math.round(Number(A.budget_night) * 100);
-        for (const k of Object.keys(payload)) if (payload[k] == null) delete payload[k];
-        const r = await act('trips.create', payload);
-        if (A.booked && A.booked.trim()) { await act('trips.add_note', { trip_id: r.id, body: 'Already booked (from setup):\n' + A.booked.trim() }); await act('trips.add_task', { trip_id: r.id, title: 'Enter the bookings pasted at setup as items, so the checker can see them', kind: 'todo', due: new Date(Date.now() + 2 * 864e5).toISOString().slice(0, 10) }); }
-        if (A.unsure) await act('trips.add_task', { trip_id: r.id, title: 'Pick where and when: compare the same kind of trip in a few places (Destinations → Trip cost), then set the dates', kind: 'todo' });
-        await act('trips.run_checks', { trip_id: r.id });
-        S.id = r.id; try { localStorage.setItem('trips.id', S.id); } catch (x) {}
-        dlg.close(); toast(r.setup_missing && r.setup_missing.length ? 'Started. Still to set up: ' + r.setup_missing.join('; ') : 'Started.', 6000);
-        await refresh(); showTab('timeline');
-      } catch (x) { toast(x.message, 6000); }
-    };
+    panel.innerHTML = `<div class="wiz-top"><div class="small">New trip</div><a href="#" id="wz-later">Save and finish later</a></div>
+      <div class="wiz"><aside class="rail"><h4>Five questions</h4>${TITLES.map((t, i) => `<div class="step ${i === step ? 'on' : ''} ${i < step ? 'done' : ''}"><i>${i < step ? '✓' : i + 1}</i>${esc(t)}</div>`).join('')}<p>That's all we need to start. We'll ask about passports or spending limits only if they come up.</p></aside>
+      <form id="wz-form"><div class="k">${step + 1} of ${STEPS.length}</div><h1>${esc(st.q)}</h1><div class="why">${esc(st.why)}</div>${st.body()}
+        <div class="nav"><button type="button" class="sbtn ghost" id="wz-back">${step ? 'Back' : 'Cancel'}</button><button type="submit" class="sbtn gold" id="wz-next">${NEXT[step]}</button></div></form>
+      <aside class="side" id="wz-side">${side()}</aside></div>`;
+    const place = wizPlace();
+    if (place) App.photo(place, $('#wiz-photo')); else { $('#wiz-photo').classList.add('photo'); $('#wiz-photo').innerHTML = '<span>Where to?</span>'; }
+    $('#wz-back').onclick = () => { if (!step) return close(); step--; draw(); };
+    $('#wz-later').onclick = e => { e.preventDefault(); st.take(new FormData($('#wz-form'))); finish(true); };
+    const sel = panel.querySelector('select[name="region_pack"]'); if (sel) sel.onchange = async () => { A.region_pack = sel.value; region = A.region_pack ? await api('GET', `/v1/trips/helper/regions/${A.region_pack}`).catch(() => null) : null; $('#wz-side').innerHTML = side(); const pl = wizPlace(); if (pl) App.photo(pl, $('#wiz-photo')); };
+    const nm = panel.querySelector('input[name="name"]'); if (nm) nm.onchange = () => { A.name = nm.value; const pl = wizPlace(); if (pl) App.photo(pl, $('#wiz-photo')); };
+    $('#wz-form').onsubmit = e => { e.preventDefault(); st.take(new FormData(e.target)); const bad = st.check && st.check(); if (bad) return toast(bad, 4000); if (step < STEPS.length - 1) { step++; draw(); } else finish(false); };
   };
-  draw(); dlg.showModal();
+  const close = () => { panel.classList.remove('on'); panel.innerHTML = ''; $('#hero').style.display = ''; document.querySelector('.sidebar').style.display = ''; if (location.hash === '#new') history.replaceState(null, '', location.pathname); showTab(S.tab || 'timeline'); };
+  async function finish(partial) {
+    try {
+      const name = (A.name && A.name.trim()) || (A.date_flex === 'unsure' ? 'Somewhere, not sure yet' : 'New trip');
+      const payload = { name, purpose: A.purpose, headcount: A.headcount, travelers: (A.travelers || '').split(',').map(x => x.trim()).filter(Boolean), purpose_note: A.purpose_note || null, handling: A.handling, may_contact: A.may_contact, date_flex: A.date_flex };
+      if (A.region_pack) payload.region_pack = A.region_pack;
+      if (A.start_date) payload.start_date = A.start_date; if (A.end_date) payload.end_date = A.end_date;
+      if (A.budget_night) payload.budget_night_cents = Math.round(Number(A.budget_night) * 100);
+      for (const k of Object.keys(payload)) if (payload[k] == null) delete payload[k];
+      const r = await act('trips.create', payload);
+      if (A.booked && A.booked.trim()) { await act('trips.add_note', { trip_id: r.id, body: 'Already booked (from setup):\n' + A.booked.trim() }); await act('trips.add_task', { trip_id: r.id, title: 'Enter the bookings you pasted at setup, so the checks can see them', kind: 'todo', due: new Date(Date.now() + 2 * 864e5).toISOString().slice(0, 10) }); }
+      if (A.date_flex === 'unsure') await act('trips.add_task', { trip_id: r.id, title: 'Pick where: compare the same trip in a few places (Destinations → Compare), then set the dates', kind: 'todo' });
+      if (partial) await act('trips.add_task', { trip_id: r.id, title: 'Finish the five setup questions (Trip settings)', kind: 'todo' });
+      await act('trips.run_checks', { trip_id: r.id });
+      S.id = r.id; try { localStorage.setItem('trips.id', S.id); } catch (x) {}
+      toast(partial ? 'Saved. Finish the questions any time in Trip settings.' : (r.setup_missing && r.setup_missing.length ? 'Started. Still to set up: ' + r.setup_missing.join('; ') : 'Started.'), 6000);
+      close(); await refresh(); showTab('timeline');
+    } catch (x) { toast(x.message, 6000); }
+  }
+  document.querySelectorAll('.panel').forEach(p => p.classList.remove('on')); panel.classList.add('on'); $('#hero').style.display = 'none'; document.querySelector('.sidebar').style.display = 'none';
+  const q = new URLSearchParams(location.search); if (q.get('place')) A.name = q.get('place');
+  draw(); window.scrollTo(0, 0);
 }
 
 // ---------- item form ---------------------------------------------------------------------
-function itemForm(it, day) {
-  const d = words(), tz = S.plan.time_zone;
+function itemForm(it, day, pre) {
+  const d = words(), tz = S.plan.time_zone; pre = pre || {};
   const F = [
-    { k: 'kind', l: 'Kind', t: 'select', o: S.opt.kind_list.map(k => [k, k]), v: it ? it.kind : 'flight' },
+    { k: 'kind', l: 'Kind', t: 'select', o: S.opt.kind_list.map(k => [k, k]), v: it ? it.kind : (pre.kind || 'flight') },
     { k: 'status', l: 'Status', t: 'select', o: d.statuses, v: it ? it.status : 'to_book' },
     { k: 'title', l: 'Title', v: it ? it.title : '', wide: true, ph: 'Nok Air DD 130 DMK → KBV / Nomads Ao Nang / 4 Islands half-day tour' },
     { k: 'from_place', l: 'From (or the area)', v: it ? it.from_place : '' }, { k: 'to_place', l: 'To', v: it ? it.to_place : '' },
-    { k: 'start_at', l: `Starts (local${tz ? ', ' + tz : ''}; stays: check-in day)`, t: 'datetime', v: it ? it.start_at : (day ? day + 'T09:00' : '') }, { k: 'end_at', l: 'Ends / arrives / check-out', t: 'datetime', v: it ? it.end_at : '' },
+    { k: 'start_at', l: `Starts (local${tz ? ', ' + tz : ''}; stays: check-in day)`, t: 'datetime', v: it ? it.start_at : (day ? (pre.kind === 'stay' ? day + 'T15:00' : day + 'T09:00') : '') }, { k: 'end_at', l: 'Ends / arrives / check-out', t: 'datetime', v: it ? it.end_at : (pre.end ? pre.end + 'T11:00' : '') },
     { k: 'price', l: 'Price', t: 'number', v: it && it.price_cents != null ? it.price_cents / 100 : '' }, { k: 'currency', l: 'Currency', v: it ? it.currency : (S.plan.trip.local_currency || home()) },
     { k: 'basis', l: 'Per person or group? (always say which, G03)', t: 'select', o: [['', 'not said yet'], ['per_person', 'per person'], ['group', 'for the group']], v: it ? it.basis : '' },
     { k: 'headcount', l: 'On the booking (blank = everyone)', t: 'number', v: it ? it.headcount : '' },
@@ -221,7 +266,7 @@ function itemForm(it, day) {
 function openItem(id) {
   const it = S.plan.items.find(x => x.id === id); if (!it) return;
   const price = it.group_cents != null ? `${amt(it.group_cents, it.currency)} for ${it.headcount_used}${it.per_person_cents != null && it.headcount_used > 1 ? ` · ${amt(it.per_person_cents, it.currency)} each` : ''}${it.home_cents != null && it.currency !== home() ? ` · ≈ ${money(it.home_cents)}` : ''}${it.basis ? '' : ' <span class="badge hand">per person or group?</span>'}` : 'no price yet';
-  App.detail(`${glyph(it.kind)} ${esc(it.title)}`, `<div class="links">${it.links.map(l => `<a href="${esc(l.url)}" target="_blank">${esc(l.label)} ↗</a>`).join('')}</div>
+  App.detail(esc(it.title), `<div class="links">${it.links.map(l => `<a href="${esc(l.url)}" target="_blank">${esc(l.label)} ↗</a>`).join('')}</div>
     <table class="t"><tr><td>Kind</td><td>${esc(it.kind)} ${statusTag(it.status)}</td></tr>
     <tr><td>When</td><td>${esc(dOf(it.start_at))} ${esc(tOf(it.start_at))}${it.end_at ? ' → ' + esc(dOf(it.end_at)) + ' ' + esc(tOf(it.end_at)) : ''}</td></tr>
     ${it.from_place || it.to_place ? `<tr><td>Where</td><td>${esc(it.from_place || '')}${it.to_place ? ' → ' + esc(it.to_place) : ''}</td></tr>` : ''}
@@ -238,43 +283,90 @@ function openItem(id) {
 }
 
 // ---------- timeline -------------------------------------------------------------------------
-function noTrip(sel) { $(sel).innerHTML = `<div class="card"><h3>No trip yet</h3><div>Start one: five questions (who's going, where and when, the budget and what matters, what's already booked, how much to handle), then the checker watches the plan as you add to it.</div><div class="row" style="margin-top:10px"><button class="sbtn gold" id="first-trip">+ New trip</button></div></div>`; $('#first-trip').onclick = () => tripWizard(); }
+function noTrip(sel) { if (!S.plan && S.trips.length === 0 && !$('#p-new').classList.contains('on')) { tripWizard(); return; } $(sel).innerHTML = `<div class="card"><h3>No trip yet</h3><div>Start one: five questions (who's going, where and when, the budget and what matters, what's already booked, how much to handle), then the checker watches the plan as you add to it.</div><div class="row" style="margin-top:10px"><button class="sbtn gold" id="first-trip">+ New trip</button></div></div>`; $('#first-trip').onclick = () => tripWizard(); }
+function itemLine(it) {
+  const parts = [];
+  if (it.kind === 'flight') { if (it.start_at) parts.push(`Leaves ${tOf(it.start_at)}`); if (it.end_at) parts.push(`lands ${tOf(it.end_at) || dOf(it.end_at)}`); if (it.leave) parts.push(`be at ${esc((it.from_place || 'the airport').split(/[(,]/)[0].trim())} by ${tOf(it.leave.be_there_by)}`); }
+  else if (it.is_stay) { const n = it.start_at && it.end_at ? Math.round((new Date(it.end_at.slice(0, 10)) - new Date(it.start_at.slice(0, 10))) / 864e5) : null; if (n) parts.push(`${n} night${n === 1 ? '' : 's'}`); if (it.end_at) parts.push(`check-out ${dOf(it.end_at)}`); if (it.desk_hours) parts.push(`front desk ${esc(it.desk_hours)}`); }
+  else { if (it.start_at && it.start_at.length > 10) parts.push(`${tOf(it.start_at)}${it.end_at ? ' – ' + (tOf(it.end_at) || dOf(it.end_at)) : ''}`); if (it.leave && it.leave.lead_minutes) parts.push(`<span class="leave">leave by ${tOf(it.leave.leave_by)}</span>`); if (it.from_place || it.to_place) parts.push(esc(it.from_place || '') + (it.to_place ? ' → ' + esc(it.to_place) : '')); }
+  if (it.confirmation) parts.push(`booking code ${esc(it.confirmation)}`);
+  if (it.last_departure) parts.push(`last one of the day ${esc(it.last_departure)}`);
+  const f = it.findings[0];
+  if (f) parts.push(`<span class="${f.severity === 'blocker' ? 'bad' : 'muted'}">${esc(f.message.replace(it.title + ' ', '').replace(it.title + ': ', ''))}</span>${f.fix_action && f.fix_action.label ? ` · <span class="fixlink" data-fix="${f.id}">${esc(f.fix_action.label)}</span>` : ''}`);
+  return parts.join(' · ');
+}
 function itemRow(it) {
-  const time = it.is_stay ? (tOf(it.start_at) || 'check-in') + (it.end_at ? ' → ' + dOf(it.end_at) : '') : (tOf(it.start_at) || 'time to set') + (it.end_at && !it.is_stay ? ' → ' + (tOf(it.end_at) || dOf(it.end_at)) : '');
-  return `<div class="it flag-${flagOf(it)} ${it.is_stay ? 'is-stay' : ''}" data-item="${it.id}"><div class="glyph">${glyph(it.kind)}</div>
-    <div><div class="tm">${esc(time)}${it.leave && it.leave.lead_minutes ? ` · <span class="leave">leave by ${esc(tOf(it.leave.leave_by))}</span>` : ''}</div><div class="ti">${esc(it.title)}${statusTag(it.status)}</div>
-    <div class="su">${it.from_place || it.to_place ? esc(it.from_place || '') + (it.to_place ? ' → ' + esc(it.to_place) : '') : esc(it.kind)}${it.confirmation ? ' · #' + esc(it.confirmation) : ''}${it.tag === 'work' ? ' · work' : ''}${it.paid_by === 'company' ? ' · company pays' : ''}${it.findings.length ? ` · <span class="${flagOf(it) === 'blocker' ? 'bad' : 'muted'}">${it.findings.length} check${it.findings.length === 1 ? '' : 's'}</span>` : ''}</div></div>
-    <div class="pr">${it.group_cents != null ? esc(amt(it.group_cents, it.currency)) : ''}<small>${it.group_cents != null ? (it.headcount_used > 1 ? `${esc(amt(it.per_person_cents, it.currency))} each` : 'group') + (it.home_cents != null && it.currency !== home() ? ` · ≈ ${money0(it.home_cents)}` : '') : ''}</small></div></div>`;
+  const flag = flagOf(it), stat = flag === 'blocker' ? '<span class="st fix">Fix now</span>' : statusTag(it.status);
+  return `<div class="it flag-${flag} ${it.is_stay ? 'is-stay' : ''}" data-item="${it.id}"><div class="glyph">${glyph(it.kind, it.tag)}</div>
+    <div><div class="ti">${esc(it.title)}${stat}${it.tag === 'work' ? '<span class="st work">Work</span>' : ''}</div><div class="su">${itemLine(it)}</div></div>
+    <div class="pr">${it.group_cents != null ? esc(it.basis === 'per_person' && it.per_person_cents != null ? cur(it.per_person_cents, it.currency) : cur(it.group_cents, it.currency)) : '<span class="small">no cost</span>'}<small>${it.group_cents != null ? `${it.basis === 'per_person' ? 'each' : it.headcount_used > 1 ? `for ${it.headcount_used === 2 ? 'both' : 'all ' + it.headcount_used}` : 'for you'} · ${paysWord(it.paid_by)}${it.home_cents != null && it.currency !== home() ? ` · ≈ ${money0(it.home_cents)}` : ''}` : ''}</small></div></div>`;
 }
 function chapters(p) {
   const out = []; let cur = null;
   for (const d of p.days) { const n = d.night ? d.night.title : null; if (n !== (cur && cur.title)) { cur = { title: n, from: d.date, to: d.date, n: 0 }; out.push(cur); } cur.to = d.date; cur.n++; }
-  return out.filter(c => c.n > 0).map(c => `<a href="#d-${c.from}" data-jump="d-${c.from}">${esc(c.title ? c.title.split(',')[0] : 'no stay')}<small>${esc(fmtD(c.from))}${c.n > 1 ? ' → ' + esc(fmtD(c.to)) : ''} · ${c.n} night${c.n === 1 ? '' : 's'}</small></a>`).join('');
+  return out.map(c => `<a href="#d-${c.from}" data-jump="d-${c.from}">${esc(c.title ? c.title.split(/[,(]/)[0].trim() : 'no stay')} · ${esc(fmtD(c.from).replace(/^(\w+) /, '$1 '))}${c.n > 1 ? '–' + esc(fmtD(c.to).split(' ')[1]) : ''}</a>`).join('');
+}
+function dayKind(d, byId) { const its = d.items.map(id => byId[id]); if (its.some(i => i.is_leg)) return 'travel'; if (its.some(i => i.tag === 'work')) return 'work'; if (!its.length) return 'free'; return its.length === 1 ? its[0].kind : 'busy'; }
+function stopBlock(d, p, byId, n) {
+  const noStay = !d.night && d.date < (p.trip.end_date || '');
+  return `<section class="stop ${d.date === p.today ? 'today' : ''} ${noStay ? 'nostay' : ''}" id="d-${d.date}"><i class="dot"></i>
+    <header class="stop-head"><div class="dayname">${esc(d.label.split(' ')[0])} ${esc(d.label.slice(4))}<small>day ${n} · ${dayKind(d, byId)}${d.date === p.today ? ' · today' : ''}</small></div><div class="night ${noStay ? 'warn' : ''}">${d.night ? 'night: ' + esc(d.night.title.split(/[,(]/)[0].trim()) : (noStay ? 'night: no stay yet' : 'last day')}</div></header>
+    ${d.items.map(id => itemRow(byId[id])).join('') || `<div class="it empty"><span>Nothing planned yet</span><span class="fixlink" data-add="${d.date}">Add something</span></div>`}</section>`;
+}
+function findingCard(f, compact) {
+  const [head, ...rest] = f.message.split(/(?<=\.)\s/);
+  const fa = f.fix_action;
+  const btn = fa && fa.label ? `<button class="sbtn mini gold" data-fix="${f.id}">${esc(fa.label)}</button>${fa.alt ? `<button class="sbtn mini" data-fixalt="${f.id}">${esc(fa.alt.label)}</button>` : ''}` : '';
+  return `<div class="fd ${f.severity}"><h4>${esc(head)}</h4><div class="fx">${esc(rest.join(' '))}${f.fix ? (rest.length ? ' ' : '') + esc(f.fix) : ''}</div>
+    <div class="acts">${btn}<button class="sbtn mini ghost" data-dismiss="${f.id}">Dismiss</button>${f.item_id && !compact ? `<button class="sbtn mini ghost" data-item="${f.item_id}">Open</button>` : ''}<span class="rl dev-only">${esc(f.rule)}</span></div></div>`;
+}
+async function quickFix(id, alt) {
+  const f = S.plan.findings.find(x => x.id === id) || (await api('GET', `/v1/trips/${S.id}/findings?all=true`)).find(x => x.id === id);
+  if (!f || !f.fix_action) return;
+  const fa = alt ? f.fix_action.alt : f.fix_action;
+  if (fa.action) { try { await act(fa.action, fa.payload); await act('trips.run_checks', { trip_id: S.id }); toast('Done.'); await refresh(); } catch (x) { toast(x.message, 5000); } return; }
+  if (fa.ui === 'add_stay') { const it = null; itemForm(it, fa.start, { kind: 'stay', end: fa.end }); return; }
+  if (fa.ui === 'trip_settings') { tripForm(S.plan.trip); return; }
+  if (fa.ui === 'edit_item') { const it = S.plan.items.find(x => x.id === fa.item_id); if (it) itemForm(it); }
+}
+function wireFixes(root) {
+  root.querySelectorAll('[data-fix]').forEach(b => b.onclick = e => { e.stopPropagation(); quickFix(b.dataset.fix, false); });
+  root.querySelectorAll('[data-fixalt]').forEach(b => b.onclick = e => { e.stopPropagation(); quickFix(b.dataset.fixalt, true); });
+  root.querySelectorAll('[data-dismiss]').forEach(b => b.onclick = async e => { e.stopPropagation(); await act('trips.dismiss_finding', { id: b.dataset.dismiss }); await refresh(); });
+}
+function costCard(c) {
+  const work = c.by_paid_by.company || 0, me = c.by_paid_by.me || 0, split = c.by_paid_by.split || 0, tot = work + me + split || 1;
+  return `<div class="costcard"><span class="k">What this trip costs</span><div class="two-nums"><div><b>${money0(c.planned_home_cents)}</b><small>planned${c.headcount > 1 ? `, for ${c.headcount === 2 ? 'both' : 'all ' + c.headcount} of you` : ''}</small></div><div><b>${money0(c.booked_home_cents)}</b><small>already booked</small></div></div>
+    ${work || split ? `<div class="bar"><span class="seg" style="width:${work / tot * 100}%;background:var(--color-accent-2-500)"></span><span class="seg" style="width:${split / tot * 100}%;background:var(--color-accent-2-300)"></span><span class="seg" style="width:${me / tot * 100}%;background:var(--color-accent-400)"></span></div><div class="legend"><span><i style="background:var(--color-accent-2-500)"></i>work pays ${money0(work + split / 2)}</span><span><i style="background:var(--color-accent-400)"></i>you pay ${money0(me + split / 2)}</span></div>` : `<div class="small">${c.actual_home_cents ? money0(c.actual_home_cents) + ' spent so far' : 'you pay all of it'}</div>`}
+    <div class="row" style="margin-top:10px"><a href="#costs" class="small" data-go="costs">Every line ›</a></div></div>`;
 }
 function renderTimeline() {
   if (!S.plan) return noTrip('#p-timeline');
-  const p = S.plan, t = p.trip, byId = Object.fromEntries(p.items.map(i => [i.id, i]));
-  $('#p-timeline').innerHTML = `${p.finding_counts.blocker || p.finding_counts.warn ? `<div class="fd ${p.finding_counts.blocker ? 'blocker' : 'warn'}" style="margin-bottom:12px">The checker has <b>${p.finding_counts.blocker}</b> blocker(s) and <b>${p.finding_counts.warn}</b> warning(s). <a href="#checks" data-go="checks">See them ›</a></div>` : ''}
-    ${p.days.length ? `<div class="chapters">${chapters(p)}</div>` : ''}
+  const p = S.plan, byId = Object.fromEntries(p.items.map(i => [i.id, i]));
+  const top = p.findings.slice(0, 5);
+  $('#p-timeline').innerHTML = `${p.days.length ? `<div class="chapters">${chapters(p)}</div>` : ''}
+   <div class="tl"><div>
     <div class="journey">
-    ${p.days.map(d => `<section class="stop ${d.date === p.today ? 'today' : ''} ${!d.night && d.date < (t.end_date || '') ? 'nostay' : ''}" id="d-${d.date}"><i class="dot"></i>
-      <header class="stop-head"><div class="dayname">${esc(d.label.split(' ')[0])}<small>${esc(d.label.slice(4))}${d.date === p.today ? ' · today' : ''}</small></div><div class="night ${!d.night && d.date < (t.end_date || '') ? 'warn' : ''}">${d.night ? '🛏 ' + esc(d.night.title) : (d.date < (t.end_date || '') ? 'no stay booked' : 'last day')}${d.tasks.length ? ' · ' + d.tasks.length + ' deadline(s)' : ''}</div></header>
-      ${d.items.map(id => itemRow(byId[id])).join('') || '<div class="it empty">nothing planned · <a href="#" data-add="' + d.date + '">add something</a></div>'}</section>`).join('')}
+    ${p.days.map((d, i) => stopBlock(d, p, byId, i + 1)).join('')}
     ${p.unscheduled.length ? `<section class="stop"><i class="dot"></i><header class="stop-head"><div class="dayname">No date yet</div></header>${p.unscheduled.map(id => itemRow(byId[id])).join('')}</section>` : ''}
-    ${!p.days.length && !p.unscheduled.length ? '<div class="card"><div>Nothing in the plan yet. Add the first leg or stay with <b>+ Add to the plan</b>.</div></div>' : ''}
-    </div>
-    <div class="help">Prices show for the group and each; a price with no per-person/group basis is flagged. Times are local to the destination (${esc(p.time_zone || 'no zone set')}). A red edge means something on that item would cost money or a missed ride; amber, worth a look.<span class="dev-only"> Every rule the checker uses is in <a href="/apps/system/web/settings.html#logic">Settings → Logic</a>.</span></div>`;
+    ${!p.days.length && !p.unscheduled.length ? '<div class="card"><div>Nothing in the plan yet. <b>Add something</b>: the first flight, the first stay.</div></div>' : ''}
+    </div></div>
+    <aside class="aside"><div class="ah"><h3>Checks</h3><span class="small">${p.findings.length ? 'checked just now' : 'all clear'}</span></div>
+     <div class="sev">${p.finding_counts.blocker ? `<span class="b">${p.finding_counts.blocker} fix now</span>` : ''}${p.finding_counts.warn ? `<span class="w">${p.finding_counts.warn} worth a look</span>` : ''}${p.finding_counts.info ? `<span>${p.finding_counts.info} tidy up</span>` : ''}${!p.findings.length ? '<span>Nothing wrong that the checks can see</span>' : ''}</div>
+     ${top.map(f => findingCard(f, true)).join('')}
+     ${p.findings.length > top.length ? `<a href="#checks" class="small" data-go="checks" style="font-weight:600">See all ${p.findings.length}</a>` : ''}
+     ${costCard(p.costs)}</aside></div>
+    <div class="help dev-only">Every rule the checker uses is in <a href="/apps/system/web/settings.html#logic">Settings → Logic</a>.</div>`;
   const P = $('#p-timeline');
   P.querySelectorAll('[data-item]').forEach(el => el.onclick = () => openItem(el.dataset.item));
-  P.querySelectorAll('[data-add]').forEach(a => a.onclick = e => { e.preventDefault(); itemForm(null, a.dataset.add); });
+  P.querySelectorAll('[data-add]').forEach(a => a.onclick = e => { e.preventDefault(); e.stopPropagation(); itemForm(null, a.dataset.add); });
   P.querySelectorAll('[data-jump]').forEach(a => a.onclick = e => { e.preventDefault(); const el = document.getElementById(a.dataset.jump); if (el) el.scrollIntoView({ behavior: 'smooth', block: 'start' }); });
-  const go = P.querySelector('[data-go]'); if (go) go.onclick = e => { e.preventDefault(); showTab('checks'); };
+  P.querySelectorAll('[data-go]').forEach(a => a.onclick = e => { e.preventDefault(); showTab(a.dataset.go); });
+  wireFixes(P);
 }
 
 // ---------- checks ----------------------------------------------------------------------------
-function finding(f) {
-  return `<div class="fd ${f.severity}"><div><b>${esc(f.severity === 'blocker' ? 'Fix now' : f.severity === 'warn' ? 'Worth a look' : 'Tidy up')}</b> · ${esc(f.message)}</div>${f.fix ? `<div class="fx">Fix: ${esc(f.fix)}</div>` : ''}<div class="row" style="margin-top:4px"><span class="rl dev-only">${esc(f.rule)} · first seen ${esc(fmtWhen(f.first_seen))}</span><button class="sbtn mini" data-dismiss="${f.id}">Dismiss</button>${f.item_id ? `<button class="sbtn mini" data-item="${f.item_id}">Open item</button>` : ''}</div></div>`;
-}
+function finding(f) { return findingCard(f, false); }
 async function renderChecks() {
   if (!S.plan) return noTrip('#p-checks');
   const p = S.plan;
@@ -286,7 +378,7 @@ async function renderChecks() {
     ${closed.length ? `<details style="margin-top:12px"><summary class="small">${closed.length} resolved or dismissed</summary>${closed.map(f => `<div class="small" style="padding:4px 0;border-top:1px solid var(--line)">${esc(f.status)} · ${esc(f.message)} ${f.status === 'dismissed' ? `<button class="sbtn mini" data-undismiss="${f.id}">reopen</button>` : ''}</div>`).join('')}</details>` : ''}
     <div class="help">What it checks: pickups set before the ride they meet has arrived; prices that don't say per person or group; the passenger count against the group; nights with no stay, or two; overlaps; the airport buffer (${p.rules.airport_buffer_minutes.domestic} min domestic, ${p.rules.airport_buffer_minutes.international} international) and gaps under ${p.rules.min_connection_minutes} min between legs; the last departure of the day; late check-ins with no word on the desk; the budget caps; prices older than ${p.rules.price_recheck_days} days; unbooked flights inside ${p.rules.book_flights_weeks_out} weeks; bookings outside the trip dates; passport validity (${p.rules.passport_valid_months} months past the trip); deadlines (${p.rules.deadline_warn_days} days' warning); confirmations with no reply.<span class="dev-only"> The numbers live in Settings → Logic → Trips.</span></div>`;
   $('#recheck').onclick = async () => { const r = await act('trips.run_checks', { trip_id: S.id }); toast(`${r.counts.blocker} blockers, ${r.counts.warn} warnings, ${r.counts.info} notes`); await refresh(); };
-  $('#p-checks').querySelectorAll('[data-dismiss]').forEach(b => b.onclick = async () => { await act('trips.dismiss_finding', { id: b.dataset.dismiss }); await refresh(); });
+  wireFixes($('#p-checks'));
   $('#p-checks').querySelectorAll('[data-undismiss]').forEach(b => b.onclick = async () => { await act('trips.dismiss_finding', { id: b.dataset.undismiss, undo: true }); await refresh(); });
   $('#p-checks').querySelectorAll('[data-item]').forEach(b => b.onclick = () => openItem(b.dataset.item));
 }
@@ -348,7 +440,7 @@ function renderRun() {
   const nxt = upcoming[0];
   const days = p.days.filter(d => d.date >= today).slice(0, 2);
   $('#p-run').innerHTML = `${p.trip.stage !== 'run' ? `<div class="help">The trip is in the <b>${esc(label(words().stages, p.trip.stage))}</b> stage. Set it to Run in the header when you are away; this screen is built for those days.</div>` : ''}
-    ${nxt ? `<div class="next"><div class="lab">Next move</div><h3>${glyph(nxt.kind)} ${esc(nxt.title)}</h3><div class="when">${esc(dOf(nxt.start_at))} · ${esc(tOf(nxt.start_at))}${nxt.end_at ? ' → ' + esc(tOf(nxt.end_at) || dOf(nxt.end_at)) : ''}${nxt.leave ? ' · <b>' + esc(nxt.leave.words) + '</b>' : ''}</div>
+    ${nxt ? `<div class="next"><div class="lab">Next move</div><h3>${esc(nxt.title)}</h3><div class="when">${esc(dOf(nxt.start_at))} · ${esc(tOf(nxt.start_at))}${nxt.end_at ? ' → ' + esc(tOf(nxt.end_at) || dOf(nxt.end_at)) : ''}${nxt.leave ? ' · <b>' + esc(nxt.leave.words) + '</b>' : ''}</div>
       <div class="when" style="margin-top:4px">${nxt.from_place || nxt.to_place ? esc(nxt.from_place || '') + (nxt.to_place ? ' → ' + esc(nxt.to_place) : '') : ''}${nxt.confirmation ? ` · <span class="code">${esc(nxt.confirmation)}</span>` : ''}${nxt.operator ? ' · ' + esc(nxt.operator) : ''}</div>
       <div class="links" style="margin-top:12px">${nxt.links.map(l => `<a href="${esc(l.url)}" target="_blank">${esc(l.label)} ↗</a>`).join('')}</div>
       ${nxt.findings.length ? `<div class="small" style="color:#fff;margin-top:4px">⚠ ${esc(nxt.findings[0].message)}</div>` : ''}</div>` : '<div class="card"><div class="small">Nothing timed ahead. Add times to the legs and this screen shows the next move, when to leave, and the confirmation code.</div></div>'}
@@ -438,8 +530,10 @@ App.onMode(() => { if (S.plan) { renderHero(); showTab(S.tab); } });
 (async () => {
   try {
     S.opt = await api('GET', '/v1/trips/options');
+    const want = new URLSearchParams(location.search).get('trip'); if (want) { S.id = want; try { localStorage.setItem('trips.id', want); } catch (x) {} }
     await loadTrips(); await loadPlan();
     const t = location.hash.slice(1);
+    if (t === 'new' || (!S.trips.length && !S.plan)) { showTab('timeline'); tripWizard(); return; }
     showTab(['timeline', 'checks', 'costs', 'prepare', 'run', 'confirm', 'helper', 'region'].includes(t) ? t : 'timeline');
   } catch (e) { App.down('#p-timeline'); }
 })();

@@ -1,5 +1,24 @@
 # Status
 
+## 2026-09-29 — the Organic look and the four screens from the mockup board
+
+Malachi had Claude Design mock up Home, New trip, Inside a trip and Compare
+on the Organic system and handed the board over ("the design upgrades are on
+desktop"). Built from it (decision 0012):
+- `ui-kit/organic.css` vendored; tokens, shell and app CSS re-mapped onto it
+  (Caprasimo + Figtree, sand + terracotta + sage, pills, 28-px radii).
+- Home = your trips as cards with days-to-go, photo, chips, stage, health;
+  coming up; past trips. New trip = a three-column page with the five
+  questions and a season panel from the local-tips pack. Trip = hero +
+  journey with the checks and costs alongside; findings carry a one-tap
+  `fix_action` (migration 0003; "Move it to 7:15 PM", "It's per person",
+  "Add a stay", "Done"). Compare = "Same trip, cheaper place" for your
+  dates and people. `date_flex` on the trip (fixed / flexible / unsure).
+- The helper chat (`ui-kit/helper.js`, `trips.ask` through the switchboard,
+  the `trips.ask` prompt, `/v1/trips/briefing/{id}`): answers, suggests,
+  never changes the trip. Photos live from Wikipedia with the source shown.
+- 49 tests. Checked headless at 1280 and 390 px: no console errors.
+
 ## 2026-09-28, late — User and Developer modes; reframed for travellers
 
 Malachi: the AI inbox and Browse don't belong in front of a user; "what the

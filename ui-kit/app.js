@@ -66,5 +66,23 @@
   applyMode();
   if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', mountMode); else mountMode();
   const onMode = fn => document.addEventListener('modechange', e => fn(e.detail));
-  window.App = { $, esc, toast, api, act, money, money0, fmtD, fmtWhen, remember, tabs, detail, down, mode, isDev, setMode, onMode };
+  /* A washed photo of a place from Wikipedia's page summary (live, cached per browser), or a
+     dashed placeholder with the name. Every photo carries its source. el gets class "photo". */
+  const PH_KEY = 'dh.photo.';
+  async function photo(name, el, shape) {
+    if (!el || !name) return;
+    el.classList.add('photo'); if (shape === 'circle') el.style.borderRadius = '50%';
+    el.innerHTML = `<span>${esc(name)}</span>`;
+    let hit = null; try { hit = JSON.parse(localStorage.getItem(PH_KEY + name) || 'null'); } catch (e) {}
+    if (!hit) {
+      try {
+        const r = await fetch('https://en.wikipedia.org/api/rest_v1/page/summary/' + encodeURIComponent(name.replace(/ /g, '_')), { headers: { accept: 'application/json' } });
+        const j = r.ok ? await r.json() : null;
+        hit = { src: j && j.thumbnail ? (j.originalimage && j.originalimage.width < 1400 ? j.originalimage.source : j.thumbnail.source) : null, title: j ? j.title : name };
+        try { localStorage.setItem(PH_KEY + name, JSON.stringify(hit)); } catch (e) {}
+      } catch (e) { hit = { src: null }; }
+    }
+    if (hit && hit.src) { el.classList.add('has'); el.innerHTML = `<img src="${esc(hit.src)}" alt="${esc(name)}" loading="lazy"><span class="credit">Wikipedia · ${esc(hit.title || name)}</span>`; }
+  }
+  window.App = { $, esc, toast, api, act, money, money0, fmtD, fmtWhen, remember, tabs, detail, down, mode, isDev, setMode, onMode, photo };
 })();

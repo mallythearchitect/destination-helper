@@ -97,10 +97,11 @@ vault, never in git. Pages only learn "set" or "not set".
 opens the newest copy and compares it with the live vault.
 
 **One look, built once.** Every page loads the same files from `ui-kit/`
-and adds only what is unique to it. The look is the Helper's own (decision
-0011): light and warm, coral for the one action that matters, a serif for
-display, pill navigation and rails instead of a sidebar, dark mode when the
-system asks for it. Every page has a tour and a Go-to menu.
+and adds only what is unique to it. The look is the Organic design system
+from the mockup board (decision 0012): a sand ground, terracotta for the one
+action that matters, sage for "fine", Caprasimo over Figtree, rounded shapes
+and pill buttons, washed photos with their source. Every page has a tour, a
+Go-to menu and the helper chat.
 
 **The checks before a commit.** Tidy code, no leaked keys, tests pass. The
 same three run on GitHub on every push.

@@ -5,7 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Destinations · Destination Helper</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
-<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,500;9..144,600;9..144,700&family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Caprasimo&family=Figtree:wght@400;500;600;700&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="https://unpkg.com/maplibre-gl@5.0.0/dist/maplibre-gl.css">
 <link rel="stylesheet" href="/ui-kit/tokens.css">
 <link rel="stylesheet" href="/ui-kit/shell.css">
@@ -40,17 +40,38 @@
 .maplibregl-popup-content{background:var(--ink-3);color:var(--paper);font-family:var(--font-body);border:0;border-radius:12px;box-shadow:var(--shadow-md);padding:10px 14px}
 .maplibregl-popup-tip{border-top-color:var(--ink-3)}
 @media (max-width:900px){.atlas{grid-template-columns:1fr}#map{height:340px}.list{max-height:none}}
+/* compare: same trip, cheaper place */
+.cmp-head h1{font-size:44px;margin:0 0 6px}
+.cmp-head .sub{font-size:14px;color:var(--mut);margin-bottom:18px}
+.cmp{display:grid;grid-template-columns:170px repeat(var(--n),minmax(0,1fr));gap:0;align-items:stretch}
+.cmp .lbl{align-self:end;padding:0 8px 14px;font-size:11.5px;letter-spacing:.06em;text-transform:uppercase;color:var(--mut)}
+.cmp .col{margin:0 8px;background:var(--color-surface);border-radius:var(--radius) var(--radius) 0 0;padding:18px 16px 14px;display:flex;flex-direction:column;gap:8px}
+.cmp .col .top{display:flex;justify-content:space-between;align-items:center;font-size:11px;color:var(--mut)}
+.cmp .col .top button{font:inherit;background:transparent;border:0;color:var(--mut);cursor:pointer}
+.cmp .col .ph{height:110px;border-radius:18px}
+.cmp .col h3{font-size:24px;margin:6px 0 0;font-family:var(--font-heading);font-weight:400}
+.cmp .col .sub{font-size:12.5px;color:var(--mut)}
+.cmp .col .sub.bad{color:var(--color-accent-700);font-weight:600}
+table.cmpt{width:100%;border-collapse:collapse;font-size:14px}
+table.cmpt td{padding:12px 8px;border-bottom:1px solid var(--line);vertical-align:top}
+table.cmpt td:first-child{font-size:11.5px;letter-spacing:.06em;text-transform:uppercase;color:var(--mut);width:170px}
+table.cmpt tr:last-child td{border-bottom:0}
+table.cmpt b.big{font-family:var(--font-heading);font-size:19px;font-weight:400}
+.fitbar{display:flex;align-items:center;gap:10px}.fitbar i{flex:1;height:10px;border-radius:999px;background:var(--color-neutral-300);overflow:hidden;display:block}.fitbar i b{display:block;height:100%;background:var(--color-accent-2-500)}
+.tagx{display:inline-block;font-size:11px;padding:3px 10px;border-radius:999px;background:var(--color-neutral-100);color:var(--color-neutral-800)}
+.tagx.acc{background:var(--color-accent-100);color:var(--color-accent-800)}.tagx.acc2{background:var(--color-accent-2-100);color:var(--color-accent-2-800)}
+@media (max-width:900px){.cmp{grid-template-columns:repeat(var(--n),minmax(180px,1fr));overflow-x:auto}.cmp .lbl{display:none}table.cmpt{display:block;overflow-x:auto}}
 </style>
 </head>
 <body>
 <header class="band"><div class="appbar">
  <span class="appbar-brand"><span class="appbar-eyebrow">Destination Helper</span>Destinations</span>
- <span class="appbar-right"><span class="pill" id="pill"></span><a href="/apps/system/web/browse.html" data-user-label="History" data-dev-label="Browse">History</a><a href="/apps/launcher/web/">‹ Home</a></span>
+ <span class="appbar-right"><span class="pill dev-only" id="pill"></span><a href="/apps/launcher/web/">Home</a><a href="/apps/trips/web/">Trips</a><a href="/apps/system/web/browse.html" data-user-label="History" data-dev-label="Browse">History</a></span>
 </div></header>
 <main class="wrap">
  <div class="side-layout">
   <aside class="sidebar">
-   <div><h4>Destinations</h4><nav class="sidenav" id="tabs"><a href="#atlas" class="on">Atlas</a><a href="#compare">Compare</a><a href="#trip">Trip cost</a><a href="#saved">My list</a><a href="#sources">Sources</a></nav></div>
+   <div><h4>Destinations</h4><nav class="sidenav" id="tabs"><a href="#atlas" class="on">Explore</a><a href="#compare">Compare</a><a href="#trip">Trip cost</a><a href="#saved">Saved</a><a href="#sources">Where the numbers come from</a></nav></div>
    <div><h4>Show</h4><div class="opts" id="kinds"></div></div>
    <div><h4>Rank for</h4><div class="opts" id="goals"></div></div>
   </aside>

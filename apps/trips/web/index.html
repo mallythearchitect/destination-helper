@@ -5,108 +5,137 @@
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Trips · Destination Helper</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
-<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,500;9..144,600;9..144,700&family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Caprasimo&family=Figtree:wght@400;500;600;700&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="/ui-kit/tokens.css">
 <link rel="stylesheet" href="/ui-kit/shell.css">
 <link rel="stylesheet" href="/ui-kit/app.css">
 <style>
-/* ---- the trip hero: name, dates, health, the stage stepper */
-.hero{display:grid;grid-template-columns:1fr auto;gap:16px 24px;align-items:center;background:var(--night);color:#fff;border-radius:var(--radius);padding:22px 24px;margin-bottom:18px;box-shadow:var(--shadow-md);position:relative;overflow:hidden}
-.hero::before{content:"";position:absolute;right:-60px;top:-80px;width:260px;height:260px;border-radius:50%;background:radial-gradient(circle,rgba(228,100,59,.45),transparent 65%);pointer-events:none}
-.hero h1{font-size:30px;margin:0 0 4px;color:#fff}
-.hero .meta{font-size:13.5px;color:rgba(255,255,255,.72)}
-.hero .meta b{color:#fff;font-weight:600}
-.hero .acts{display:flex;gap:8px;flex-wrap:wrap;margin-top:14px}
-.hero .acts .sbtn{background:rgba(255,255,255,.08);border-color:rgba(255,255,255,.22);color:#fff}
-.hero .acts .sbtn.gold{background:var(--gold);border-color:var(--gold)}
-.health{display:grid;place-items:center;width:104px;height:104px;border-radius:50%;background:conic-gradient(var(--h-col) calc(var(--h) * 1%),rgba(255,255,255,.12) 0);position:relative;flex:none}
-.health::after{content:"";position:absolute;inset:9px;border-radius:50%;background:var(--night)}
-.health b{position:relative;z-index:1;font-family:var(--font-heading);font-size:30px;line-height:1}
-.health small{position:relative;z-index:1;font-size:10px;letter-spacing:.12em;text-transform:uppercase;color:rgba(255,255,255,.7)}
-.stepper{grid-column:1/-1;display:flex;gap:6px;align-items:center;flex-wrap:wrap;margin-top:4px}
-.stepper button{font:inherit;font-size:12.5px;font-weight:600;padding:6px 14px;border-radius:var(--radius-pill);border:1px solid rgba(255,255,255,.22);background:transparent;color:rgba(255,255,255,.75);cursor:pointer;display:inline-flex;gap:8px;align-items:center}
-.stepper button i{width:8px;height:8px;border-radius:50%;background:rgba(255,255,255,.3);display:inline-block}
-.stepper button.done{color:#fff;border-color:transparent;background:rgba(255,255,255,.1)}.stepper button.done i{background:var(--ok)}
-.stepper button.on{background:var(--gold);border-color:var(--gold);color:#fff}.stepper button.on i{background:#fff}
-.stepper .arrow{color:rgba(255,255,255,.35);font-size:12px}
-/* ---- the journey timeline */
-.chapters{display:flex;gap:6px;overflow-x:auto;scrollbar-width:none;padding:2px 0 10px}
+/* ---- the trip hero */
+.hero{display:grid;grid-template-columns:200px 1fr 150px;gap:28px;align-items:center;background:var(--color-surface);border-radius:var(--radius);padding:30px 34px;margin-bottom:26px}
+.hero .ph{width:200px;height:200px}
+.hero .credit-line{font-size:10.5px;color:var(--mut);margin-top:6px}
+.hero h1{font-size:44px;margin:8px 0 6px;line-height:1}
+.hero .meta{font-size:14.5px;color:var(--mut)}
+.hero .acts{display:flex;gap:10px;flex-wrap:wrap;margin-top:18px;align-items:center}
+.stepper{display:flex;gap:6px;align-items:center;flex-wrap:wrap}
+.stepper button{font:inherit;font-size:12.5px;padding:5px 12px;border-radius:var(--radius-pill);border:0;background:var(--color-neutral-100);color:var(--paper);cursor:pointer;display:inline-flex;gap:8px;align-items:center}
+.stepper button i{width:7px;height:7px;border-radius:50%;background:var(--color-neutral-400);display:inline-block}
+.stepper button.done i{background:var(--color-accent-2-600)}
+.stepper button.on{background:var(--color-accent-2-100);color:var(--color-accent-2-900)}.stepper button.on i{background:var(--color-accent-2-700)}
+.stepper .arrow{color:var(--mut);font-size:13px}
+.health{display:grid;place-items:center;width:140px;height:140px;border-radius:50%;background:conic-gradient(var(--h-col) calc(var(--h) * 1%),var(--color-neutral-300) 0);position:relative;flex:none;justify-self:end}
+.health::after{content:"";position:absolute;inset:11px;border-radius:50%;background:var(--color-surface)}
+.health b{position:relative;z-index:1;font-family:var(--font-heading);font-size:40px;line-height:1;font-weight:400}
+.health small{position:relative;z-index:1;font-size:10px;letter-spacing:.14em;text-transform:uppercase;color:var(--mut)}
+/* ---- journey + checks alongside */
+.tl{display:grid;grid-template-columns:minmax(0,1fr) 340px;gap:40px;align-items:start}
+.chapters{display:flex;gap:8px;overflow-x:auto;scrollbar-width:none;padding:2px 0 18px}
 .chapters::-webkit-scrollbar{display:none}
-.chapters a{flex:none;text-decoration:none;color:var(--paper);font-size:12.5px;font-weight:600;padding:6px 12px;border-radius:var(--radius-pill);background:var(--ink-3);border:1px solid var(--line)}
-.chapters a small{display:block;font-weight:400;color:var(--mut);font-size:11px}
-.journey{position:relative;padding-left:34px}
-.journey::before{content:"";position:absolute;left:11px;top:8px;bottom:8px;width:2px;background:linear-gradient(var(--sea),var(--gold));border-radius:2px;opacity:.55}
-.stop{position:relative;margin-bottom:22px;scroll-margin-top:130px}
-.stop .dot{position:absolute;left:-30px;top:6px;width:16px;height:16px;border-radius:50%;background:var(--ink-3);border:3px solid var(--sea);box-shadow:0 0 0 3px var(--ink)}
-.stop.today .dot{border-color:var(--gold);box-shadow:0 0 0 3px var(--ink),0 0 0 7px var(--gold-soft)}
-.stop.nostay .dot{border-style:dashed;border-color:var(--warn)}
-.stop-head{display:flex;justify-content:space-between;align-items:baseline;gap:10px;margin-bottom:8px}
-.stop-head .dayname{font-family:var(--font-heading);font-size:20px}
-.stop-head .dayname small{font-family:var(--font-body);font-size:12.5px;color:var(--mut);margin-left:8px;font-weight:500}
-.stop-head .night{font-size:12.5px;color:var(--mut);white-space:nowrap}
-.stop-head .night.warn{color:var(--warn);font-weight:600}
-.it{display:grid;grid-template-columns:44px 1fr auto;gap:12px;padding:12px 14px;background:var(--ink-3);border:1px solid var(--line);border-radius:12px;margin-bottom:8px;cursor:pointer;align-items:center;box-shadow:var(--shadow-sm);border-left-width:4px}
-.it:hover{border-color:var(--sea);box-shadow:var(--shadow-md)}
-.it.flag-blocker{border-left-color:var(--bad)}.it.flag-warn{border-left-color:var(--warn)}.it.flag-none{border-left-color:var(--sea)}.it.is-stay{border-left-color:var(--night)}
-.it .glyph{width:44px;height:44px;border-radius:12px;display:grid;place-items:center;font-size:20px;background:var(--sea-soft)}
-.it.is-stay .glyph{background:var(--ink-2)}
-.it .ti{font-weight:600;font-size:15px;line-height:1.25}
-.it .su{font-size:12.5px;color:var(--mut);margin-top:2px}
-.it .tm{font-size:12.5px;color:var(--paper-2);font-variant-numeric:tabular-nums;font-weight:600}
-.it .pr{text-align:right;font-family:var(--font-heading);font-size:18px;white-space:nowrap}
-.it .pr small{display:block;font-family:var(--font-body);font-size:11px;color:var(--mut);font-weight:400}
-.it.empty{cursor:default;background:transparent;box-shadow:none;border-style:dashed;color:var(--mut);grid-template-columns:1fr;font-size:13px;padding:10px 14px;border-left-width:1px}
-.st{display:inline-block;font-size:10.5px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;padding:2px 8px;border-radius:var(--radius-pill);margin-left:6px;vertical-align:middle;background:var(--ink-2);color:var(--mut)}
-.st.booked,.st.confirmed,.st.done{background:var(--ok-soft);color:var(--ok)}.st.check_now{background:var(--warn-soft);color:var(--warn)}.st.cancelled{text-decoration:line-through}
-.leave{font-size:12px;color:var(--gold);font-weight:600}
-/* ---- checks */
-.fd{border-left:4px solid var(--line-2);padding:12px 14px;margin-bottom:8px;background:var(--ink-3);border-radius:12px;box-shadow:var(--shadow-sm)}
-.fd.blocker{border-left-color:var(--bad)}.fd.warn{border-left-color:var(--warn)}.fd.info{border-left-color:var(--sea)}
-.fd .fx{color:var(--paper-2);font-size:13px;margin-top:3px}.fd .rl{font-family:ui-monospace,Menlo,monospace;font-size:11px;color:var(--mut)}
-.links a{display:inline-flex;align-items:center;font-size:12.5px;font-weight:600;padding:6px 12px;border:1px solid var(--line);border-radius:var(--radius-pill);margin:0 6px 8px 0;text-decoration:none;color:var(--paper);background:var(--ink-3)}
-.links a:hover{border-color:var(--gold);color:var(--gold)}
-/* ---- run: the next move */
-.next{background:linear-gradient(135deg,var(--sea),#0f5561);color:#fff;border-radius:var(--radius);padding:20px 22px;margin-bottom:14px;box-shadow:var(--shadow-md)}
-.next .lab{font-size:11px;letter-spacing:.14em;text-transform:uppercase;color:rgba(255,255,255,.7);font-weight:700}
-.next h3{font-size:26px;color:#fff;margin:6px 0 2px;font-family:var(--font-heading)}
-.next .when{font-size:15px;color:rgba(255,255,255,.85)}
+.chapters a{flex:none;text-decoration:none;color:var(--paper);font-size:13px;font-weight:500;padding:8px 16px;border-radius:var(--radius-pill);background:var(--color-neutral-100)}
+.chapters a.on,.chapters a:hover{background:var(--color-accent-2-800);color:var(--color-bg)}
+.journey{position:relative;padding-left:38px}
+.journey::before{content:"";position:absolute;left:13px;top:10px;bottom:10px;width:2px;background:var(--color-accent-2-300);border-radius:2px}
+.stop{position:relative;margin-bottom:26px;scroll-margin-top:20px}
+.stop .dot{position:absolute;left:-33px;top:7px;width:16px;height:16px;border-radius:50%;background:var(--color-bg);border:3px solid var(--color-accent-2-500)}
+.stop.today .dot{border-color:var(--color-accent);box-shadow:0 0 0 5px var(--color-accent-100)}
+.stop.nostay .dot{border-style:dashed;border-color:var(--color-accent-400)}
+.stop-head{display:flex;justify-content:space-between;align-items:baseline;gap:10px;margin-bottom:10px}
+.stop-head .dayname{font-family:var(--font-heading);font-size:24px}
+.stop-head .dayname small{font-family:var(--font-body);font-size:13px;color:var(--mut);margin-left:10px}
+.stop-head .night{font-size:13px;color:var(--mut);white-space:nowrap}
+.stop-head .night.warn{color:var(--color-accent-700);font-weight:600}
+.it{display:grid;grid-template-columns:52px 1fr auto;gap:14px;padding:16px 18px;background:var(--color-surface);border-radius:20px;margin-bottom:10px;cursor:pointer;align-items:center;border-left:4px solid var(--color-accent-2-500)}
+.it:hover{background:var(--color-neutral-200)}
+.it.flag-blocker{border-left-color:var(--color-accent)}.it.flag-warn{border-left-color:var(--color-accent-400)}.it.is-stay{border-left-color:var(--color-neutral-400)}
+.it .glyph{width:52px;height:52px;border-radius:50%;display:grid;place-items:center;background:var(--color-bg);color:var(--paper)}
+.it .glyph svg{width:22px;height:22px;stroke:currentColor;fill:none;stroke-width:2.2;stroke-linecap:round;stroke-linejoin:round}
+.it .ti{font-weight:600;font-size:16px;line-height:1.25}
+.it .su{font-size:13px;color:var(--mut);margin-top:3px;line-height:1.45}
+.it .su a,.it .su .fixlink{color:var(--color-accent-700);font-weight:600;text-decoration:none;cursor:pointer}
+.it .pr{text-align:right;font-family:var(--font-heading);font-size:20px;white-space:nowrap}
+.it .pr small{display:block;font-family:var(--font-body);font-size:11.5px;color:var(--mut);margin-top:2px}
+.it.empty{cursor:default;background:transparent;border:1.5px dashed var(--color-neutral-400);border-left-width:1.5px;color:var(--mut);grid-template-columns:1fr auto;font-size:14px;padding:16px 18px}
+.it.empty .fixlink{color:var(--color-accent-700);font-family:var(--font-heading);cursor:pointer}
+.st{display:inline-block;font-size:11px;padding:3px 10px;border-radius:var(--radius-pill);margin-left:8px;vertical-align:middle;background:var(--color-neutral-100);color:var(--paper)}
+.st.booked,.st.confirmed,.st.done{background:var(--color-accent-2-100);color:var(--color-accent-2-900)}.st.check_now,.st.fix{background:var(--color-accent);color:var(--color-bg)}.st.cancelled{text-decoration:line-through}.st.work{background:var(--color-accent-2-100);color:var(--color-accent-2-900)}
+.leave{color:var(--color-accent-700);font-weight:600}
+/* the aside */
+.aside .ah{display:flex;justify-content:space-between;align-items:baseline;margin-bottom:10px}
+.aside .ah h3{font-size:24px;margin:0}
+.aside .ah .small{font-size:12px}
+.sev{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:12px}
+.sev span{font-size:12px;padding:4px 12px;border-radius:var(--radius-pill);background:var(--color-neutral-100)}
+.sev span.b{background:var(--color-accent);color:var(--color-bg)}.sev span.w{background:var(--color-accent-100);color:var(--color-accent-800)}
+.fd{background:var(--color-neutral-100);border-radius:20px;padding:16px 18px;margin-bottom:10px;border-left:0}
+.fd.blocker{background:var(--color-surface)}
+.fd h4{font-family:var(--font-body);font-weight:600;font-size:15px;margin:0 0 4px}
+.fd .fx{font-size:13px;color:var(--mut);line-height:1.45}
+.fd .acts{display:flex;gap:8px;flex-wrap:wrap;margin-top:10px;align-items:center}
+.fd .rl{font-family:ui-monospace,Menlo,monospace;font-size:11px;color:var(--mut)}
+.costcard{background:var(--color-surface);border-radius:var(--radius);padding:18px 20px;margin-top:18px}
+.costcard .k{font-size:10.5px;letter-spacing:.1em;text-transform:uppercase;color:var(--color-accent);font-weight:600}
+.costcard .two-nums{display:flex;gap:26px;margin:10px 0 8px}
+.costcard .two-nums b{font-family:var(--font-heading);font-size:28px;font-weight:400;display:block;line-height:1}
+.costcard .two-nums small{font-size:12px;color:var(--mut)}
+.costcard .bar{background:var(--color-neutral-300)}
+.links a{display:inline-flex;align-items:center;font-size:12.5px;font-weight:600;padding:7px 14px;border:1px solid var(--line-2);border-radius:var(--radius-pill);margin:0 6px 8px 0;text-decoration:none;color:var(--paper);font-family:var(--font-heading);font-weight:400}
+.links a:hover{background:color-mix(in srgb,var(--color-text) 7%,transparent)}
+/* run */
+.next{background:var(--color-accent-2-800);color:var(--color-bg);border-radius:var(--radius);padding:22px 24px;margin-bottom:16px}
+.next .lab{font-size:11px;letter-spacing:.14em;text-transform:uppercase;color:var(--color-accent-2-200);font-weight:600}
+.next h3{font-size:30px;color:var(--color-bg);margin:6px 0 2px}
+.next .when{font-size:15px;color:var(--color-accent-2-100)}
 .next .code{font-family:ui-monospace,Menlo,monospace;font-size:13px;background:rgba(255,255,255,.14);padding:3px 8px;border-radius:6px}
-.next .links a{background:rgba(255,255,255,.12);border-color:rgba(255,255,255,.25);color:#fff}
-/* ---- tasks, helper, misc */
-.tk{display:flex;gap:10px;align-items:flex-start;padding:9px 0;border-top:1px solid var(--line)}
+.next .links a{background:transparent;border-color:rgba(255,255,255,.35);color:var(--color-bg)}
+/* tasks, guide, misc */
+.tk{display:flex;gap:10px;align-items:flex-start;padding:10px 0;border-top:1px solid var(--line)}
 .tk:first-child{border-top:0}.tk.done{opacity:.5}.tk .due{font-size:12px;color:var(--mut);white-space:nowrap;margin-left:auto}
-.q{padding:6px 0;border-top:1px solid var(--line);font-size:13.5px}.q code{font-family:ui-monospace,Menlo,monospace;font-size:11.5px;color:var(--sea);margin-right:8px;font-weight:600}
-.wf{border:1px solid var(--line);background:var(--ink-3);padding:14px 16px;margin-bottom:8px;border-radius:12px}.wf h4{margin:0 0 4px;font-size:17px}
-.wf ol{margin:6px 0 4px 18px;padding:0;font-size:13.5px}.wf .tr{font-size:12.5px;color:var(--mut)}
-.msg{white-space:pre-wrap;font-size:13.5px;background:var(--ink-2);border-radius:10px;padding:10px 12px}
-/* ---- the wizard */
-.wiz .steps{display:flex;gap:6px;margin:4px 0 14px}.wiz .steps i{flex:1;height:4px;border-radius:2px;background:var(--ink-2)}.wiz .steps i.on{background:var(--gold)}
-.wiz .q1{font-family:var(--font-heading);font-size:24px;margin:0 0 4px}
-.wiz .why{font-size:13px;color:var(--mut);margin-bottom:12px}
-.wiz .opt{display:flex;gap:10px;align-items:flex-start;padding:10px 12px;border:1px solid var(--line-2);border-radius:12px;margin-bottom:8px;cursor:pointer}
-.wiz .opt:has(input:checked){border-color:var(--gold);background:var(--gold-soft)}
-.wiz .opt input{margin-top:3px;accent-color:var(--gold)}
-.wiz .opt b{display:block;font-weight:600}.wiz .opt span{font-size:12.5px;color:var(--mut)}
-.wiz .nav{display:flex;justify-content:space-between;align-items:center;margin-top:16px}
-@media (max-width:760px){
- .hero{grid-template-columns:1fr;padding:18px 16px}.hero h1{font-size:24px}.health{width:84px;height:84px;justify-self:start}.health b{font-size:24px}
- .it{grid-template-columns:38px 1fr;gap:10px;padding:10px 12px}.it .glyph{width:38px;height:38px;font-size:17px}.it .pr{grid-column:2;text-align:left;font-size:16px}
- .journey{padding-left:26px}.stop .dot{left:-23px;width:14px;height:14px}.journey::before{left:8px}
-}
+.q{padding:7px 0;border-top:1px solid var(--line);font-size:14px}.q code{font-family:ui-monospace,Menlo,monospace;font-size:11.5px;color:var(--color-accent-2-800);margin-right:8px;font-weight:600}
+.wf{background:var(--color-surface);padding:16px 18px;margin-bottom:10px;border-radius:20px}.wf h4{margin:0 0 4px;font-size:19px;font-family:var(--font-heading);font-weight:400}
+.wf ol{margin:6px 0 4px 18px;padding:0;font-size:14px}.wf .tr{font-size:12.5px;color:var(--mut)}
+.msg{white-space:pre-wrap;font-size:13.5px;background:var(--color-neutral-100);border-radius:14px;padding:12px 14px}
+/* ---- new trip: the five questions as a page */
+.wiz{display:grid;grid-template-columns:230px minmax(0,1fr) 300px;gap:40px;align-items:start}
+.wiz .rail h4{font-size:11px;letter-spacing:.1em;text-transform:uppercase;color:var(--color-accent);font-weight:600;margin:0 0 14px}
+.wiz .rail .step{display:flex;gap:12px;align-items:center;padding:8px 0;font-size:15px;color:var(--mut)}
+.wiz .rail .step i{width:28px;height:28px;border-radius:50%;display:grid;place-items:center;font-style:normal;font-family:var(--font-heading);font-size:13px;background:var(--color-neutral-200);color:var(--paper);flex:none}
+.wiz .rail .step.on{color:var(--paper);font-weight:600}.wiz .rail .step.on i{background:var(--color-accent);color:var(--color-bg)}
+.wiz .rail .step.done i{background:var(--color-accent-2-600);color:var(--color-bg)}
+.wiz .rail p{font-size:13px;color:var(--mut);margin-top:16px;line-height:1.5}
+.wiz .k{font-size:11px;letter-spacing:.1em;text-transform:uppercase;color:var(--color-accent);font-weight:600}
+.wiz h1{font-size:44px;margin:6px 0 8px;line-height:1.05}
+.wiz .why{font-size:15px;color:var(--mut);margin-bottom:20px;line-height:1.5}
+.wiz label.f{display:block;font-size:12.5px;color:var(--mut);margin:12px 0 4px}
+.wiz .opt{display:flex;gap:12px;align-items:flex-start;padding:16px 18px;border:1px solid var(--line-2);border-radius:20px;margin-bottom:10px;cursor:pointer;background:transparent}
+.wiz .opt:has(input:checked){border-color:var(--color-accent);background:var(--color-accent-100)}
+.wiz .opt input{margin-top:3px}
+.wiz .opt b{display:block;font-weight:600;font-size:15px}.wiz .opt span{font-size:13px;color:var(--mut)}
+.wiz .nav{display:flex;justify-content:space-between;align-items:center;margin-top:22px}
+.wiz .side .ph{width:100%;height:220px;border-radius:24px}
+.wiz .side .info{background:var(--color-surface);border-radius:24px;padding:18px 20px;margin-top:14px}
+.wiz .side .info .k{margin-bottom:6px;display:block}
+.wiz .side .info b{font-size:16px;display:block;margin-bottom:4px}
+.wiz .side .info p{font-size:13.5px;color:var(--paper-2);margin:0 0 6px}
+.wiz .side .info .src{font-size:11px;color:var(--mut)}
+.wiz-top{display:flex;justify-content:space-between;align-items:center;margin-bottom:22px}
+.wiz-top a{font-size:14px;color:var(--paper);text-decoration:none}
+@media (max-width:1000px){.tl{grid-template-columns:1fr}.wiz{grid-template-columns:1fr}.wiz .rail{display:none}.wiz .side{order:3}.hero{grid-template-columns:1fr;padding:22px 20px}.hero .ph{width:120px;height:120px}.health{justify-self:start;width:104px;height:104px}.health b{font-size:30px}}
+@media (max-width:760px){.hero h1{font-size:32px}.it{grid-template-columns:44px 1fr;gap:10px;padding:12px 14px}.it .glyph{width:44px;height:44px}.it .pr{grid-column:2;text-align:left;font-size:17px}.journey{padding-left:28px}.stop .dot{left:-24px;width:14px;height:14px}.journey::before{left:9px}.wiz h1{font-size:32px}}
 </style>
 </head>
 <body>
 <header class="band"><div class="appbar">
  <span class="appbar-brand"><span class="appbar-eyebrow">Destination Helper</span>Trips</span>
- <span class="appbar-right"><span class="pill" id="pill"></span><a href="/apps/destinations/web/">Destinations</a><a href="/apps/launcher/web/">Home</a></span>
+ <span class="appbar-right"><span class="pill dev-only" id="pill"></span><a href="/apps/launcher/web/">Home</a><a href="/apps/destinations/web/">Destinations</a><a href="/apps/system/web/browse.html" data-user-label="History" data-dev-label="Browse">History</a></span>
 </div></header>
 <main class="wrap">
  <div class="side-layout">
   <aside class="sidebar">
-   <div><h4>Trips</h4><div class="opts" id="trips"></div><button class="sbtn mini gold" id="new-trip">+ New trip</button></div>
+   <div><h4>Trips</h4><div class="opts" id="trips"></div><button class="sbtn mini gold" id="new-trip">New trip</button></div>
    <div><nav class="sidenav" id="tabs"><a href="#timeline" class="on">Timeline</a><a href="#checks">Checks</a><a href="#costs">Costs</a><a href="#prepare">Prepare</a><a href="#run">Run</a><a href="#confirm">Confirm</a><a href="#helper">Guide</a><a href="#region">Local tips</a></nav></div>
   </aside>
   <div class="content">
+   <section class="panel" id="p-new"></section>
    <div id="hero"></div>
    <section class="panel on" id="p-timeline"></section>
    <section class="panel" id="p-checks"></section>
@@ -122,13 +151,14 @@
 <dialog class="form-dialog" id="form"></dialog>
 <script src="/ui-kit/app.js"></script>
 <script src="trips.js"></script>
+<script src="/ui-kit/helper.js"></script>
 <script src="/ui-kit/tour.js"></script>
 <script>
 Tour.init({ page: 'trips', steps: [
   { title: 'Trips: the Destination Helper', text: 'A trip co-pilot. It plans the trip, then helps you run it: <b>Plan</b> (routes, timing, costs and the checks), <b>Prepare</b> (confirm bookings, the before-you-go list, deadlines), <b>Run</b> (the day\'s legs with leave-by times and live links). Work and personal, any size.' },
   { target: '#new-trip', title: 'Five questions to start', text: 'New trip asks who\'s going, where and when (or not sure yet), the budget and what matters, what\'s already booked, and how much the app should handle. Everything else is asked only when a step needs it.' },
   { target: '#hero', title: 'The trip, and its health', text: 'The health score starts at 100 and drops for every open problem the checker finds. Move the trip along the stages as you go.' },
-  { target: '#tabs a[href="#timeline"]', title: 'The journey', text: 'One line through the whole trip: a stop per day, the night\'s stay on each, every leg, stay and activity as a card with its mode. A red edge means something on it would cost money or a missed ride; amber, worth a look. Click a card for the live links and the details.' },
+  { target: '#tabs a[href="#timeline"]', title: 'The journey, with the checks alongside', text: 'One line through the whole trip: a stop per day, the night\'s stay on each, every leg, stay and activity as a card. A terracotta edge means something on it would cost money or a missed ride; a lighter one, worth a look. The checks sit beside the journey with a one-tap fix on each.' },
   { target: '#tabs a[href="#checks"]', title: 'Checks', text: 'The part other planners skip. Pickups booked before the flight lands, prices that don\'t say per person or group, nights with no stay, tight connections, the last ferry, budget caps, passport validity, deadlines.' },
   { target: '#tabs a[href="#run"]', title: 'Travel day', text: 'Only the next move: what it is, when to leave, the confirmation code, the live links. Then the rest of the day.' },
   { target: '#tabs a[href="#confirm"]', title: 'Confirm', text: 'W27: message the business first (WhatsApp, LINE, text, email), call only if there is no reply, and the call says it\'s automated. The engine drafts; you send and log the answer.' },

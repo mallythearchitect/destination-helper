@@ -5,6 +5,7 @@ Findings are kept in trip_findings so a dismissed one stays dismissed and a
 fixed one is marked resolved, not forgotten."""
 from __future__ import annotations
 
+import json
 from datetime import UTC, date, datetime, timedelta
 
 from engine.ids import uuid7
@@ -51,8 +52,9 @@ def run(store: Store, trip: dict, items: list[dict], tasks: list[dict], confirma
     stays = [it for it in live if it["kind"] in kinds["stay"]]
     out: list[dict] = []
 
-    def add(rule, key, severity, message, fix=None, item=None):
-        out.append({"rule": rule, "key": f"{rule}:{key}", "severity": severity, "message": message, "fix": fix, "item_id": item["id"] if item else None})
+    def add(rule, key, severity, message, fix=None, item=None, fix_action=None):
+        out.append({"rule": rule, "key": f"{rule}:{key}", "severity": severity, "message": message, "fix": fix, "item_id": item["id"] if item else None,
+                    "fix_action": fix_action})
 
     # 1. A pickup set before the ride it meets has arrived (the Thailand taxi: 12:00 PM against a 6:45 PM landing).
     wait = rules["transfer_after_arrival_minutes"]
@@ -61,16 +63,20 @@ def run(store: Store, trip: dict, items: list[dict], tasks: list[dict], confirma
             continue
         for a in arrivals:
             if a["_day"] == p["_day"] and _same_place(a.get("to_place"), p.get("from_place")) and p["_start"] < a["_end"]:
+                new_t = a["_end"] + timedelta(minutes=wait)
                 add("pickup-before-arrival", p["id"], "blocker",
                     f"{p['title']} is set for {q.fmt_t(p['_start'])} but {a['title']} only arrives at {q.fmt_t(a['_end'])} on {q.fmt_d(a['_day'])}.",
-                    f"Move the pickup to about {q.fmt_t(a['_end'] + timedelta(minutes=wait))}, add the flight or ferry number to the booking, and message the operator.", p)
+                    f"Move the pickup to about {q.fmt_t(new_t)}, add the flight or ferry number to the booking, and message the operator.", p,
+                    fix_action={"label": f"Move it to {q.fmt_t(new_t)}", "action": "trips.update_item", "payload": {"id": p["id"], "start_at": q.local_iso(new_t)}})
                 break
 
     # 2. Prices that don't say per person or for the group (G03, G04).
     for it in live:
         if it.get("price_cents") is not None and not it.get("basis"):
             add("price-basis", it["id"], "warn", f"{it['title']}: the price doesn't say whether it is per person or for the group.",
-                "Open the booking page and mark it per person or group; the totals change with it.", it)
+                "Open the booking page and mark it per person or group; the totals change with it.", it,
+                fix_action={"label": "It's per person", "action": "trips.update_item", "payload": {"id": it["id"], "basis": "per_person"},
+                            "alt": {"label": "For the group", "action": "trips.update_item", "payload": {"id": it["id"], "basis": "group"}}})
         if it.get("headcount") and it["headcount"] != trip["headcount"]:
             add("headcount", it["id"], "warn", f"{it['title']} is for {it['headcount']}, but {trip['headcount']} are travelling.",
                 "Check the passenger count on the booking page.", it)
@@ -97,7 +103,8 @@ def run(store: Store, trip: dict, items: list[dict], tasks: list[dict], confirma
                 n = (b - a).days + 1
                 add("night-without-stay", a.isoformat(), "warn",
                     f"No place to sleep {'on ' + q.fmt_d(a.isoformat()) if n == 1 else 'from ' + q.fmt_d(a.isoformat()) + ' to ' + q.fmt_d(b.isoformat()) + f' ({n} nights)'}.",
-                    "Add the stay, or mark the night as covered (a night bus, a friend's place).")
+                    "Add the stay, or mark the night as covered (a night bus, a friend's place).",
+                    fix_action={"label": "Add a stay", "ui": "add_stay", "start": a.isoformat(), "end": (b + timedelta(days=1)).isoformat()})
 
     # 4. Timed items that overlap; legs too close together; the airport buffer.
     timed = sorted([it for it in live if it["_timed"] and it["kind"] not in kinds["stay"]], key=lambda x: x["_start"])
@@ -187,9 +194,10 @@ def run(store: Store, trip: dict, items: list[dict], tasks: list[dict], confirma
             weeks = (date.fromisoformat(it["_day"]) - today).days / 7
             if 0 <= weeks < rules["book_flights_weeks_out"]:
                 add("book-flight-now", it["id"], "warn", f"{it['title']} is {weeks:.0f} week(s) away and not booked; budget fares climb from about {rules['book_flights_weeks_out']} weeks out.",
-                    "Book it, or decide to skip it.", it)
+                    "Book it, or decide to skip it.", it, fix_action={"label": "Open it", "ui": "edit_item", "item_id": it["id"]})
         if it["status"] in ("booked", "confirmed") and it.get("price_cents") is None:
-            add("booked-no-price", it["id"], "info", f"{it['title']} is booked but no price is logged.", "Add the price from the confirmation so the totals are real.", it)
+            add("booked-no-price", it["id"], "info", f"{it['title']} is booked but no price is logged.", "Add the price from the confirmation so the totals are real.", it,
+                fix_action={"label": "Add the price", "ui": "edit_item", "item_id": it["id"]})
         if it["status"] in ("booked", "confirmed") and it["_day"] and trip.get("start_date") and trip.get("end_date") and not (trip["start_date"] <= it["_day"] <= trip["end_date"]):
             add("booked-outside-dates", it["id"], "warn", f"{it['title']} is booked for {q.fmt_d(it['_day'])}, outside the trip dates.", "Booked for the old plan? Change or cancel it.", it)
 
@@ -202,7 +210,8 @@ def run(store: Store, trip: dict, items: list[dict], tasks: list[dict], confirma
                 add("passport-validity", "trip", "blocker", f"The passport expires {q.fmt_d(trip['passport_expiry'])}; many countries want {rules['passport_valid_months']} months past the trip ({q.fmt_d(need.isoformat())}).",
                     "Renew it, or confirm this country's rule on travel.state.gov.")
         elif international:
-            add("passport-unchecked", "trip", "info", "Passport expiry not entered, so its validity can't be checked.", "Add it to the trip (Settings on the trip).")
+            add("passport-unchecked", "trip", "info", "Passport expiry not entered, so its validity can't be checked.", "Add it to the trip (Settings on the trip).",
+                fix_action={"label": "Add it", "ui": "trip_settings"})
     if international and any(it.get("currency") and it["currency"].upper() != trip["home_currency"].upper() for it in live) and not trip.get("fx_rate"):
         add("fx-missing", "trip", "info", "Prices in the local currency can't be converted: no exchange rate on the trip.", "Look it up today (TradingView) and note the date.")
 
@@ -212,10 +221,11 @@ def run(store: Store, trip: dict, items: list[dict], tasks: list[dict], confirma
         if t.get("done_at") or not t.get("due"):
             continue
         due = date.fromisoformat(t["due"])
+        done = {"label": "Done", "action": "trips.complete_task", "payload": {"id": t["id"], "done": True}}
         if due < today:
-            add("deadline-overdue", t["id"], "blocker", f"Overdue: {t['title']} (was due {q.fmt_d(t['due'])}).", "Do it now, or move the date on purpose.")
+            add("deadline-overdue", t["id"], "blocker", f"Overdue: {t['title']} (was due {q.fmt_d(t['due'])}).", "Do it now, or move the date on purpose.", fix_action=done)
         elif due <= soon:
-            add("deadline-soon", t["id"], "warn", f"Due {q.fmt_d(t['due'])}: {t['title']}.", None)
+            add("deadline-soon", t["id"], "warn", f"Due {q.fmt_d(t['due'])}: {t['title']}.", None, fix_action=done)
     for c in confirmations:
         if c["status"] == "sent" and c.get("sent_at"):
             sent = datetime.fromisoformat(c["sent_at"])
@@ -241,12 +251,12 @@ def sync(store: Store, trip_id: str, found: list[dict], app: str) -> dict:
             seen.add(f["key"])
             cur = have.get(f["key"])
             if cur is None:
-                con.execute("INSERT INTO trip_findings(id, trip_id, item_id, rule, key, severity, message, fix, status, first_seen, last_seen, updated_at) VALUES(?,?,?,?,?,?,?,?,?,?,?,?)",
-                            (uuid7(), trip_id, f["item_id"], f["rule"], f["key"], f["severity"], f["message"], f["fix"], "open", ts, ts, ts))
+                con.execute("INSERT INTO trip_findings(id, trip_id, item_id, rule, key, severity, message, fix, status, first_seen, last_seen, updated_at, fix_action) VALUES(?,?,?,?,?,?,?,?,?,?,?,?,?)",
+                            (uuid7(), trip_id, f["item_id"], f["rule"], f["key"], f["severity"], f["message"], f["fix"], "open", ts, ts, ts, json.dumps(f.get("fix_action")) if f.get("fix_action") else None))
             else:
                 status = "dismissed" if cur["status"] == "dismissed" else "open"
-                con.execute("UPDATE trip_findings SET item_id=?, severity=?, message=?, fix=?, status=?, last_seen=?, updated_at=? WHERE id=?",
-                            (f["item_id"], f["severity"], f["message"], f["fix"], status, ts, ts, cur["id"]))
+                con.execute("UPDATE trip_findings SET item_id=?, severity=?, message=?, fix=?, status=?, last_seen=?, updated_at=?, fix_action=? WHERE id=?",
+                            (f["item_id"], f["severity"], f["message"], f["fix"], status, ts, ts, json.dumps(f.get("fix_action")) if f.get("fix_action") else None, cur["id"]))
         for key, cur in have.items():
             if key not in seen and cur["status"] == "open":
                 con.execute("UPDATE trip_findings SET status='resolved', updated_at=? WHERE id=?", (ts, cur["id"]))

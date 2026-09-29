@@ -20,7 +20,7 @@ from . import queries as q
 
 TRIP_FIELDS = ("name", "purpose", "start_date", "end_date", "headcount", "travelers", "home_currency", "local_currency", "fx_rate", "fx_date",
                "passport_country", "passport_expiry", "budget_night_cents", "budget_leg_cents", "budget_day_cents", "region_pack", "time_zone", "purpose_note",
-               "handling", "may_contact")
+               "handling", "may_contact", "date_flex")
 ITEM_FIELDS = ("kind", "title", "from_place", "to_place", "start_at", "end_at", "time_zone", "status", "price_cents", "currency", "basis", "headcount",
                "paid_by", "tag", "international", "confirmation", "link", "operator", "contact", "last_departure", "desk_hours", "lead_minutes", "notes")
 
@@ -96,6 +96,7 @@ class CreateTrip(BaseModel):
     purpose_note: str | None = Field(None, description="What the trip is for: active days, nightlife, water sports...")
     handling: str | None = Field(None, description="How much the app should handle: plan_for_me, check_my_plan (default) or just_remind")
     may_contact: bool | None = Field(None, description="True if it may message, then call, businesses on your behalf (W27)")
+    date_flex: str | None = Field(None, description="fixed (a client day sets them), flexible (can move a week or two), or unsure (not sure where yet)")
 
 
 def _setup_missing(t: dict) -> list[str]:
@@ -127,6 +128,8 @@ def create_trip(store: Store, i: CreateTrip, app: str = "trips") -> dict:
         raise ValueError("the end date is before the start")
     if i.handling is not None and i.handling not in _words(store, "handling"):
         raise ValueError(f"handling must be one of {_words(store, 'handling')}")
+    if i.date_flex is not None and i.date_flex not in ("fixed", "flexible", "unsure"):
+        raise ValueError("date_flex is fixed, flexible or unsure")
     with store.tx() as con:
         region = q.region_row(con, i.region_pack) if i.region_pack else None
         if i.region_pack and not region:
@@ -143,7 +146,7 @@ def create_trip(store: Store, i: CreateTrip, app: str = "trips") -> dict:
                      i.budget_night_cents, i.budget_leg_cents, i.budget_day_cents, i.region_pack, i.time_zone or (region or {}).get("time_zone"), i.purpose_note, ts, ts))
         if i.local_currency:
             con.execute("UPDATE trips SET local_currency=? WHERE id=?", (i.local_currency.upper(), tid))
-        con.execute("UPDATE trips SET handling=?, may_contact=? WHERE id=?", (i.handling or "check_my_plan", int(bool(i.may_contact)), tid))
+        con.execute("UPDATE trips SET handling=?, may_contact=?, date_flex=? WHERE id=?", (i.handling or "check_my_plan", int(bool(i.may_contact)), i.date_flex or "fixed", tid))
         after = _row(con, "trips", tid)
         history.record(con, app=app, action="trips.create", tbl="trips", row_key=tid, before=None, after=after)
     t = q.trip_row(store.con, tid)
@@ -174,6 +177,7 @@ class UpdateTrip(BaseModel):
     purpose_note: str | None = None
     handling: str | None = None
     may_contact: bool | None = None
+    date_flex: str | None = None
     clear: list[str] = Field(default_factory=list, description="Field names to blank out (e.g. budget_leg_cents)")
 
 
@@ -203,14 +207,16 @@ def update_trip(store: Store, i: UpdateTrip, app: str = "trips") -> dict:
             raise ValueError(f"no region pack {new['region_pack']}")
         if new["handling"] not in _words(store, "handling"):
             raise ValueError(f"handling must be one of {_words(store, 'handling')}")
+        if new["date_flex"] not in ("fixed", "flexible", "unsure"):
+            raise ValueError("date_flex is fixed, flexible or unsure")
         trav = new["travelers"] if isinstance(new["travelers"], str) else json.dumps(new["travelers"])
         con.execute("UPDATE trips SET name=?, purpose=?, start_date=?, end_date=?, headcount=?, travelers=?, home_currency=?, local_currency=?, fx_rate=?, fx_date=?, "
-                    "passport_country=?, passport_expiry=?, budget_night_cents=?, budget_leg_cents=?, budget_day_cents=?, region_pack=?, time_zone=?, purpose_note=?, handling=?, may_contact=?, "
+                    "passport_country=?, passport_expiry=?, budget_night_cents=?, budget_leg_cents=?, budget_day_cents=?, region_pack=?, time_zone=?, purpose_note=?, handling=?, may_contact=?, date_flex=?, "
                     "version=version+1, updated_at=? WHERE id=?",
                     (str(new["name"]).strip(), new["purpose"], new["start_date"], new["end_date"], new["headcount"], trav, str(new["home_currency"]).upper(),
                      (new["local_currency"] or None) and str(new["local_currency"]).upper(), new["fx_rate"], new["fx_date"], new["passport_country"], new["passport_expiry"],
                      new["budget_night_cents"], new["budget_leg_cents"], new["budget_day_cents"], new["region_pack"], new["time_zone"], new["purpose_note"],
-                     new["handling"], int(bool(new["may_contact"])), now_iso(), i.id))
+                     new["handling"], int(bool(new["may_contact"])), new["date_flex"], now_iso(), i.id))
         after = _row(con, "trips", i.id)
         history.record(con, app=app, action="trips.update", tbl="trips", row_key=i.id, before=cur, after=after)
         if after["name"] != cur["name"] or after["start_date"] != cur["start_date"] or after["end_date"] != cur["end_date"]:
@@ -681,3 +687,30 @@ def check_all(store: Store, i: CheckAll, app: str = "trips") -> dict:
         if t["stage"] != "done":
             out[t["id"]] = checks.check_trip(store, t["id"], app)["counts"]
     return {"trips": len(out), "counts": out}
+
+
+class Ask(BaseModel):
+    question: str = Field(description="What you want to know about the trip, in your words")
+    trip_id: str | None = Field(None, description="The trip to answer about; the nearest upcoming one if empty")
+
+
+@action("trips.ask", "Ask the helper about a trip. It answers from the plan, the checks and the local tips, and suggests; it never changes the trip. Needs a model and key in Settings → AI.", Ask)
+def ask(store: Store, i: Ask, app: str = "trips") -> dict:
+    from engine.ai import switchboard
+    if not i.question.strip():
+        raise ValueError("ask something")
+    trips = q.trips(store)
+    tid = i.trip_id or next((t["id"] for t in trips if t["stage"] != "done"), None)
+    if not tid:
+        return {"answer": "There is no trip to talk about yet. Start one with the five questions and ask me again.", "trip_id": None, "model": None, "cost_cents": 0}
+    with store.read():
+        _need_trip(store.con, tid)
+    text = q.briefing(store, tid)
+    with store.read():
+        wfs = [dict(r) for r in store.con.execute("SELECT code, title, runs_when, steps FROM pack_helper.workflows ORDER BY ord")]
+        gs = [dict(r) for r in store.con.execute("SELECT code, rule FROM pack_helper.guardrails ORDER BY ord")]
+    play = "\n".join(f"{w['code']} {w['title']}: runs when {w['runs_when']}; steps: {'; '.join(json.loads(w['steps']))}" for w in wfs)
+    rules = "\n".join(f"{g['code']} {g['rule']}" for g in gs)
+    user = f"THE TRIP\n{text}\n\nTHE PLAYBOOK (follow the matching workflow's steps)\n{play}\n\nGUARDRAILS\n{rules}\n\nQUESTION\n{i.question.strip()}"
+    out = switchboard.run(store, job="answer", workflow="trips.ask", user=user, scope="trip_data", max_tokens=1200, effort="low")
+    return {"answer": out.text, "trip_id": tid, "model": out.model, "cost_cents": out.cost_cents, "fell_back": out.fell_back}

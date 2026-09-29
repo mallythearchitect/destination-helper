@@ -5,45 +5,53 @@
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Destination Helper</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
-<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,500;9..144,600;9..144,700&family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Caprasimo&family=Figtree:wght@400;500;600;700&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="/ui-kit/tokens.css">
 <link rel="stylesheet" href="/ui-kit/shell.css">
 <link rel="stylesheet" href="/ui-kit/app.css">
 <style>
-.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(210px,1fr));gap:10px;margin-top:8px}
-.app{border:1px solid var(--line);background:var(--ink-3);padding:14px 16px;text-decoration:none;color:inherit;display:block;border-radius:var(--radius);box-shadow:var(--shadow-sm)}
-.app h2{font-size:19px;color:var(--paper)}
-.app p{margin:4px 0 0;color:var(--mut);font-size:12.5px}
-.app .st{display:inline-block;margin-top:8px;font-size:10.5px;letter-spacing:.12em;text-transform:uppercase;color:var(--sea);font-weight:700}
-a.app:hover{border-color:var(--gold);box-shadow:var(--shadow-md)}
+.top{display:flex;justify-content:space-between;align-items:flex-end;gap:16px;margin:10px 0 22px;flex-wrap:wrap}
+.top h1{font-size:46px;margin:0 0 4px}
+.top .sub{font-size:15px;color:var(--mut)}
+.tripcard{display:grid;grid-template-columns:72px 88px 1fr auto;gap:18px;align-items:center;background:var(--color-surface);border-radius:var(--radius);padding:22px 26px;margin-bottom:12px;text-decoration:none;color:inherit}
+.tripcard:hover{background:var(--color-neutral-200)}
+.days{width:72px;height:72px;border-radius:50%;display:grid;place-items:center;background:var(--color-accent-2-200);color:var(--color-accent-2-900);text-align:center;line-height:1}
+.days.near{background:var(--color-accent-2-800);color:var(--color-bg)}
+.days b{font-family:var(--font-heading);font-size:24px;display:block}.days small{font-size:9px;letter-spacing:.12em;text-transform:uppercase;margin-top:2px}
+.tripcard .ph{width:88px;height:88px}
+.tripcard h2{font-size:30px;margin:0 0 4px;line-height:1.05}
+.tripcard .meta{font-size:14px;color:var(--mut)}
+.tripcard .chips{margin:10px 0 0;gap:6px}
+.tripcard .chips span{font-size:12px;padding:4px 12px;border-radius:var(--radius-pill);background:var(--color-neutral-100);color:var(--paper)}
+.tripcard .chips span.fix{background:var(--color-accent);color:var(--color-bg)}.tripcard .chips span.warn{background:var(--color-accent-100);color:var(--color-accent-800)}.tripcard .chips span.ok{background:var(--color-accent-2-100);color:var(--color-accent-2-800)}
+.tripcard .side{text-align:right;display:flex;flex-direction:column;align-items:flex-end;gap:10px}
+.tripcard .stage{font-size:12px;padding:4px 12px;border-radius:var(--radius-pill);background:var(--color-neutral-100)}
+.tripcard .health{font-family:var(--font-heading);font-size:24px;line-height:1}.tripcard .health small{font-family:var(--font-body);font-size:11px;color:var(--mut);margin-left:4px}
+.past{margin-top:34px}.past h3{font-size:22px;margin:0 0 6px;display:flex;justify-content:space-between;align-items:baseline}
+.past .row-p{display:flex;justify-content:space-between;gap:12px;padding:12px 0;border-top:1px solid var(--line);font-size:14px;text-decoration:none;color:inherit}
+.past .row-p:hover b{color:var(--color-accent)}
+.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(220px,1fr));gap:12px;margin-top:8px}
+.app{background:var(--color-surface);padding:18px 20px;text-decoration:none;color:inherit;display:block;border-radius:var(--radius)}
+.app h2{font-size:22px;color:var(--paper)}
+.app p{margin:4px 0 0;color:var(--mut);font-size:13px}
+.app .st{display:inline-block;margin-top:10px;font-size:10.5px;letter-spacing:.12em;text-transform:uppercase;color:var(--color-accent);font-weight:600}
+a.app:hover{background:var(--color-neutral-200)}
 .spark{width:100%;height:44px;display:block}
-.run{display:grid;grid-template-columns:1fr auto;gap:8px;padding:6px 0;border-top:1px solid var(--line);font-size:13px}
+.run{display:grid;grid-template-columns:1fr auto;gap:8px;padding:7px 0;border-top:1px solid var(--line);font-size:13px}
 .run:first-child{border-top:0}
 .lead{color:var(--paper-2);max-width:720px;margin:0 0 14px}
-.next-trip{display:grid;grid-template-columns:1fr auto;gap:16px;align-items:center;background:var(--night);color:#fff;border-radius:var(--radius);padding:22px 24px;margin-bottom:14px;box-shadow:var(--shadow-md);text-decoration:none;position:relative;overflow:hidden}
-.next-trip::before{content:"";position:absolute;right:-60px;top:-80px;width:260px;height:260px;border-radius:50%;background:radial-gradient(circle,rgba(228,100,59,.45),transparent 65%);pointer-events:none}
-.next-trip .lab{font-size:11px;letter-spacing:.14em;text-transform:uppercase;color:rgba(255,255,255,.7);font-weight:700}
-.next-trip h2{font-size:30px;color:#fff;margin:4px 0 2px}
-.next-trip .meta{font-size:13.5px;color:rgba(255,255,255,.75)}
-.next-trip .big{font-family:var(--font-heading);font-size:44px;line-height:1;text-align:right}
-.next-trip .big small{display:block;font-family:var(--font-body);font-size:11px;letter-spacing:.14em;text-transform:uppercase;color:rgba(255,255,255,.7);margin-top:4px}
-.trip{display:grid;grid-template-columns:1fr auto;gap:10px;padding:10px 0;border-top:1px solid var(--line);align-items:center;text-decoration:none;color:inherit}
-.trip:first-child{border-top:0}.trip:hover b{color:var(--gold)}
-.trip .sub{font-size:12.5px;color:var(--mut)}
-.hp{display:inline-block;width:10px;height:10px;border-radius:50%;margin-right:6px;vertical-align:middle}
-@media (max-width:760px){.next-trip{grid-template-columns:1fr;padding:18px 16px}.next-trip .big{text-align:left;font-size:36px}}
+@media (max-width:760px){.top h1{font-size:36px}.tripcard{grid-template-columns:56px 1fr;gap:12px;padding:16px}.days{width:56px;height:56px}.days b{font-size:19px}.tripcard .ph{display:none}.tripcard h2{font-size:24px}.tripcard .side{grid-column:1/-1;flex-direction:row;justify-content:space-between;align-items:center}}
 </style>
 </head>
 <body>
 <header class="band"><div class="appbar">
  <span class="appbar-brand"><span class="appbar-eyebrow">Destination Helper</span>Home</span>
- <span class="appbar-right"><span class="pill dev-only" id="health">engine <b>…</b></span></span>
+ <span class="appbar-right"><span class="pill dev-only" id="health">engine <b>…</b></span><a href="/apps/trips/web/">Trips</a><a href="/apps/destinations/web/">Destinations</a><a href="/apps/system/web/browse.html" data-user-label="History" data-dev-label="Browse">History</a></span>
 </div></header>
 <main class="wrap">
  <div class="side-layout">
-  <aside class="sidebar">
-   <div><h4>Home</h4><nav class="sidenav" id="tabs"><a href="#today" class="on">Overview</a><a href="#tracking" class="dev-only">Tracking</a><a href="#workflows" class="dev-only">Workflows</a><a href="#apps">Apps</a></nav></div>
-   <div><h4>What it does</h4><div class="opts"><button class="sub" disabled>plans your trip</button><button class="sub" disabled>checks the plan</button><button class="sub" disabled>gets you ready</button><button class="sub" disabled>runs the trip with you</button></div></div>
+  <aside class="sidebar dev-only">
+   <div><h4>Home</h4><nav class="sidenav" id="tabs"><a href="#today" class="on">Your trips</a><a href="#tracking" class="dev-only">Tracking</a><a href="#workflows" class="dev-only">Workflows</a><a href="#apps">Apps</a></nav></div>
   </aside>
   <div class="content">
    <section class="panel on" id="p-today"></section>
@@ -55,15 +63,15 @@ a.app:hover{border-color:var(--gold);box-shadow:var(--shadow-md)}
 </main>
 <script src="/ui-kit/app.js"></script>
 <script src="home.js"></script>
+<script src="/ui-kit/helper.js"></script>
 <script src="/ui-kit/tour.js"></script>
 <script>
 Tour.init({ page: 'home', steps: [
-  { title: 'Destination Helper', text: 'A trip co-pilot: it plans the trip, checks the plan for the mistakes that cost money, helps you prepare, then runs the trip live. Work and personal, any size. Everything lives in one file on this computer.' },
-  { target: '#trips-now', title: 'Your trips', text: 'Each trip with its stage, what is still to book, and what the checker has open. Click one to open it.' },
-  { target: '#coming-up', title: 'Coming up', text: 'Deadlines and timed plans from every trip in the next two weeks, so nothing sneaks up on you.' },
-  { target: '#tabs a[href="#apps"]', title: 'The apps', text: 'Trips is the co-pilot. Destinations is the atlas of places with scores and costs. History holds every trip, place and note you have kept. Settings holds your home city, time zone and keys.' },
-  { target: '#mode-switch', title: 'User and Developer', text: 'User mode is the app as a traveller sees it. Developer mode shows the engine behind it: what ran overnight, the numbers it tracks, the AI inbox, rule codes, the settings behind every rule.' },
-  { target: '#tour-go', title: 'Go anywhere', text: '<b>Go to</b> jumps to any page from any page; <b>? Tour</b> replays a page\'s tour.' },
+  { title: 'Destination Helper', text: 'A trip co-pilot: it plans the trip, checks the plan for the mistakes that cost money, helps you get ready, then runs the trip with you. Work and personal, any size.' },
+  { target: '#trips-now', title: 'Your trips', text: 'Each trip with the days to go, what needs fixing, what is still to book, and its health. Tap one to open it.' },
+  { target: '#new-trip', title: 'Five questions to start', text: 'New trip asks who\'s going, where and when (or not sure yet), your budget, what\'s already booked, and how much help you want.' },
+  { target: '#helper-fab', title: 'Ask the helper', text: 'Ask about any trip in your own words. It answers from your plan, the checks and the local tips, and suggests. Nothing is added to a trip until you say so.' },
+  { target: '#mode-switch', title: 'User and Developer', text: 'User mode is the app as a traveller sees it. Developer mode shows the engine behind it.' },
 ]});
 </script>
 </body>

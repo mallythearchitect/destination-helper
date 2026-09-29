@@ -25,6 +25,7 @@ const showTab = App.tabs({ render: { today: renderToday, tracking: renderTrackin
 async function load() {
   [S.trips, S.wf, S.metrics] = await Promise.all([api('GET', '/v1/trips'), api('GET', '/v1/workflows'), api('GET', '/v1/track/metrics')]);
   const p = $('#health'); p.className = 'pill ok dev-only'; p.innerHTML = `engine <b>ok</b> · ${S.trips.length} trip${S.trips.length === 1 ? '' : 's'}`;
+  document.querySelector('.sidebar').classList.toggle('dev-only', true);
 }
 async function comingUp(live) {
   const plans = await Promise.all(live.slice(0, 6).map(t => api('GET', `/v1/trips/${t.id}`).catch(() => null)));
@@ -37,24 +38,27 @@ async function comingUp(live) {
   return out.sort((a, b) => a.sort < b.sort ? -1 : 1).slice(0, 10);
 }
 function renderToday() {
-  const live = S.trips.filter(t => t.stage !== 'done'), blockers = live.reduce((a, t) => a + (t.findings.blocker || 0), 0), warns = live.reduce((a, t) => a + (t.findings.warn || 0), 0);
-  const toBook = live.reduce((a, t) => a + t.to_book, 0), tasks = live.reduce((a, t) => a + t.tasks_open, 0);
-  const next = live.filter(t => t.start_date).sort((a, b) => a.start_date < b.start_date ? -1 : 1)[0];
-  const runsToday = S.wf.runs.filter(r => r.started_at.slice(0, 10) === new Date().toISOString().slice(0, 10));
-  const days = next ? Math.ceil((new Date(next.start_date + 'T00:00:00') - Date.now()) / 864e5) : null;
-  const hc = h => h >= 80 ? 'var(--ok)' : h >= 50 ? 'var(--sun)' : 'var(--bad)';
-  $('#p-today').innerHTML = `${next ? `<a class="next-trip" href="/apps/trips/web/"><div><div class="lab">Next trip</div><h2>${esc(next.name)}</h2><div class="meta">${esc(fmtD(next.start_date))}${next.end_date ? ' → ' + esc(fmtD(next.end_date)) : ''} · ${next.headcount} going · ${next.items} items · ${next.to_book ? next.to_book + ' to book' : 'all booked'}${next.findings.blocker ? ` · <b style="color:#F08A5D">${next.findings.blocker} blocker${next.findings.blocker === 1 ? '' : 's'}</b>` : ''}</div></div><div class="big">${days > 0 ? days : days === 0 ? 'today' : 'now'}<small>${days > 0 ? 'days to go' : 'under way'}</small></div></a>` : `<div class="card"><h3>No trip yet</h3><div>Start one in Trips: five questions, then the checker watches the plan as you add to it.</div><div class="row" style="margin-top:10px"><a class="sbtn gold" href="/apps/trips/web/">Open Trips</a></div></div>`}
-   <div class="kpis">
-    <a class="kpi ${blockers ? 'warn' : ''}" href="/apps/trips/web/#checks"><div class="lab">Things to fix</div><div class="val">${blockers}</div><div class="sub">${blockers === 1 ? 'would cost money' : 'would cost money'} · ${warns} worth a look</div></a>
-    <a class="kpi" href="/apps/trips/web/#prepare"><div class="lab">Still to book</div><div class="val">${toBook}</div><div class="sub">${tasks} task${tasks === 1 ? '' : 's'} open</div></a>
-    <a class="kpi" href="/apps/trips/web/"><div class="lab">Trips</div><div class="val">${live.length}</div><div class="sub">${S.trips.length - live.length} done</div></a>
-   </div>
-   <div class="two">
-    <div class="card" id="trips-now"><h3>Your trips</h3>${S.trips.length ? S.trips.map(t => `<a class="trip" href="/apps/trips/web/"><div><b><i class="hp" style="background:${hc(t.health)}" title="health ${t.health}"></i>${esc(t.name)}</b><div class="sub">${esc(t.stage)} · ${t.start_date ? esc(fmtD(t.start_date)) + (t.end_date ? ' → ' + esc(fmtD(t.end_date)) : '') : 'no dates'} · ${t.headcount} going · ${t.items} items</div></div><div class="sub">health ${t.health}${t.to_book ? ' · ' + t.to_book + ' to book' : ''}</div></a>`).join('') : '<div class="small">No trips yet. <a href="/apps/trips/web/">Start one</a>.</div>'}</div>
-    <div class="card" id="coming-up"><h3>Coming up <span class="small">next two weeks</span></h3><div class="small">Looking…</div></div>
-    <div class="card dev-only"><h3>What the engine did today</h3>${runsToday.length ? runsToday.map(r => `<div class="run"><span>${esc(r.name)} <span class="small">${esc(r.trigger)} · ${fmtWhen(r.started_at)}</span></span><span class="${r.ok ? 'ok' : 'bad'}">${r.ok ? 'ok' : 'failed'}</span></div>`).join('') : '<div class="small">Nothing yet today. It re-checks every trip at 6 AM and writes the day\'s numbers after midnight (Workflows tab).</div>'}</div>
-   </div>
-   <h2 class="sec" style="margin-top:8px">Apps</h2>${appsGrid()}`;
+  const today = new Date().toISOString().slice(0, 10), words = ['No', 'One', 'Two', 'Three', 'Four', 'Five', 'Six'];
+  const live = S.trips.filter(t => t.stage !== 'done' && !(t.end_date && t.end_date < today)).sort((a, b) => (a.start_date || '9') < (b.start_date || '9') ? -1 : 1);
+  const past = S.trips.filter(t => !live.includes(t)).sort((a, b) => (a.start_date || '') < (b.start_date || '') ? 1 : -1);
+  const dayIn = t => t.start_date ? Math.ceil((new Date(t.start_date + 'T00:00:00') - Date.now()) / 864e5) : null;
+  const first = live.find(t => dayIn(t) != null && dayIn(t) >= 0);
+  let sub = 'Nothing planned yet. Start with five quick questions.';
+  if (live.length) { const d = first ? dayIn(first) : null, when = d == null ? '' : d === 0 ? 'leaves today' : d === 1 ? 'leaves tomorrow' : `leaves in ${d} days`; const count = live.length === 1 ? 'One trip planned' : `${words[live.length] || live.length} planned`; sub = when ? (live.length === 1 ? `${count}. It ${when}.` : `${count}. The next one ${when}.`) : `${count}.`; }
+  const people = t => t.headcount === 1 ? 'just me' : `${t.headcount} people`;
+  const purpose = t => ({ personal: 'personal', work: 'work', mixed: 'work + personal' })[t.purpose] || t.purpose;
+  const chips = t => { const c = []; if (t.findings.blocker) c.push(`<span class="fix">${t.findings.blocker} fix now</span>`); if (t.findings.warn) c.push(`<span class="warn">${t.findings.warn} worth a look</span>`); if (t.to_book) c.push(`<span>${t.to_book} left to book</span>`); if (t.waiting_on) c.push(`<span>Waiting to hear back from ${t.waiting_on} place${t.waiting_on === 1 ? '' : 's'}</span>`); if (!c.length) c.push(`<span class="ok">${t.items ? 'All booked' : 'All set'}</span>`); return c.join(''); };
+  const stageWord = s => ({ plan: 'Plan', prepare: 'Prepare', run: 'Under way', done: 'Recap' })[s] || s;
+  $('#p-today').innerHTML = `<div class="top"><div><h1>Your trips</h1><div class="sub">${esc(sub)}</div></div><a class="sbtn gold" id="new-trip" href="/apps/trips/web/#new">New trip</a></div>
+   <div id="trips-now">${live.map(t => { const d = dayIn(t); return `<a class="tripcard" href="/apps/trips/web/?trip=${t.id}">
+     <div class="days ${t === first ? 'near' : ''}"><b>${d == null ? '?' : d < 0 ? 'now' : d}</b><small>${d == null ? 'no date' : d < 0 ? 'under way' : d === 1 ? 'day' : 'days'}</small></div>
+     <div class="ph" data-photo="${esc((t.places && t.places[0]) || t.name.split(',')[0])}"></div>
+     <div><h2>${esc(t.name)}</h2><div class="meta">${t.start_date ? esc(fmtD(t.start_date)) + (t.end_date ? ' – ' + esc(fmtD(t.end_date)) : '') : 'no dates yet'}${t.places && t.places.length ? ' · ' + esc(t.places.map(x => x.split(',')[0]).join(', ')) : ''} · ${people(t)} · ${purpose(t)}</div><div class="chips">${chips(t)}</div></div>
+     <div class="side"><span class="stage">${esc(stageWord(t.stage))}</span><span class="health">${t.health}<small>health</small></span></div></a>`; }).join('') || '<div class="card"><div>No trips yet. Start one with five quick questions.</div></div>'}</div>
+   <div class="card light" id="coming-up" style="margin-top:18px"><h3>Coming up <span class="small">next two weeks</span></h3><div class="small">Looking…</div></div>
+   ${past.length ? `<div class="past"><h3>Past trips <a class="small" href="/apps/trips/web/">See all</a></h3>${past.slice(0, 5).map(t => `<a class="row-p" href="/apps/trips/web/?trip=${t.id}"><span><b>${esc(t.name)}</b> · ${t.start_date ? esc(fmtD(t.start_date)) + (t.end_date ? ' – ' + esc(fmtD(t.end_date)) : '') : ''} · ${people(t)}</span><span class="small">${t.spent_home_cents ? money0(t.spent_home_cents) + ' spent · ' : ''}see the recap</span></a>`).join('')}</div>` : ''}
+   <div class="dev-only" style="margin-top:28px"><h2 class="sec">Apps</h2>${appsGrid()}</div>`;
+  $('#p-today').querySelectorAll('[data-photo]').forEach(el => App.photo(el.dataset.photo, el, 'circle'));
   comingUp(live).then(list => { const el = $('#coming-up'); if (!el) return; el.innerHTML = `<h3>Coming up <span class="small">next two weeks</span></h3>${list.length ? list.map(x => `<div class="run"><span>${x.kind === 'blocker' ? '⛔ ' : x.kind === 'overdue' ? '⏰ ' : x.kind === 'deadline' ? '📌 ' : ''}${esc(x.what)} <span class="small">${esc(x.trip)}</span></span><span class="small">${x.kind === 'blocker' ? 'fix now' : x.kind === 'overdue' ? 'overdue' : esc(x.when.length > 10 ? new Date(x.when).toLocaleString([], { month: 'short', day: 'numeric', hour: 'numeric', minute: '2-digit' }) : fmtD(x.when))}</span></div>`).join('') : '<div class="small">Nothing due in the next two weeks.</div>'}`; });
 }
 async function renderTracking() {
@@ -88,6 +92,6 @@ function renderApps() {
 }
 App.onMode(() => { const t = location.hash.slice(1); showTab(App.isDev() || !['tracking', 'workflows'].includes(t) ? t : 'today'); });
 (async () => {
-  try { await load(); const t = location.hash.slice(1); showTab(['today', 'tracking', 'workflows', 'apps'].includes(t) && (App.isDev() || !['tracking', 'workflows'].includes(t)) ? t : 'today'); }
+  try { await load(); const t = location.hash.slice(1); showTab(['today', 'tracking', 'workflows', 'apps'].includes(t) && (App.isDev() || !['tracking', 'workflows', 'apps'].includes(t)) ? t : 'today'); }
   catch (e) { const p = $('#health'); p.className = 'pill bad'; p.innerHTML = 'engine <b>down</b>'; App.down('#p-today'); }
 })();

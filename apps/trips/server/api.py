@@ -37,6 +37,15 @@ def region(rid: str, request: Request):
         raise HTTPException(404, f"no region pack {rid}")
 
 
+@router.get("/briefing/{tid}")
+def briefing(tid: str, request: Request):
+    """The plan as plain text, what the helper chat reads."""
+    try:
+        return {"text": queries.briefing(_store(request), tid)}
+    except LookupError:
+        raise HTTPException(404, f"no trip {tid}")
+
+
 @router.get("/{tid}/calendar.ics")
 def calendar(tid: str, request: Request):
     """Every item and deadline as a calendar file (ADMIN-03): open it in Google Calendar or Apple Calendar."""

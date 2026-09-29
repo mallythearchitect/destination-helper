@@ -93,11 +93,17 @@ def confirmations(con, tid: str) -> list[dict]:
     return [dict(r) for r in con.execute("SELECT * FROM trip_confirmations WHERE trip_id=? AND deleted_at IS NULL ORDER BY created_at DESC", (tid,))]
 
 
+def _finding(r) -> dict:
+    d = dict(r)
+    d["fix_action"] = _loads(d.get("fix_action"), None)
+    return d
+
+
 def findings(con, tid: str, all_: bool = False) -> list[dict]:
     order = "CASE severity WHEN 'blocker' THEN 0 WHEN 'warn' THEN 1 ELSE 2 END, first_seen"
     if all_:
-        return [dict(r) for r in con.execute(f"SELECT * FROM trip_findings WHERE trip_id=? ORDER BY status='open' DESC, {order}", (tid,))]
-    return [dict(r) for r in con.execute(f"SELECT * FROM trip_findings WHERE trip_id=? AND status='open' ORDER BY {order}", (tid,))]
+        return [_finding(r) for r in con.execute(f"SELECT * FROM trip_findings WHERE trip_id=? ORDER BY status='open' DESC, {order}", (tid,))]
+    return [_finding(r) for r in con.execute(f"SELECT * FROM trip_findings WHERE trip_id=? AND status='open' ORDER BY {order}", (tid,))]
 
 
 def workflow_runs(con, tid: str) -> list[dict]:
@@ -310,7 +316,41 @@ def trips(store: Store) -> list[dict]:
     w = logic(store, "logic.trips.defaults").get("health_weights", {})
     for t in out:
         t["health"] = health(t["findings"], w)
+        c = costs(store, t["id"])
+        t["planned_home_cents"], t["spent_home_cents"], t["booked_home_cents"] = c["planned_home_cents"], c["actual_home_cents"], c["booked_home_cents"]
+        with store.read():
+            t["waiting_on"] = store.con.execute("SELECT count(*) FROM trip_confirmations WHERE trip_id=? AND deleted_at IS NULL AND status IN ('sent','call')", (t["id"],)).fetchone()[0]
+            t["places"] = [r[0] for r in store.con.execute("SELECT DISTINCT from_place FROM trip_items WHERE trip_id=? AND deleted_at IS NULL AND kind='stay' AND from_place IS NOT NULL ORDER BY start_at", (t["id"],))]
     return out
+
+
+def briefing(store: Store, tid: str) -> str:
+    """The plan as plain text for the helper chat: what a model needs to answer about this trip."""
+    p = plan(store, tid)
+    t = p["trip"]
+    L = [f"Trip: {t['name']}. {t['start_date']} to {t['end_date']}. {t['headcount']} going. Purpose: {t['purpose']}. Stage: {t['stage']}. Home currency {t['home_currency']}"
+         + (f", local {t['local_currency']} at {t['fx_rate']} per 1 {t['home_currency']}." if t.get('fx_rate') else "."),
+         f"What it's for: {t.get('purpose_note') or 'not said'}.", "Items by day:"]
+    for d in p["days"]:
+        night = d["night"]["title"] if d["night"] else "no stay"
+        L.append(f"- {d['label']}: night at {night}")
+        for iid in d["items"]:
+            it = next(x for x in p["items"] if x["id"] == iid)
+            price = f"{it['group_cents'] / 100:.0f} {it['currency']} for {it['headcount_used']}" if it["group_cents"] is not None else "no price"
+            L.append(f"    {it['kind']}: {it['title']} [{it['status']}] {it['start_at'] or ''}{' → ' + it['end_at'] if it['end_at'] else ''} {it.get('from_place') or ''}→{it.get('to_place') or ''} {price}")
+    if p["findings"]:
+        L.append("Open findings from the checker:")
+        L += [f"- [{f['severity']}] {f['message']} Fix: {f['fix'] or ''}" for f in p["findings"]]
+    if p["tasks"]:
+        L.append("Tasks: " + "; ".join(f"{x['title']} (due {x['due'] or 'no date'}{', done' if x['done_at'] else ''})" for x in p["tasks"][:15]))
+    c = p["costs"]
+    L.append(f"Costs in {c['home_currency']} cents: planned {c['planned_home_cents']}, booked {c['booked_home_cents']}, to book {c['to_book_home_cents']}, spent {c['actual_home_cents']}.")
+    if p["region"]:
+        with store.read():
+            r = region_row(store.con, p["region"]["id"])
+        for k, lines in (r["sections"] if r else {}).items():
+            L.append(f"Local tips, {k}: " + " ".join(lines)[:600])
+    return "\n".join(L)
 
 
 # ---- the calendar file ------------------------------------------------------------

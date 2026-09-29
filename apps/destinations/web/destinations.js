@@ -101,19 +101,38 @@ function toggleCompare(id, on) {
   try { localStorage.setItem('dest.compare', JSON.stringify(S.compare)); } catch (e) {}
 }
 async function renderCompare() {
-  const ps = await Promise.all(S.compare.map(id => api('GET', `/v1/destinations/places/${id}`).catch(() => null))); const list = ps.filter(Boolean);
-  $('#p-compare').innerHTML = `<h2 class="sec">Compare <span class="small">${list.length} of ${(S.opt.defaults || {}).compare_limit || 4}</span></h2><div class="help">Tick places on the Atlas list to add them here.</div>
-   ${list.length ? `<div class="scroll"><table class="t"><thead><tr><th></th>${list.map(p => `<th>${esc(p.name)}<br><span class="small">${esc(p.kind_label)}</span></th>`).join('')}</tr></thead><tbody>
-    <tr><td>Fit for ${esc(goalLabel(S.goal))}</td>${list.map(p => `<td class="num"><b>${p.goal_fits[S.goal] ?? '—'}</b></td>`).join('')}</tr>
-    ${S.opt.domains.map(d => `<tr><td>${esc(d.label)}</td>${list.map(p => { const s = p.scores.find(x => x.domain === d.id); return `<td class="num">${s ? s.value + ' ' + badge(s.confidence) : '—'}</td>`; }).join('')}</tr>`).join('')}
-    <tr><td>Population</td>${list.map(p => `<td class="num">${pop(p.population) || '—'}</td>`).join('')}</tr>
-    <tr><td>Cost per day</td>${list.map(p => `<td class="num">${p.cost_per_day != null ? '$' + p.cost_per_day : '—'}</td>`).join('')}</tr>
-    <tr><td>Distance from home</td>${list.map(p => `<td class="num">${miles(p.distance_miles)}</td>`).join('')}</tr>
-    <tr><td>Tier</td>${list.map(p => `<td>${esc(TIER_LABEL[p.tier] || p.tier || '—')}</td>`).join('')}</tr>
-    <tr><td>Tags</td>${list.map(p => `<td class="small">${esc(p.tags.join(', ')) || '—'}</td>`).join('')}</tr>
-    <tr><td>My status</td>${list.map(p => `<td>${esc(p.status || '—')}</td>`).join('')}</tr>
-    <tr><td></td>${list.map(p => `<td><button class="sbtn mini" data-uncmp="${p.id}">remove</button></td>`).join('')}</tr></tbody></table></div>` : ''}`;
-  $('#p-compare').querySelectorAll('[data-uncmp]').forEach(b => b.onclick = () => { toggleCompare(b.dataset.uncmp, false); renderCompare(); });
+  const P = $('#p-compare');
+  if (!S.compare.length) { P.innerHTML = `<div class="cmp-head"><h1>Same trip, cheaper place</h1><div class="sub">Tick up to ${S.opt.defaults.compare_limit || 4} places on Explore and see them side by side: what a day costs, what the whole trip costs, how safe it feels, how to get there.</div></div><div class="card"><div>Nothing picked yet. Go to <a href="#atlas" data-go="atlas">Explore</a> and tick "compare" on a few places.</div></div>`; P.querySelector('[data-go]').onclick = e => { e.preventDefault(); showTab('atlas'); }; return; }
+  P.innerHTML = '<div class="small">Working it out…</div>';
+  let ctx = { days: 7, people: 1, label: '' };
+  try { const trips = await api('GET', '/v1/trips'); const t = trips.filter(x => x.stage !== 'done' && x.start_date && x.end_date).sort((a, b) => a.start_date < b.start_date ? -1 : 1)[0]; if (t) ctx = { days: Math.max(1, Math.round((new Date(t.end_date) - new Date(t.start_date)) / 864e5)), people: t.headcount, label: `${fmtD(t.start_date)} – ${fmtD(t.end_date)}`, trip: t }; } catch (e) {}
+  const got = await Promise.all(S.compare.map(async id => { try { const d = await api('GET', `/v1/destinations/places/${id}`); const tc = d.cost_per_day != null ? await api('GET', `/v1/destinations/trip-cost?place_id=${id}&days=${ctx.days}&people=${ctx.people}`).catch(() => null) : null; return { d, tc }; } catch (e) { return null; } }));
+  const cols = got.filter(Boolean);
+  if (cols.length !== S.compare.length) { S.compare = cols.map(c => c.d.id); try { localStorage.setItem('dest.compare', JSON.stringify(S.compare)); } catch (e) {} if (!cols.length) return renderCompare(); }
+  const base = cols[0].tc ? cols[0].tc.total : null;
+  const rel = tc => { if (!tc || base == null) return ['tagx', 'no total yet']; const r = (tc.total - base) / base; if (Math.abs(r) < 0.05) return ['tagx', 'About the same']; return r < 0 ? ['tagx acc', `Cheaper by ${Math.round(-r * 100)}%`] : ['tagx', `Pricier by ${Math.round(r * 100)}%`]; };
+  const score = (d, k) => { const s = d.scores.find(x => x.domain === k); return s ? s : null; };
+  const who = ctx.people === 1 ? 'for you' : ctx.people === 2 ? 'for two of you' : `for ${ctx.people} of you`;
+  const ways = d => (d.ways_there || []).filter(w => ['flights', 'all_modes'].includes(w.key)).map(w => `<a class="sbtn mini" href="${esc(w.url)}" target="_blank" rel="noopener">${esc(w.label)}</a>`).join(' ');
+  P.innerHTML = `<div class="cmp-head"><h1>Same trip, cheaper place</h1><div class="sub">${cols.length === 1 ? 'One place' : ['', '', 'Two', 'Three', 'Four'][cols.length] + ' places'}${ctx.label ? ` for ${esc(ctx.label)}` : ` for ${ctx.days} days`}, ${who}. Prices are typical days from the sources named; flights are a distance guess unless you enter a fare in Trip cost.</div></div>
+   <div class="cmp" style="--n:${cols.length}"><div class="lbl">${esc(ctx.label || ctx.days + ' days')}<br>${ctx.people} ${ctx.people === 1 ? 'person' : 'people'}</div>
+    ${cols.map(({ d, tc }, i) => { const [cls, txt] = i === 0 ? ['tagx acc2', 'Your pick'] : rel(tc); return `<div class="col"><div class="top"><span class="${cls}">${esc(txt)}</span><button data-rm="${d.id}">Remove</button></div><div class="ph" data-photo="${esc(d.name)}"></div><h3>${esc(d.name)}</h3><div class="sub">${esc([d.region && d.kind !== 'leisure' ? d.region : '', d.country].filter(Boolean).join(' · '))}${d.tier ? ' · ' + esc(TIER_LABEL[d.tier] || d.tier) : ''}</div></div>`; }).join('')}</div>
+   <table class="cmpt"><tbody>
+    <tr><td>How well it fits you</td>${cols.map(({ d }) => `<td>${d.fit != null ? `<div class="fitbar"><i><b style="width:${Math.round(d.fit)}%"></b></i><b>${Math.round(d.fit)}</b></div>` : '<span class="small">not scored</span>'}</td>`).join('')}</tr>
+    <tr><td>A day here, per person</td>${cols.map(({ d }) => `<td>${d.cost_per_day != null ? `<b class="big">$${d.cost_per_day}</b> <span class="tagx">${esc((d.dataset && d.dataset.confidence) || 'estimate')}</span>` : '<span class="small">no figure yet</span>'}</td>`).join('')}</tr>
+    <tr><td>The whole trip, ${esc(who.replace('for ', ''))}</td>${cols.map(({ tc }) => `<td>${tc ? `<b class="big">${money0(Math.round(tc.total * 100))}</b><div class="small">${ctx.days} days${tc.flights_total ? ' + flights ' + money0(Math.round(tc.flights_total * 100)) : ''}${tc.assumption ? ' · ' + esc(tc.assumption) : ''}</div>` : '<span class="small">—</span>'}</td>`).join('')}</tr>
+    <tr><td>How safe it feels</td>${cols.map(({ d }) => { const s = score(d, 'safety'); return `<td>${s ? `${s.value} <span class="small">from ${esc((s.from_indexes || []).join(', ') || 'the pack')}</span>` : '<span class="small">no figure</span>'}</td>`; }).join('')}</tr>
+    <tr><td>Day-to-day life</td>${cols.map(({ d }) => { const s = score(d, 'quality_of_life') || score(d, 'lifestyle'); return `<td>${s ? s.value : '<span class="small">no figure</span>'}</td>`; }).join('')}</tr>
+    <tr><td>Getting there from ${esc(S.opt.home.name.split(',')[0])}</td>${cols.map(({ d }) => `<td>${d.distance_miles != null ? `${d.distance_miles.toLocaleString()} mi` : '—'}${d.hub ? ` <span class="small">via ${esc(d.hub)}</span>` : ''}</td>`).join('')}</tr>
+    <tr><td>Look up the trip</td>${cols.map(({ d }) => `<td><div class="row">${ways(d)}</div></td>`).join('')}</tr>
+    <tr><td></td>${cols.map(({ d }, i) => `<td>${i === 0 ? `<span class="sbtn mini" style="cursor:default">Keep ${esc(d.name)}</span>` : `<a class="sbtn mini gold" href="/apps/trips/web/#new?place=${encodeURIComponent(d.name)}">Plan a trip here</a>`} ${d.status ? '' : `<button class="sbtn mini ghost" data-save="${d.id}">Save for later</button>`}</td>`).join('')}</tr>
+   </tbody></table>
+   <div class="row" style="margin-top:18px"><a href="#atlas" data-go="atlas" class="sbtn ghost">+ Add a place</a><span class="small">compare up to ${S.opt.defaults.compare_limit || 4}</span></div>
+   <div class="help">Weather for your dates and what travellers say arrive with the season layer; until then, tap a place on Explore for its sources.</div>`;
+  P.querySelectorAll('[data-photo]').forEach(el => App.photo(el.dataset.photo, el));
+  P.querySelectorAll('[data-rm]').forEach(b => b.onclick = () => { toggleCompare(b.dataset.rm, false); renderCompare(); });
+  P.querySelectorAll('[data-save]').forEach(b => b.onclick = async () => { await act('destinations.set_status', { place_id: b.dataset.save, status: 'want' }); toast('Saved for later.'); renderCompare(); });
+  P.querySelectorAll('[data-go]').forEach(a => a.onclick = e => { e.preventDefault(); showTab('atlas'); });
 }
 
 // ---------- trip cost ---------------------------------------------------------------

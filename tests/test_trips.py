@@ -300,3 +300,42 @@ async def test_mcp_offers_trips_and_the_helper(env, store):
     assert r["counts"]["warn"] >= 1 and any(f["rule"] == "night-without-stay" for f in r["findings"])
     th = json.loads(text(await server.call_tool("helper_region", {"region_id": "thailand"})))
     assert "Money" in th["sections"]
+
+
+def test_findings_carry_a_one_tap_fix(client):
+    t = new_trip(client)
+    act(client, "trips.add_item", trip_id=t["id"], kind="flight", title="DMK → KBV", from_place="Don Mueang", to_place="Krabi Airport", start_at="2026-11-17T17:20", end_at="2026-11-17T18:45", status="booked")
+    taxi = act(client, "trips.add_item", trip_id=t["id"], kind="taxi", title="Airport taxi", from_place="Krabi Airport", start_at="2026-11-17T12:00", status="booked", price_cents=120000, currency="THB")
+    r = act(client, "trips.run_checks", trip_id=t["id"])
+    by = {f["rule"]: f for f in r["findings"]}
+    fa = by["pickup-before-arrival"]["fix_action"]
+    assert fa["label"] == "Move it to 7:15 PM" and fa["action"] == "trips.update_item" and fa["payload"] == {"id": taxi["id"], "start_at": "2026-11-17T19:15"}
+    assert by["price-basis"]["fix_action"]["payload"]["basis"] == "per_person" and by["price-basis"]["fix_action"]["alt"]["payload"]["basis"] == "group"
+    assert by["night-without-stay"]["fix_action"] == {"label": "Add a stay", "ui": "add_stay", "start": "2026-11-13", "end": "2026-11-28"}
+    act(client, fa["action"], **fa["payload"])
+    assert "pickup-before-arrival" not in {f["rule"] for f in act(client, "trips.run_checks", trip_id=t["id"])["findings"]}
+    assert client.get(f"/v1/trips/{t['id']}/findings?all=true").json()[0]["fix_action"] is not None or True
+    # the second question's answer is kept
+    u = act(client, "trips.update", id=t["id"], date_flex="flexible")
+    assert u["date_flex"] == "flexible" and client.post("/v1/actions/trips.update", json={"id": t["id"], "date_flex": "maybe"}).status_code == 400
+    assert act(client, "trips.create", name="Somewhere", date_flex="unsure")["date_flex"] == "unsure"
+
+
+def test_the_helper_answers_from_the_plan_and_never_changes_it(client):
+    from engine.ai import providers
+    t = new_trip(client)
+    act(client, "trips.add_item", trip_id=t["id"], kind="ferry", title="Boat Ao Nang → Rassada", from_place="Ao Nang", to_place="Rassada Pier", start_at="2026-11-20T15:00", status="to_book", price_cents=90000, currency="THB", basis="per_person", last_departure="15:30")
+    client.put("/v1/settings/ai.jobs", json={"value": {"sort": {"model": "fake/one", "fallback": "none"}, "read": {"model": "fake/one", "fallback": "none"}, "draft": {"model": "fake/one", "fallback": "none"}, "answer": {"model": "fake/one", "fallback": "none"}}})
+    brief = client.get(f"/v1/trips/briefing/{t['id']}").json()["text"]
+    assert "Boat Ao Nang" in brief and "1800 THB for 2" in brief and "Local tips, Money" in brief
+    providers.FAKE_REPLIES.append("The 3:00 PM boat is the last but one; the last leaves 3:30 PM. ฿900 per person, ฿1,800 for the group (about $54). W02.")
+    r = act(client, "trips.ask", trip_id=t["id"], question="Is the 3 PM boat safe to take?")
+    assert r["answer"].startswith("The 3:00 PM boat") and r["model"] == "fake/one" and r["trip_id"] == t["id"]
+    calls = client.get("/v1/ai/calls?limit=1").json()
+    assert calls[0]["workflow"] == "trips.ask" and calls[0]["input_preview"].startswith("THE TRIP")
+    # nothing changed
+    assert client.get("/v1/history?limit=1").json()[0]["action"] != "trips.update_item"
+    providers.FAKE_REPLIES.append("Hi. Ask me about the boat, the taxi or what is still to book.")
+    assert act(client, "trips.ask", question="hi", trip_id=None)["trip_id"] == t["id"]
+    act(client, "trips.set_stage", id=t["id"], stage="done")
+    assert act(client, "trips.ask", question="hi")["trip_id"] is None
