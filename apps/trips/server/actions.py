@@ -714,3 +714,170 @@ def ask(store: Store, i: Ask, app: str = "trips") -> dict:
     user = f"THE TRIP\n{text}\n\nTHE PLAYBOOK (follow the matching workflow's steps)\n{play}\n\nGUARDRAILS\n{rules}\n\nQUESTION\n{i.question.strip()}"
     out = switchboard.run(store, job="answer", workflow="trips.ask", user=user, scope="trip_data", max_tokens=1200, effort="low")
     return {"answer": out.text, "trip_id": tid, "model": out.model, "cost_cents": out.cost_cents, "fell_back": out.fell_back}
+
+
+
+# ---- ways to do a leg (W02): options, ranked, one chosen ---------------------------------
+
+OPTION_FIELDS = ("mode", "label", "from_place", "to_place", "distance_miles", "speed_mph", "minutes", "depart_at", "price_cents", "currency",
+                 "basis", "last_departure", "link", "notes", "day")
+
+
+class AddOption(BaseModel):
+    trip_id: str
+    item_id: str | None = Field(None, description="The leg this is a way of doing; empty for a leg not in the plan yet (then give day, from and to)")
+    mode: str = Field(description="flight, train, bus, van, ferry, taxi, transfer or drive")
+    label: str | None = Field(None, description="e.g. 'Ferry via Ko Yao' or 'Nok Air 5:20 PM'")
+    from_place: str | None = None
+    to_place: str | None = None
+    day: str | None = Field(None, description="YYYY-MM-DD, for a leg not in the plan yet")
+    distance_miles: float | None = Field(None, description="Leave empty to estimate it from the two places")
+    speed_mph: float | None = Field(None, description="Leave empty for the mode's usual speed")
+    minutes: int | None = Field(None, description="The ride time if you know it; it beats distance and speed")
+    depart_at: str | None = Field(None, description="Local YYYY-MM-DDTHH:MM")
+    price_cents: int | None = None
+    currency: str | None = None
+    basis: str | None = Field(None, description="per_person or group")
+    last_departure: str | None = Field(None, description="HH:MM, the last one of the day on this route")
+    link: str | None = None
+    notes: str | None = None
+
+
+def _check_option(store: Store, v: dict) -> None:
+    kinds = q.logic(store, "logic.trips.kinds")
+    if v["mode"] not in kinds["transport"]:
+        raise ValueError(f"mode must be one of {kinds['transport']}")
+    if v["basis"] not in (None, "per_person", "group"):
+        raise ValueError("basis is per_person or group")
+    if v["price_cents"] is not None and v["price_cents"] < 0:
+        raise ValueError("a price is not negative")
+    if v["last_departure"] and q.parse_local(f"2000-01-01T{v['last_departure']}", None) is None:
+        raise ValueError("last_departure is HH:MM")
+    v["depart_at"] = _when(v["depart_at"], "depart_at")
+    v["day"] = _date(v["day"], "day")
+
+
+@action("trips.add_option", "Add a way to do one leg: a mode with a time, or a distance and a speed (minutes = distance ÷ speed × 60), plus the price. A zero or negative distance or speed is kept but skipped as invalid. The options are ranked fastest first by default.", AddOption)
+def add_option(store: Store, i: AddOption, app: str = "trips") -> dict:
+    from . import routes
+    v = i.model_dump()
+    _check_option(store, v)
+    oid, ts = uuid7(), now_iso()
+    with store.tx() as con:
+        t = _need_trip(con, i.trip_id)
+        if i.item_id:
+            it = _need_item(con, i.item_id)
+            v["from_place"] = v["from_place"] or it["from_place"]
+            v["to_place"] = v["to_place"] or it["to_place"]
+            v["day"] = v["day"] or (it["start_at"] or "")[:10] or None
+            n = con.execute("SELECT count(*) FROM trip_options WHERE item_id=? AND deleted_at IS NULL", (i.item_id,)).fetchone()[0]
+        else:
+            if not (v["from_place"] and v["to_place"]):
+                raise ValueError("a leg not in the plan yet needs from and to")
+            v["day"] = v["day"] or (v["depart_at"] or "")[:10] or None
+            n = con.execute("SELECT count(*) FROM trip_options WHERE trip_id=? AND item_id IS NULL AND deleted_at IS NULL AND coalesce(day,'')=coalesce(?,'') "
+                            "AND lower(trim(from_place))=lower(trim(?)) AND lower(trim(to_place))=lower(trim(?))", (i.trip_id, v["day"], v["from_place"], v["to_place"])).fetchone()[0]
+        cap = routes.rules(store)["max_options"]
+        if n >= cap:
+            raise ValueError(f"a leg holds at most {cap} options (Settings → Logic → Trips · comparing ways to do a leg)")
+        cur_ = (v["currency"] or t["local_currency"] or t["home_currency"]).upper() if v["price_cents"] is not None or v["currency"] else None
+        con.execute("INSERT INTO trip_options(id, trip_id, item_id, day, mode, label, from_place, to_place, distance_miles, speed_mph, minutes, depart_at, price_cents, currency, basis, "
+                    "last_departure, link, notes, version, created_at, updated_at) VALUES(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,1,?,?)",
+                    (oid, i.trip_id, i.item_id, v["day"], v["mode"], (v["label"] or "").strip() or None, v["from_place"], v["to_place"], v["distance_miles"], v["speed_mph"],
+                     v["minutes"], v["depart_at"], v["price_cents"], cur_, v["basis"], v["last_departure"], v["link"], v["notes"], ts, ts))
+        after = _row(con, "trip_options", oid)
+        history.record(con, app=app, action="trips.add_option", tbl="trip_options", row_key=oid, before=None, after=after)
+    return after
+
+
+class UpdateOption(BaseModel):
+    id: str
+    mode: str | None = None
+    label: str | None = None
+    from_place: str | None = None
+    to_place: str | None = None
+    day: str | None = None
+    distance_miles: float | None = None
+    speed_mph: float | None = None
+    minutes: int | None = None
+    depart_at: str | None = None
+    price_cents: int | None = None
+    currency: str | None = None
+    basis: str | None = None
+    last_departure: str | None = None
+    link: str | None = None
+    notes: str | None = None
+    clear: list[str] = Field(default_factory=list, description="Field names to blank out, e.g. minutes to go back to distance ÷ speed")
+
+
+@action("trips.update_option", "Change a way of doing a leg: its time, distance, speed, departure or price.", UpdateOption)
+def update_option(store: Store, i: UpdateOption, app: str = "trips") -> dict:
+    with store.tx() as con:
+        cur_row = _bump(con, "trip_options", i.id, None)
+        new = dict(cur_row)
+        for k in OPTION_FIELDS:
+            v = getattr(i, k)
+            if v is not None:
+                new[k] = v
+        for k in i.clear:
+            if k in OPTION_FIELDS and k != "mode":
+                new[k] = None
+        _check_option(store, new)
+        con.execute("UPDATE trip_options SET mode=?, label=?, from_place=?, to_place=?, day=?, distance_miles=?, speed_mph=?, minutes=?, depart_at=?, price_cents=?, currency=?, "
+                    "basis=?, last_departure=?, link=?, notes=?, version=version+1, updated_at=? WHERE id=?",
+                    (new["mode"], new["label"], new["from_place"], new["to_place"], new["day"], new["distance_miles"], new["speed_mph"], new["minutes"], new["depart_at"],
+                     new["price_cents"], (new["currency"] or "").upper() or None, new["basis"], new["last_departure"], new["link"], new["notes"], now_iso(), i.id))
+        after = _row(con, "trip_options", i.id)
+        history.record(con, app=app, action="trips.update_option", tbl="trip_options", row_key=i.id, before=cur_row, after=after)
+    return after
+
+
+@action("trips.delete_option", "Remove a way of doing a leg (undoable).", ById, dangerous=True)
+def delete_option(store: Store, i: ById, app: str = "trips") -> dict:
+    ts = now_iso()
+    with store.tx() as con:
+        cur_row = _bump(con, "trip_options", i.id, None)
+        con.execute("UPDATE trip_options SET deleted_at=?, version=version+1, updated_at=? WHERE id=?", (ts, ts, i.id))
+        after = _row(con, "trip_options", i.id)
+        history.record(con, app=app, action="trips.delete_option", tbl="trip_options", row_key=i.id, before=cur_row, after=after)
+    return after
+
+
+@action("trips.choose_option", "Use this way for the leg: its mode, times, price and last departure are written onto the leg (or the leg is made, if it was not in the plan yet). The other options stay for comparison.", ById)
+def choose_option(store: Store, i: ById, app: str = "trips") -> dict:
+    from . import routes
+    with store.read():
+        o = _row(store.con, "trip_options", i.id)
+        if not o or o["deleted_at"]:
+            raise records.NotFound(i.id)
+        t = q.trip_row(store.con, o["trip_id"])
+    w = routes.work_out(store, o, t, routes.rules(store))
+    title = o["label"] or " → ".join(x for x in (o["from_place"], o["to_place"]) if x) or o["mode"]
+    fields = {"kind": o["mode"], "from_place": o["from_place"], "to_place": o["to_place"], "start_at": o["depart_at"], "end_at": w["arrive_at"],
+              "price_cents": o["price_cents"], "currency": o["currency"], "basis": o["basis"], "last_departure": o["last_departure"], "link": o["link"]}
+    with store.tx() as con:
+        if o["item_id"]:
+            it = _need_item(con, o["item_id"])
+            patch = {k: v for k, v in fields.items() if v is not None}
+            label_titles = {r[0] for r in con.execute("SELECT label FROM trip_options WHERE item_id=? AND label IS NOT NULL", (o["item_id"],))}
+            if o["label"] and (it["title"] in label_titles or it["status"] in ("idea", "to_book")):
+                patch["title"] = o["label"]
+            clear = [k for k in ("start_at", "end_at") if fields[k] is None and it[k] and o["depart_at"]]
+            item = update_item(store, UpdateItem(id=o["item_id"], clear=clear, **patch), app)
+            item_id = o["item_id"]
+        else:
+            payload = {k: v for k, v in fields.items() if v is not None}
+            if not payload.get("start_at") and o["day"]:
+                payload["start_at"] = o["day"]
+            item = add_item(store, AddItem(trip_id=o["trip_id"], title=title, status="to_book", **payload), app)
+            item_id = item["id"]
+            key = (o["day"], (o["from_place"] or "").strip().lower(), (o["to_place"] or "").strip().lower())
+            for r in con.execute("SELECT id, day, from_place, to_place FROM trip_options WHERE trip_id=? AND item_id IS NULL AND deleted_at IS NULL", (o["trip_id"],)).fetchall():
+                if (r["day"], (r["from_place"] or "").strip().lower(), (r["to_place"] or "").strip().lower()) == key:
+                    con.execute("UPDATE trip_options SET item_id=?, updated_at=? WHERE id=?", (item_id, now_iso(), r["id"]))
+        ts = now_iso()
+        before = _row(con, "trip_options", i.id)
+        con.execute("UPDATE trip_options SET chosen_at=NULL WHERE item_id=? AND id<>?", (item_id, i.id))
+        con.execute("UPDATE trip_options SET chosen_at=?, item_id=?, version=version+1, updated_at=? WHERE id=?", (ts, item_id, ts, i.id))
+        history.record(con, app=app, action="trips.choose_option", tbl="trip_options", row_key=i.id, before=before, after=_row(con, "trip_options", i.id))
+    return {"item": item, "option_id": i.id, "ride_minutes": w["ride_minutes"], "door_minutes": w["door_minutes"]}

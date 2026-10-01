@@ -46,6 +46,13 @@ def briefing(tid: str, request: Request):
         raise HTTPException(404, f"no trip {tid}")
 
 
+@router.get("/{tid}/ways")
+def ways(tid: str, request: Request):
+    """Every leg with options: worked out (ride and door-to-door minutes, prices, why one is skipped) and ranked fastest, cheapest and balanced."""
+    from . import routes
+    return routes.groups(_store(request), tid)
+
+
 @router.get("/{tid}/calendar.ics")
 def calendar(tid: str, request: Request):
     """Every item and deadline as a calendar file (ADMIN-03): open it in Google Calendar or Apple Calendar."""

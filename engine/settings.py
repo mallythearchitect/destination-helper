@@ -231,6 +231,17 @@ REGISTRY: list[Setting] = [
             check=lambda v: _check_keys(v, {"headcount": int, "home_currency": str, "passport_country": str, "card_rate_markup_pct": (int, float),
                                             "ics_alarm_minutes": int, "stages": list, "statuses": list, "paid_by": list, "tags": list, "purposes": list,
                                             "handling": list, "health_weights": dict})),
+    Setting("logic.trips.route_options", "logic", "Trips · comparing ways to do a leg", "json",
+            {"speed_mph": {"flight": 450, "train": 55, "bus": 40, "van": 45, "ferry": 18, "taxi": 25, "transfer": 30, "drive": 45},
+             "terminal_minutes": {"flight": 150, "ferry": 30, "train": 15, "bus": 15, "van": 10},
+             "road_factor": 1.3, "rank_by": "fastest", "faster_by_minutes": 15, "max_options": 10},
+            "How the options for one leg are worked out and ranked (W02). Ride minutes = distance ÷ speed × 60 when no time is given; "
+            "a distance or speed of zero or less is skipped as invalid; the fastest wins. Speed is the mode's usual speed when none is "
+            "given; distance, when none is given, is the straight line between the two places (GeoNames) times road_factor for ground "
+            "modes. terminal_minutes is time at the airport, pier or station, added for the door-to-door figure. rank_by is fastest, "
+            "cheapest or balanced. faster_by_minutes is how much quicker an unchosen option must be before the checker mentions it. "
+            "max_options caps the options on one leg. Read by trips.leg_options, trips.add_option and the checker.",
+            extra={"used_by": ["trips.leg_options", "trips.add_option", "trips.run_checks"]}, check=lambda v: _check_route_options(v)),
     Setting("logic.ai.prompts", "logic", "AI · prompt overrides", "json", {},
             "Replace a workflow's prompt text: {\"trips.draft_message\": \"...\"}. Empty means the built-in prompt "
             "(engine/ai/prompts.py). An override is logged as version 'custom'. Score it on the Test scores tab before relying on it.",
@@ -323,6 +334,19 @@ def _check_task_templates(v):
         raise ValueError("expected [{kind, title, days_before}, ...]")
     for t in v:
         _check_keys(t, {"kind": str, "title": str, "days_before": int})
+
+
+def _check_route_options(v):
+    _check_keys(v, {"speed_mph": dict, "terminal_minutes": dict, "road_factor": (int, float), "rank_by": str, "faster_by_minutes": int, "max_options": int})
+    _check_map_of_numbers(v["speed_mph"])
+    if any(x <= 0 for x in v["speed_mph"].values()):
+        raise ValueError("every usual speed must be above zero")
+    if v["terminal_minutes"]:
+        _check_map_of_numbers(v["terminal_minutes"])
+    if v["rank_by"] not in ("fastest", "cheapest", "balanced"):
+        raise ValueError("rank_by is fastest, cheapest or balanced")
+    if v["max_options"] < 1:
+        raise ValueError("max_options is at least 1")
 
 
 def _check_extra_domains(v):

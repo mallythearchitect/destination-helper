@@ -87,6 +87,11 @@ def build(store: Store | None = None) -> MCPServer:
     def trip_costs(trip_id: str) -> str:
         return json.dumps(tq.costs(store, trip_id), default=str)
 
+    @server.tool(name="trip_leg_options", description="W02 for real: every leg of a trip that has options, each worked out (ride minutes = distance ÷ speed × 60 unless a time is given; door-to-door adds time at the terminal; zero or negative distance or speed is skipped), with prices for the group, flags (misses the last departure, over budget), and the fastest, cheapest and best named. Add options with trips_add_option, pick one with trips_choose_option.")
+    def trip_leg_options(trip_id: str) -> str:
+        from apps.trips.server import routes as troutes
+        return json.dumps(troutes.groups(store, trip_id), default=str)
+
     @server.tool(name="helper_workflow", description="A Destination Helper workflow by code (W01..W29): when it runs, its steps, what it gives, and its track record. Follow the steps when the person asks that kind of question; log the outcome with trips_log_workflow.")
     def helper_workflow(code: str) -> str:
         h = tq.helper(store)

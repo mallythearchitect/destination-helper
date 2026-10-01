@@ -215,6 +215,31 @@ def run(store: Store, trip: dict, items: list[dict], tasks: list[dict], confirma
     if international and any(it.get("currency") and it["currency"].upper() != trip["home_currency"].upper() for it in live) and not trip.get("fx_rate"):
         add("fx-missing", "trip", "info", "Prices in the local currency can't be converted: no exchange rate on the trip.", "Look it up today (TradingView) and note the date.")
 
+    # 10a. Ways to do a leg: a clearly faster way not taken, and legs still being decided.
+    from . import routes
+    R = routes.rules(store)
+    for g in routes.groups(store, trip["id"], trip):
+        opts = {o["id"]: o for o in g["options"]}
+        fastest = opts.get(g["fastest_id"])
+        if g["item_id"]:
+            it = next((x for x in live if x["id"] == g["item_id"]), None)
+            if not it or not fastest or fastest["chosen_at"]:
+                continue
+            chosen = opts.get(g["chosen_id"])
+            now_min = chosen["door_minutes"] if chosen and chosen["door_minutes"] is not None else (
+                int((it["_end"] - it["_start"]).total_seconds() // 60) + int(R["terminal_minutes"].get(it["kind"], 0)) if it.get("_start") and it.get("_end") else None)
+            if now_min is not None and fastest["door_minutes"] is not None and now_min - fastest["door_minutes"] >= R["faster_by_minutes"] and not fastest["flags"]:
+                add("faster-option", g["item_id"], "info",
+                    f"{fastest.get('label') or fastest['mode'].title()} gets you there about {routes.fmt_minutes(now_min - fastest['door_minutes'])} sooner than {it['title']}, door to door.",
+                    "Compare the ways for this leg and pick one.", it,
+                    fix_action={"label": f"Use {fastest.get('label') or fastest['mode']}", "action": "trips.choose_option", "payload": {"id": fastest["id"]}})
+        else:
+            best = opts.get(g["best_id"])
+            add("undecided-leg", g["key"], "info",
+                f"Still deciding how to get from {g['from_place']} to {g['to_place']}{' on ' + q.fmt_d(g['day']) if g['day'] else ''}: {g['valid']} way{'s' if g['valid'] != 1 else ''} compared.",
+                (f"The {g['rank_by']} that fits is {best.get('label') or best['mode']} ({routes.fmt_minutes(best['door_minutes'])} door to door)." if best else "None of them is usable yet."),
+                None, fix_action={"label": f"Use {best.get('label') or best['mode']}", "action": "trips.choose_option", "payload": {"id": best["id"]}} if best else None)
+
     # 10. Deadlines and confirmations waiting on a reply.
     soon = today + timedelta(days=rules["deadline_warn_days"])
     for t in tasks:

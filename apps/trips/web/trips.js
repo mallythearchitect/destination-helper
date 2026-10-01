@@ -68,11 +68,12 @@ function renderHero() {
       <h1>${esc(t.name)}</h1>
       <div class="meta">${t.start_date ? esc(fmtD(t.start_date)) + (t.end_date ? ' – ' + esc(fmtD(t.end_date)) : '') : 'no dates yet'}${nights ? ` · ${nights} days` : ''} · ${who}${money_line}</div>
       ${t.purpose_note ? `<div class="meta" style="margin-top:4px">${esc(t.purpose_note)}</div>` : ''}
-      <div class="acts"><button class="sbtn gold" id="add-item">Add something</button><button class="sbtn" id="check-now">Check my plan</button><a class="sbtn" href="/v1/trips/${t.id}/calendar.ics">Add to calendar</a><button class="sbtn ghost" id="trip-settings">Settings</button><a class="sbtn ghost dev-only" href="/apps/system/web/browse.html#${t.entity_id}">Record</a></div></div>
+      <div class="acts"><button class="sbtn gold" id="add-item">Add something</button><button class="sbtn" id="check-now">Check my plan</button><button class="sbtn" id="compare-ways">Compare ways</button><a class="sbtn" href="/v1/trips/${t.id}/calendar.ics">Add to calendar</a><button class="sbtn ghost" id="trip-settings">Settings</button><a class="sbtn ghost dev-only" href="/apps/system/web/browse.html#${t.entity_id}">Record</a></div></div>
     <div class="health" style="--h:${p.health};--h-col:${healthColor(p.health)}" title="Starts at 100 and drops for every open problem the checker finds"><b>${p.health}</b><small>health</small></div>
   </div>`;
   App.photo(place, $('#hero-photo'), 'circle');
   $('#add-item').onclick = () => itemForm(); $('#trip-settings').onclick = () => tripForm(t);
+  $('#compare-ways').onclick = () => optionForm({});
   $('#check-now').onclick = async () => { const r = await act('trips.run_checks', { trip_id: S.id }); toast(r.counts.blocker ? `${r.counts.blocker} to fix now, ${r.counts.warn} worth a look` : r.counts.warn ? `Nothing to fix now; ${r.counts.warn} worth a look` : 'Nothing wrong that the checks can see'); await refresh(); };
   $('#stages').addEventListener('click', async e => { const b = e.target.closest('[data-stage]'); if (!b) return; try { await act('trips.set_stage', { id: S.id, stage: b.dataset.stage }); toast(`Stage: ${stageWord[b.dataset.stage]}`); await refresh(); } catch (x) { toast(x.message, 5000); } });
   if (window.Helper) Helper.setTrip(S.id);
@@ -276,8 +277,10 @@ function openItem(id) {
     ${it.notes ? `<tr><td>Notes</td><td>${esc(it.notes)}</td></tr>` : ''}</table>
     ${it.findings.length ? `<h3 style="margin:12px 0 6px">The checker says</h3>${it.findings.map(f => finding(f)).join('')}` : ''}
     ${it.confirmations.length ? `<h3 style="margin:12px 0 6px">Confirmations</h3>${it.confirmations.map(c => `<div class="small">${esc(c.status)} · ${esc(c.channel)} · ${esc(c.question)}${c.reply ? ' → ' + esc(c.reply) : ''}</div>`).join('')}` : ''}
+    ${it.is_leg ? `<div class="row" style="margin-top:12px"><button class="sbtn mini" id="ways-item">${it.ways ? `Compare the ${it.ways.count} ways for this leg` : 'Compare ways to do this leg'}</button></div>` : ''}
     <div class="row" style="margin-top:12px"><button class="sbtn gold mini" id="edit-item">Edit</button><button class="sbtn mini" id="confirm-item">Confirm something with them…</button><button class="sbtn mini" id="expense-item">Log what was paid</button></div>`);
   $('#edit-item').onclick = () => { $('#detail').close(); itemForm(it); };
+  const wb = $('#ways-item'); if (wb) wb.onclick = () => waysSheet({ itemId: it.id });
   $('#confirm-item').onclick = () => { $('#detail').close(); confirmForm(it); };
   $('#expense-item').onclick = () => { $('#detail').close(); expenseForm(it); };
 }
@@ -301,10 +304,21 @@ function priceBlock(it) {
   const main = it.basis === 'per_person' && it.per_person_cents != null ? cur(it.per_person_cents, it.currency) : cur(it.group_cents, it.currency);
   return `${esc(main)}<small>${it.basis === 'per_person' ? 'each' : it.headcount_used > 1 ? `for ${it.headcount_used === 2 ? 'both' : 'all ' + it.headcount_used}` : 'for you'} · ${paysWord(it.paid_by)}${it.home_cents != null && it.currency !== home() ? ` · ≈ ${money0(it.home_cents)}` : ''}</small>`;
 }
+const fmtMin = m => m == null ? 'time unknown' : (m >= 60 ? `${Math.floor(m / 60)} h ${String(m % 60).padStart(2, '0')}` : `${m} min`);
+function waysChip(it) {
+  if (!it.is_leg) return '';
+  if (!it.ways) return `<span class="ways-chip" data-ways="${it.id}" style="background:transparent;border:1px dashed var(--color-accent-2-300)">Compare ways</span>`;
+  const f = it.ways.fastest;
+  return `<span class="ways-chip" data-ways="${it.id}">${it.ways.count} way${it.ways.count === 1 ? '' : 's'}${f ? ` · fastest ${esc(f.label || f.mode)} ${fmtMin(f.door_minutes)}` : ''}${it.ways.chosen_id ? '' : ' · none picked'}</span>`;
+}
+function decidingRow(g) {
+  const f = g.options.find(o => o.id === g.fastest_id), c = g.options.find(o => o.id === g.cheapest_id);
+  return `<div class="it deciding" data-group="${esc(g.key)}"><div class="glyph">${glyph('transfer')}</div><div><div class="ti">Deciding: ${esc(g.from_place)} → ${esc(g.to_place)}</div><div class="su">${g.valid} way${g.valid === 1 ? '' : 's'} compared${f ? ` · fastest ${esc(f.label || f.mode)} ${fmtMin(f.door_minutes)}` : ''}${c ? ` · cheapest ${esc(c.label || c.mode)} ${esc(cur(c.basis === 'per_person' ? c.per_person_cents : c.group_cents, c.currency))}${c.basis === 'per_person' ? ' each' : ''}` : ''}</div></div><div class="pr"><span class="fixlink addprice">Pick one</span></div></div>`;
+}
 function itemRow(it) {
   const flag = flagOf(it), stat = flag === 'blocker' ? '<span class="st fix">Fix now</span>' : statusTag(it.status);
   return `<div class="it flag-${flag} ${it.is_stay ? 'is-stay' : ''}" data-item="${it.id}"><div class="glyph">${glyph(it.kind, it.tag)}</div>
-    <div><div class="ti">${esc(it.title)}${stat}${it.tag === 'work' ? '<span class="st work">Work</span>' : ''}</div><div class="su">${itemLine(it)}</div></div>
+    <div><div class="ti">${esc(it.title)}${stat}${it.tag === 'work' ? '<span class="st work">Work</span>' : ''}</div><div class="su">${itemLine(it)}</div>${waysChip(it)}</div>
     <div class="pr">${priceBlock(it)}</div></div>`;
 }
 function spans(p) {
@@ -332,13 +346,15 @@ function dayRows(c, p, byId) {
     const d = c.days[i];
     const items = d.items.map(id => byId[id]).filter(it => it.id !== stayId);
     const arriving = p.items.filter(it => !it.is_stay && it.end_day && it.end_day === d.date && it.day && it.day !== d.date && it.status !== 'cancelled');
-    if (!items.length && !arriving.length && d.date !== p.today) {
-      let j = i; while (j + 1 < c.days.length && !c.days[j + 1].items.some(id => id !== stayId) && c.days[j + 1].date !== p.today && !p.items.some(it => !it.is_stay && it.end_day === c.days[j + 1].date && it.day !== c.days[j + 1].date)) j++;
+    const deciding = (p.option_groups || []).filter(g => !g.item_id && g.day === d.date);
+    const busy = dd => dd.items.some(id => id !== stayId) || dd.date === p.today || p.items.some(it => !it.is_stay && it.end_day === dd.date && it.day !== dd.date) || (p.option_groups || []).some(g => !g.item_id && g.day === dd.date);
+    if (!items.length && !arriving.length && !deciding.length && d.date !== p.today) {
+      let j = i; while (j + 1 < c.days.length && !busy(c.days[j + 1])) j++;
       const n = j - i + 1, first = c.days[i], last = c.days[j];
       rows.push(`<div class="day free"><div class="d-lab">${esc(first.label.split(' ')[0])}${n > 1 ? '–' + esc(last.label.split(' ')[0]) : ''}<small>${esc(first.label.slice(4))}${n > 1 ? ' – ' + esc(last.label.slice(4)) : ''} · ${n > 1 ? 'days ' + dayNo(first) + '–' + dayNo(last) : 'day ' + dayNo(first)}</small></div><div class="d-items"><span>${n > 1 ? `${n} free days` : 'Nothing planned yet'}</span><span class="fixlink" data-add="${first.date}">Add something</span></div></div>`);
       i = j + 1; continue;
     }
-    rows.push(`<div class="day ${d.date === p.today ? 'today' : ''}"><div class="d-lab">${esc(d.label.split(' ')[0])}<small>${esc(d.label.slice(4))} · day ${dayNo(d)} · ${dayKind(items)}${d.date === p.today ? ' · today' : ''}</small></div><div class="d-items">${arriving.map(contRow).join('')}${items.map(itemRow).join('') || (arriving.length ? '' : `<div class="it empty"><span>Nothing planned yet</span><span class="fixlink" data-add="${d.date}">Add something</span></div>`)}</div></div>`);
+    rows.push(`<div class="day ${d.date === p.today ? 'today' : ''}"><div class="d-lab">${esc(d.label.split(' ')[0])}<small>${esc(d.label.slice(4))} · day ${dayNo(d)} · ${dayKind(items)}${d.date === p.today ? ' · today' : ''}</small></div><div class="d-items">${arriving.map(contRow).join('')}${items.map(itemRow).join('')}${deciding.map(decidingRow).join('')}${items.length || arriving.length || deciding.length ? '' : `<div class="it empty"><span>Nothing planned yet</span><span class="fixlink" data-add="${d.date}">Add something</span></div>`}</div></div>`);
     i++;
   }
   return rows.join('');
@@ -401,7 +417,7 @@ function renderTimeline() {
   $('#p-timeline').innerHTML = `${p.days.length ? `<div class="chapters">${chapters(p)}</div>` : ''}
    <div class="tl"><div>
     ${spans(p).map(c => chapterBlock(c, p, byId)).join('')}
-    ${p.unscheduled.length ? `<section class="chapter last"><div class="ch-span">No date yet</div>${p.unscheduled.map(id => itemRow(byId[id])).join('')}</section>` : ''}
+    ${p.unscheduled.length || (p.option_groups || []).some(g => !g.item_id && !g.day) ? `<section class="chapter last"><div class="ch-span">No date yet</div>${p.unscheduled.map(id => itemRow(byId[id])).join('')}${(p.option_groups || []).filter(g => !g.item_id && !g.day).map(decidingRow).join('')}</section>` : ''}
     ${!p.days.length && !p.unscheduled.length ? '<div class="card"><div>Nothing in the plan yet. <b>Add something</b>: the first flight, the first stay.</div></div>' : ''}
     </div>
     <aside class="aside"><div class="ah"><h3>Checks</h3><span class="small">${p.findings.length ? 'checked just now' : 'all clear'}</span></div>
@@ -411,7 +427,9 @@ function renderTimeline() {
      ${costCard(p.costs)}</aside></div>
     <div class="help dev-only">Every rule the checker uses is in <a href="/apps/system/web/settings.html#logic">Settings → Logic</a>.</div>`;
   const P = $('#p-timeline');
-  P.querySelectorAll('[data-item]').forEach(el => el.onclick = e => { if (e.target.closest('[data-fix],[data-add],[data-addstay],[data-price]')) return; openItem(el.dataset.item); });
+  P.querySelectorAll('[data-item]').forEach(el => el.onclick = e => { if (e.target.closest('[data-fix],[data-add],[data-addstay],[data-price],[data-ways]')) return; openItem(el.dataset.item); });
+  P.querySelectorAll('[data-ways]').forEach(a => a.onclick = e => { e.stopPropagation(); waysSheet({ itemId: a.dataset.ways }); });
+  P.querySelectorAll('[data-group]').forEach(a => a.onclick = () => waysSheet({ key: a.dataset.group }));
   P.querySelectorAll('[data-price]').forEach(a => a.onclick = e => { e.stopPropagation(); const it = S.plan.items.find(x => x.id === a.dataset.price); if (it) { itemForm(it); setTimeout(() => { const f = $('#form input[name="price"]'); if (f) { f.focus(); f.scrollIntoView({ block: "center" }); } }, 150); } });
   P.querySelectorAll('[data-photo]').forEach(el => App.photo(el.dataset.photo, el, 'circle'));
   P.querySelectorAll('[data-add]').forEach(a => a.onclick = e => { e.preventDefault(); e.stopPropagation(); itemForm(null, a.dataset.add); });
@@ -419,6 +437,70 @@ function renderTimeline() {
   P.querySelectorAll('[data-jump]').forEach(a => a.onclick = e => { e.preventDefault(); const el = document.getElementById(a.dataset.jump); if (el) el.scrollIntoView({ behavior: 'smooth', block: 'start' }); });
   P.querySelectorAll('[data-go]').forEach(a => a.onclick = e => { e.preventDefault(); showTab(a.dataset.go); });
   wireFixes(P);
+}
+
+// ---------- ways to do a leg (W02): the route comparison ------------------------------
+function waysSheet(sel, sortBy) {
+  const p = S.plan, g = (p.option_groups || []).find(x => sel.itemId ? x.item_id === sel.itemId : x.key === sel.key);
+  const it = sel.itemId ? p.items.find(x => x.id === sel.itemId) : null;
+  if (!g) { if (it) return optionForm({ item: it }); return; }
+  const by = sortBy || g.rank_by, order = g.orders[by] || g.orders.fastest, byId = Object.fromEntries(g.options.map(o => [o.id, o]));
+  const n = { fastest: 0 }; let rank = 0;
+  const row = o => {
+    const best = o.id === g.best_id && !o.skip, r = o.skip ? '–' : ++rank;
+    const badges = [o.id === g.fastest_id ? '<span class="badge verified">Fastest</span>' : '', o.id === g.cheapest_id ? '<span class="badge index">Cheapest</span>' : '', o.chosen_at ? '<span class="badge hand">Chosen</span>' : ''].join('');
+    const how = o.skip ? esc(o.skip) : [o.minutes_source === 'you' ? 'your time' : o.minutes_source ? `${o.distance_used} mi ÷ ${o.speed_used} mph × 60` : 'no distance or time yet', o.distance_source && o.distance_source !== 'you' ? esc(o.distance_source) : '', o.speed_source && o.speed_source !== 'you' && o.minutes_source !== 'you' ? esc(o.speed_source) : ''].filter(Boolean).join(' · ');
+    const when = o.depart_at && o.depart_at.length > 10 ? `${tOf(o.depart_at)}${o.arrive_at ? ' → ' + tOf(o.arrive_at) : ''}` : '';
+    return `<tr class="${best ? 'best' : ''} ${o.skip ? 'skip' : ''}"><td>${r}</td>
+      <td class="m">${glyph(o.mode)} ${esc(o.label || o.mode)} ${badges}<small>${esc(o.mode)}${when ? ' · ' + esc(when) : ''} · ${how}</small>${o.flags.map(f => `<span class="flag">${esc(f)}</span>`).join('')}</td>
+      <td class="t">${o.skip ? '' : `<b>${fmtMin(o.door_minutes)}</b><small>${o.ride_minutes != null ? `ride ${fmtMin(o.ride_minutes)}${o.terminal_minutes ? ` + ${o.terminal_minutes} min at the ${o.mode === 'flight' ? 'airport' : o.mode === 'ferry' ? 'pier' : 'station'}` : ''}` : ''}</small>`}</td>
+      <td class="p">${o.group_cents != null ? `<b>${esc(cur(o.basis === 'per_person' ? o.per_person_cents : o.group_cents, o.currency))}</b><small>${o.basis === 'per_person' ? `each · ${esc(cur(o.group_cents, o.currency))} for ${o.headcount_used === 2 ? 'both' : 'all ' + o.headcount_used}` : 'for the group'}${o.home_cents != null && o.currency !== home() ? ' · ≈ ' + money0(o.home_cents) : ''}</small>` : '<span class="small">no price</span>'}</td>
+      <td>${o.skip ? '' : o.chosen_at ? '<span class="small">in the plan</span>' : `<button class="sbtn mini gold" data-choose="${o.id}">Use this one</button>`} <button class="sbtn mini ghost" data-editopt="${o.id}">Edit</button></td></tr>`;
+  };
+  App.detail(`Ways from ${esc(g.from_place || '?')} to ${esc(g.to_place || '?')}`, `<div class="small">${g.day ? esc(dOf(g.day)) + ' · ' : ''}${g.valid} usable of ${g.options.length} · door to door includes time at the airport, pier or station</div>
+    <div class="ways-sort">Rank by ${['fastest', 'cheapest', 'balanced'].map(k => `<button class="${k === by ? 'on' : ''}" data-sort="${k}">${k}</button>`).join('')}</div>
+    <table class="ways"><tbody>${order.map(id => row(byId[id])).join('')}</tbody></table>
+    <div class="row" style="margin-top:6px"><button class="sbtn mini" id="add-way">+ Add a way</button><span class="small">up to ${(S.opt.route_max) || 10} per leg</span></div>
+    <div class="help">Give a time if you know it. Otherwise give the distance and speed and the minutes are worked out: distance ÷ speed × 60. Leave the speed empty for the mode's usual speed, and the distance empty to estimate it from the two places. A zero or negative distance or speed is skipped.<span class="dev-only"> The speeds, terminal times and ranking are in Settings → Logic → Trips · comparing ways to do a leg.</span></div>`);
+  const D = $('#detail');
+  D.querySelectorAll('[data-sort]').forEach(b => b.onclick = () => waysSheet(sel, b.dataset.sort));
+  D.querySelectorAll('[data-choose]').forEach(b => b.onclick = async () => { try { const r = await act('trips.choose_option', { id: b.dataset.choose }); await act('trips.run_checks', { trip_id: S.id }); toast(`In the plan: ${r.item.title}${r.door_minutes != null ? ' · ' + fmtMin(r.door_minutes) + ' door to door' : ''}`, 5000); D.close(); await refresh(); } catch (x) { toast(x.message, 6000); } });
+  D.querySelectorAll('[data-editopt]').forEach(b => b.onclick = () => { D.close(); optionForm({ option: byId[b.dataset.editopt], group: g, item: it }); });
+  $('#add-way').onclick = () => { D.close(); optionForm({ group: g, item: it }); };
+}
+function optionForm(ctx) {
+  const o = ctx.option, it = ctx.item, g = ctx.group, R = S.opt;
+  const kinds = R.kinds.transport, sp = (R.route && R.route.speed_mph) || {};
+  const F = [
+    ...(it || g ? [] : [{ k: 'from_place', l: 'From', v: '', ph: 'Ao Nang, Krabi' }, { k: 'to_place', l: 'To', v: '', ph: 'Phuket' }, { k: 'day', l: 'Day', t: 'date', v: S.plan.trip.start_date || '' }]),
+    { k: 'mode', l: 'How', t: 'select', o: kinds.map(k => [k, k]), v: o ? o.mode : (it ? it.kind : 'ferry') },
+    { k: 'label', l: 'Name it (optional)', v: o ? o.label : '', ph: 'Ferry via Ko Yao' },
+    { k: 'minutes', l: 'Ride time in minutes, if you know it', t: 'number', v: o ? o.minutes : '' },
+    { k: 'distance_miles', l: 'Or distance (miles; empty = estimate it)', t: 'number', v: o ? o.distance_miles : '' },
+    { k: 'speed_mph', l: 'and speed (mph; empty = usual for the mode)', t: 'number', v: o ? o.speed_mph : '', ph: Object.entries(sp).map(([k, v]) => `${k} ${v}`).slice(0, 3).join(', ') },
+    { k: 'depart_at', l: 'Leaves at (local)', t: 'datetime', v: o ? o.depart_at : (g && g.day ? g.day + 'T09:00' : (it && it.start_at && it.start_at.length > 10 ? it.start_at : '')) },
+    { k: 'last_departure', l: 'Last one of the day (HH:MM)', v: o ? o.last_departure : '', ph: '15:30' },
+    { k: 'price', l: 'Price', t: 'number', v: o && o.price_cents != null ? o.price_cents / 100 : '' },
+    { k: 'currency', l: 'Currency', v: o ? o.currency : (S.plan.trip.local_currency || home()) },
+    { k: 'basis', l: 'Per person or for the group', t: 'select', o: [['per_person', 'per person'], ['group', 'for the group']], v: o ? (o.basis || 'per_person') : 'per_person' },
+    { k: 'link', l: 'Where to book it', v: o ? o.link : '', wide: true },
+  ];
+  form(o ? 'Edit this way' : it ? `Another way to do: ${it.title}` : g ? `Another way: ${g.from_place} → ${g.to_place}` : 'Compare ways to get somewhere', F, async out => {
+    const payload = { ...out, price_cents: out.price == null ? null : Math.round(out.price * 100) }; delete payload.price;
+    if (payload.depart_at) payload.depart_at = payload.depart_at.slice(0, 16);
+    if (o) {
+      const clear = Object.keys(payload).filter(k => payload[k] == null && o[k] != null && k !== 'mode');
+      for (const k of Object.keys(payload)) if (payload[k] == null) delete payload[k];
+      await act('trips.update_option', { id: o.id, clear, ...payload });
+    } else {
+      for (const k of Object.keys(payload)) if (payload[k] == null) delete payload[k];
+      if (it) payload.item_id = it.id; else if (g) { if (g.item_id) payload.item_id = g.item_id; else { payload.from_place = g.from_place; payload.to_place = g.to_place; payload.day = g.day; } }
+      await act('trips.add_option', { trip_id: S.id, ...payload });
+    }
+    await act('trips.run_checks', { trip_id: S.id }); await refresh();
+    const sel = it ? { itemId: it.id } : g && g.item_id ? { itemId: g.item_id } : { key: (S.plan.option_groups.find(x => !x.item_id && x.from_place && (g ? x.key === g.key : (x.from_place || '').toLowerCase().trim() === (out.from_place || '').toLowerCase().trim() && (x.to_place || '').toLowerCase().trim() === (out.to_place || '').toLowerCase().trim())) || {}).key };
+    waysSheet(sel);
+  }, `<div class="small" style="margin:-2px 0 6px">Give a time, or a distance and a speed: the minutes are distance ÷ speed × 60.</div>`);
 }
 
 // ---------- checks ----------------------------------------------------------------------------

@@ -1,5 +1,35 @@
 # Status
 
+## 2026-10-01 — Compare ways: the route optimizer inside the trip's sequence
+
+Malachi: "that logic we need as an option in our sequencing, add it" (the
+MIS-310 Travel Route Optimization script: minutes = distance ÷ speed × 60,
+skip a zero or negative distance or speed, the fastest wins). The idea, not
+the code, now lives in `apps/trips/server/routes.py`:
+- `trip_options` (migration 0004): ways of doing a leg already in the plan,
+  or a leg still being decided (day + from + to).
+- Worked out per way: ride minutes (your time, else distance ÷ speed × 60,
+  with the mode's usual speed and a GeoNames straight-line distance × 1.3 as
+  fallbacks, each labelled), door-to-door with time at the terminal, arrival,
+  per-person and group price in both currencies, flags (after the last
+  departure, over the per-leg budget), skipped with the script's own reasons.
+  Ranked fastest / cheapest / balanced; fastest, cheapest and best named.
+- Actions `trips.add_option`, `update_option`, `delete_option`,
+  `choose_option` (writes the leg or makes it). Checker rules
+  `undecided-leg` and `faster-option`, both with a one-tap fix. API
+  `/v1/trips/{id}/ways`; MCP `trip_leg_options`; the helper chat's briefing
+  carries the comparisons. Logic setting `logic.trips.route_options` (24
+  logic settings).
+- Page: a "Compare ways" button in the trip header, a ways chip on every
+  leg, "Deciding" cards on their day, the comparison sheet (rank by, badges,
+  Use this one, Edit, + Add a way), stacked on a phone.
+- 52 tests. Checked on a scratch copy of the vault at 1280 and 390 px; the
+  live Thailand trip has no options yet (nothing invented was written).
+
+Known limit: a straight-line estimate undercounts roads that go around water
+(Krabi → Phuket by van estimates about 1 h 05; the real trip is nearer 2 h
+45). It is labelled an estimate; typing the real time fixes it.
+
 ## 2026-09-29 — the Organic look and the four screens from the mockup board
 
 Malachi had Claude Design mock up Home, New trip, Inside a trip and Compare

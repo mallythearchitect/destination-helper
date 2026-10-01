@@ -155,4 +155,4 @@ def test_more_rules_drive_the_engine(client, env):
     client.put("/v1/settings/logic.limits", json={"value": {"attachment_max_mb": 0.00001, "csv_max_mb": 20}})
     person = client.post("/v1/entities", json={"type": "person", "name": "x"}).json()
     assert client.post(f"/v1/entities/{person['id']}/files", files={"file": ("a.txt", b"0123456789" * 20, "text/plain")}).status_code == 413
-    assert len([s for sec in client.get("/v1/settings").json()["sections"] if sec["id"] == "logic" for s in sec["settings"]]) == 23
+    assert len([s for sec in client.get("/v1/settings").json()["sections"] if sec["id"] == "logic" for s in sec["settings"]]) == 24

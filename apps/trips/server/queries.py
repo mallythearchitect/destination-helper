@@ -292,7 +292,13 @@ def plan(store: Store, tid: str) -> dict:
     for f in fds:
         sev[f["severity"]] = sev.get(f["severity"], 0) + 1
     words = logic(store, "logic.trips.defaults")
-    return {"trip": trip, "time_zone": tz, "items": its, "days": days, "unscheduled": unscheduled, "tasks": tks, "expenses": exps, "confirmations": cfs,
+    from . import routes
+    option_groups = routes.groups(store, tid, trip)
+    for g in option_groups:
+        if g["item_id"] and g["item_id"] in by_item:
+            by_item[g["item_id"]]["ways"] = {"count": len(g["options"]), "valid": g["valid"], "fastest_id": g["fastest_id"], "cheapest_id": g["cheapest_id"],
+                                             "chosen_id": g["chosen_id"], "fastest": next((o for o in g["options"] if o["id"] == g["fastest_id"]), None)}
+    return {"trip": trip, "time_zone": tz, "option_groups": option_groups, "items": its, "days": days, "unscheduled": unscheduled, "tasks": tks, "expenses": exps, "confirmations": cfs,
             "findings": fds, "finding_counts": sev, "health": health(sev, words.get("health_weights", {})), "workflow_runs": runs, "costs": costs(store, tid),
             "region": {k: region[k] for k in ("id", "name", "currency", "time_zone", "channels", "sites", "intro")} if region else None,
             "rules": rules, "today": date.today().isoformat()}
@@ -338,6 +344,12 @@ def briefing(store: Store, tid: str) -> str:
             it = next(x for x in p["items"] if x["id"] == iid)
             price = f"{it['group_cents'] / 100:.0f} {it['currency']} for {it['headcount_used']}" if it["group_cents"] is not None else "no price"
             L.append(f"    {it['kind']}: {it['title']} [{it['status']}] {it['start_at'] or ''}{' → ' + it['end_at'] if it['end_at'] else ''} {it.get('from_place') or ''}→{it.get('to_place') or ''} {price}")
+    for g in p.get("option_groups", []):
+        L.append(f"Ways to do {g['from_place']} → {g['to_place']} on {g['day']} ({'in the plan' if g['item_id'] else 'still deciding'}):")
+        for o in g["options"]:
+            price = f"{o['group_cents'] / 100:.0f} {o['currency']} for {o['headcount_used']}" if o["group_cents"] is not None else "no price"
+            L.append(f"    {o['mode']} {o.get('label') or ''}: " + (o["skip"] or f"ride {o['ride_minutes']} min, door to door {o['door_minutes']} min, {price}"
+                     + (" [chosen]" if o["chosen_at"] else "") + (f" ({'; '.join(o['flags'])})" if o["flags"] else "")))
     if p["findings"]:
         L.append("Open findings from the checker:")
         L += [f"- [{f['severity']}] {f['message']} Fix: {f['fix'] or ''}" for f in p["findings"]]
@@ -436,6 +448,8 @@ def options(store: Store) -> dict:
         regions = [dict(r) for r in store.con.execute("SELECT id, name, country_code, currency, time_zone, channels FROM pack_helper.region_packs ORDER BY name")]
     for r in regions:
         r["channels"] = _loads(r["channels"], [])
+    route = logic(store, "logic.trips.route_options")
     return {"defaults": d, "kinds": kinds, "kind_list": kinds["transport"] + kinds["stay"] + kinds["other"], "channels": conf["channels_order"],
+            "route": route, "route_max": route["max_options"],
             "regions": regions, "home": settings.get_value(store, "profile.home_city"), "checks": logic(store, "logic.trips.checks"),
             "task_kinds": ["entry", "health", "insurance", "permit", "phone", "safety", "pack", "confirm", "follow_up", "todo"]}
