@@ -1,7 +1,8 @@
 # Destination Helper — rules every session reads first
 
-Read this, then `docs/how-it-works.md` (plain English) and `docs/status.md`
-(where we are). The spec is the brief, `docs/brief/destination-helper.md`.
+Read this, then `docs/how-it-works.md` (plain English), `docs/status.md`
+(where we are) and `docs/changelog.md` (everything done, and what is open).
+The spec is the brief, `docs/brief/destination-helper.md`.
 
 ## What this repo is
 The Destination Helper: a trip co-pilot (plan, check the plan, prepare, run)
@@ -32,31 +33,40 @@ the old workspace. Port 8772.
   by is a `logic.*` setting in `engine/settings.py` with a default, a plain
   help line, `extra.used_by`, and a `check`. Code reads it with
   `settings.get_value` and never hardcodes it.
-- **Shared look, no copied code:** a page loads tokens.css, shell.css, app.css
-  and app.js, then its own script. A page's `<style>` holds only what is
-  unique to it. Every app page uses the sidebar pattern.
+- **Shared look, no copied code:** the look is the Organic design system from
+  Malachi's mockup board (decision 0012): `ui-kit/organic.css`, mapped by
+  tokens.css, then shell.css, app.css and app.js, then the page's own script.
+  A page's `<style>` holds only what is unique to it. Page controls are pill
+  rails, not a sidebar. User-facing words by default; engine detail goes
+  behind the Developer switch (class `dev-only`, `App.isDev()`). When Malachi
+  hands over a new mockup board, build from it.
+- **Log every change** in `docs/changelog.md` (what, why, the commit) and keep
+  its "Still open" list true.
 - **AI suggests; the person decides.** Workflows ask the switchboard for a
   job, never a provider; they file suggestions, never change data. Nothing
   sends a message, places a call or deletes without the person's OK. Tests use
   the fake provider, never the network.
-- **Tests never touch real data.** `tests/conftest.py` gives every test its
-  own vault. Never point a test at `vault/`.
+- **Tests never touch real data or the network.** `tests/conftest.py` gives
+  every test its own vault and forces place and road lookups offline. Never
+  point a test at `vault/`. Check screens on a scratch copy of the vault
+  (`MINDSCAPE_VAULT=<copy> MINDSCAPE_PORT=8773`), not on the live trip.
 - **Big decisions get a short note** in `docs/decisions/`.
 - **Plain English in docs and help text.**
 
 ## Layout
     engine/            store (vault), settings, history + undo, records, sources, packs, tracking, analytics, predict, workflows, /v1 API
     engine/ai/         switchboard, providers, prompts, inbox, tests, the MCP plug
-    apps/trips/        the co-pilot: server (tables, actions, queries, checks.py = the plan checker, tracking), web (the page)
+    apps/trips/        the co-pilot: server (tables, actions, queries, checks.py = the plan checker, routes.py = compare ways,
+                       geo.py = places and road routes, tracking), web (the page)
     apps/destinations/ the atlas: server (queries over the pack, actions), web
     apps/ai/web/       the AI inbox
     apps/system/web/   Settings, Browse
     apps/launcher/web/ Home
     packs/             helper.sqlite (the brief as data), destinations.sqlite, build scripts, source JSON
-    ui-kit/            tokens.css, shell.css, app.css, app.js, tour.js
+    ui-kit/            organic.css (the design system), tokens.css, shell.css, app.css, app.js (+ User/Developer, photos), helper.js (the chat), tour.js
     scripts/           check.sh, check_secrets.py, backup.py, dev.sh, extract_helper_doc.py, import_thailand_trip.py, install_*.sh
     tests/             pytest; every test isolated
-    docs/              how-it-works, status, decisions/, brief/ (the docx versions and the one-page Markdown)
+    docs/              how-it-works, status, changelog, decisions/, brief/ (the docx versions and the one-page Markdown)
     vault/             your data (ignored)
 
 ## Run
