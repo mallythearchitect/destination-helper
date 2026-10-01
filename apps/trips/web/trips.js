@@ -449,7 +449,11 @@ function waysSheet(sel, sortBy) {
   const row = o => {
     const best = o.id === g.best_id && !o.skip, r = o.skip ? '–' : ++rank;
     const badges = [o.id === g.fastest_id ? '<span class="badge verified">Fastest</span>' : '', o.id === g.cheapest_id ? '<span class="badge index">Cheapest</span>' : '', o.chosen_at ? '<span class="badge hand">Chosen</span>' : ''].join('');
-    const how = o.skip ? esc(o.skip) : [o.minutes_source === 'you' ? 'your time' : o.minutes_source ? `${o.distance_used} mi ÷ ${o.speed_used} mph × 60` : 'no distance or time yet', o.distance_source && o.distance_source !== 'you' ? esc(o.distance_source) : '', o.speed_source && o.speed_source !== 'you' && o.minutes_source !== 'you' ? esc(o.speed_source) : ''].filter(Boolean).join(' · ');
+    const road = (o.minutes_source || '').startsWith('road time');
+    const how = o.skip ? esc(o.skip) : [
+      o.minutes_source === 'you' ? 'your time' : road ? `${o.distance_used} mi by road · ${esc(o.minutes_source.replace('road time', 'driving time'))} · OSRM, OpenStreetMap` : o.minutes_source ? `${o.distance_used} mi ÷ ${o.speed_used} mph × 60` : 'no distance or time yet',
+      o.distance_source && o.distance_source !== 'you' && o.minutes_source !== 'you' && !road ? esc(o.distance_source.replace(/^.*?, (straight line|over water|great circle)/, '$1')) : '',
+      o.speed_source && o.speed_source !== 'you' && !road && o.minutes_source !== 'you' ? esc(o.speed_source) : ''].filter(Boolean).join(' · ');
     const when = o.depart_at && o.depart_at.length > 10 ? `${tOf(o.depart_at)}${o.arrive_at ? ' → ' + tOf(o.arrive_at) : ''}` : '';
     return `<tr class="${best ? 'best' : ''} ${o.skip ? 'skip' : ''}"><td>${r}</td>
       <td class="m">${glyph(o.mode)} ${esc(o.label || o.mode)} ${badges}<small>${esc(o.mode)}${when ? ' · ' + esc(when) : ''} · ${how}</small>${o.flags.map(f => `<span class="flag">${esc(f)}</span>`).join('')}</td>
@@ -460,13 +464,14 @@ function waysSheet(sel, sortBy) {
   App.detail(`Ways from ${esc(g.from_place || '?')} to ${esc(g.to_place || '?')}`, `<div class="small">${g.day ? esc(dOf(g.day)) + ' · ' : ''}${g.valid} usable of ${g.options.length} · door to door includes time at the airport, pier or station</div>
     <div class="ways-sort">Rank by ${['fastest', 'cheapest', 'balanced'].map(k => `<button class="${k === by ? 'on' : ''}" data-sort="${k}">${k}</button>`).join('')}</div>
     <table class="ways"><tbody>${order.map(id => row(byId[id])).join('')}</tbody></table>
-    <div class="row" style="margin-top:6px"><button class="sbtn mini" id="add-way">+ Add a way</button><span class="small">up to ${(S.opt.route_max) || 10} per leg</span></div>
-    <div class="help">Give a time if you know it. Otherwise give the distance and speed and the minutes are worked out: distance ÷ speed × 60. Leave the speed empty for the mode's usual speed, and the distance empty to estimate it from the two places. A zero or negative distance or speed is skipped.<span class="dev-only"> The speeds, terminal times and ranking are in Settings → Logic → Trips · comparing ways to do a leg.</span></div>`);
+    <div class="row" style="margin-top:6px"><button class="sbtn mini" id="add-way">+ Add a way</button><button class="sbtn mini ghost" id="re-est" title="Look the places and roads up again">Re-estimate</button><span class="small">up to ${(S.opt.route_max) || 10} per leg</span></div>
+    <div class="help">Give a time if you know it. Otherwise give the distance and speed and the minutes are worked out: distance ÷ speed × 60. Leave them empty and car, taxi, van and bus legs use the real road (OpenStreetMap); ferries go straight across the water and flights the great circle. A zero or negative distance or speed is skipped.<span class="dev-only"> The speeds, terminal times and ranking are in Settings → Logic → Trips · comparing ways to do a leg.</span></div>`);
   const D = $('#detail');
   D.querySelectorAll('[data-sort]').forEach(b => b.onclick = () => waysSheet(sel, b.dataset.sort));
   D.querySelectorAll('[data-choose]').forEach(b => b.onclick = async () => { try { const r = await act('trips.choose_option', { id: b.dataset.choose }); await act('trips.run_checks', { trip_id: S.id }); toast(`In the plan: ${r.item.title}${r.door_minutes != null ? ' · ' + fmtMin(r.door_minutes) + ' door to door' : ''}`, 5000); D.close(); await refresh(); } catch (x) { toast(x.message, 6000); } });
   D.querySelectorAll('[data-editopt]').forEach(b => b.onclick = () => { D.close(); optionForm({ option: byId[b.dataset.editopt], group: g, item: it }); });
   $('#add-way').onclick = () => { D.close(); optionForm({ group: g, item: it }); };
+  $('#re-est').onclick = async () => { $('#re-est').disabled = true; toast('Looking the places and roads up again…', 8000); try { const r = await act('trips.refresh_ways', { trip_id: S.id, forget_cache: true }); toast(r.changed ? `${r.changed} estimate${r.changed === 1 ? '' : 's'} updated` : 'Nothing changed', 4000); await refresh(); waysSheet(sel, sortBy); } catch (x) { toast(x.message, 6000); } };
 }
 function optionForm(ctx) {
   const o = ctx.option, it = ctx.item, g = ctx.group, R = S.opt;

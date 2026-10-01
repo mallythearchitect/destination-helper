@@ -20,6 +20,7 @@ from . import queries as q
 
 SUFFIX = re.compile(r"\b(international airport|airport|bus terminal|terminal|station|pier|town|city|centre|center)\b", re.I)
 GROUND = {"bus", "van", "taxi", "transfer", "drive", "train"}
+ROAD = {"bus", "van", "taxi", "transfer", "drive"}       # legs a road route answers; trains and ferries do not
 
 
 def rules(store: Store) -> dict:
@@ -71,6 +72,35 @@ def estimate_distance(store: Store, a: str | None, b: str | None, mode: str, R: 
     return round(d, 1), f"{pa['name']} → {pb['name']}, straight line (GeoNames)"
 
 
+def short(place: str | None) -> str:
+    return (place or "").split(",")[0].split("(")[0].strip() or "?"
+
+
+def estimate(store: Store, o: dict, R: dict, online: bool = True) -> dict:
+    """Stored on a way when it is saved: its distance (and, for road legs, the road time), and where they came from.
+    Road legs get a real road route; trains get the straight line times road_factor; ferries and flights the straight line."""
+    blank = {"est_distance_miles": None, "est_minutes": None, "est_source": None}
+    if o.get("minutes") is not None or (o.get("distance_miles") is not None and o.get("speed_mph") is not None):
+        return blank                                   # nothing to estimate: you gave the numbers
+    if not (o.get("from_place") and o.get("to_place")):
+        return blank
+    from . import geo
+    a, b = geo.geocode(store, o["from_place"], R, online), geo.geocode(store, o["to_place"], R, online)
+    if not a or not b or (round(a["lat"], 4), round(a["lon"], 4)) == (round(b["lat"], 4), round(b["lon"], 4)):
+        return blank
+    names = f"{short(o['from_place'])} → {short(o['to_place'])}"
+    where = "OpenStreetMap" if "nominatim" in (a["source"], b["source"]) else "GeoNames"
+    if o["mode"] in ROAD:
+        r = geo.road(store, a, b, R, online)
+        if r:
+            return {"est_distance_miles": r["miles"], "est_minutes": r["minutes"], "est_source": f"{names}, {r['source']}"}
+    d = _miles(a, b)
+    if o["mode"] in GROUND:
+        return {"est_distance_miles": round(d * R["road_factor"], 1), "est_minutes": None, "est_source": f"{names}, straight line × {R['road_factor']} ({where})"}
+    over = "over water" if o["mode"] == "ferry" else "great circle" if o["mode"] == "flight" else "straight line"
+    return {"est_distance_miles": round(d, 1), "est_minutes": None, "est_source": f"{names}, {over} ({where})"}
+
+
 def work_out(store: Store, o: dict, trip: dict, R: dict) -> dict:
     """One option's numbers: ride and door-to-door minutes, arrival, prices, and why it is skipped if it is."""
     out = {**o, "skip": None, "distance_used": None, "distance_source": None, "speed_used": None, "speed_source": None,
@@ -89,14 +119,21 @@ def work_out(store: Store, o: dict, trip: dict, R: dict) -> dict:
     else:
         if o.get("distance_miles") is not None:
             out["distance_used"], out["distance_source"] = float(o["distance_miles"]), "you"
+        elif o.get("est_distance_miles"):
+            out["distance_used"], out["distance_source"] = float(o["est_distance_miles"]), o.get("est_source")
         else:
             out["distance_used"], out["distance_source"] = estimate_distance(store, o.get("from_place"), o.get("to_place"), o["mode"], R)
+        factor = float((R.get("road_minutes_factor") or {}).get(o["mode"], 1.0))
         if o.get("speed_mph") is not None:
             out["speed_used"], out["speed_source"] = float(o["speed_mph"]), "you"
+        elif o.get("est_minutes") and o.get("distance_miles") is None:
+            # a real road route gave a driving time: use it, scaled for the mode (a bus stops more than a car)
+            out["ride_minutes"] = round(float(o["est_minutes"]) * factor)
+            out["minutes_source"] = "road time" + (f" × {factor:g} for a {o['mode']}" if factor != 1 else "")
         else:
             sp = R["speed_mph"].get(o["mode"])
             out["speed_used"], out["speed_source"] = (float(sp), f"usual {o['mode']} speed") if sp else (None, None)
-        if out["distance_used"] and out["speed_used"]:
+        if out["ride_minutes"] is None and out["distance_used"] and out["speed_used"]:
             out["ride_minutes"] = round(out["distance_used"] / out["speed_used"] * 60)
             out["minutes_source"] = "distance ÷ speed × 60"
     if out["ride_minutes"] is not None:

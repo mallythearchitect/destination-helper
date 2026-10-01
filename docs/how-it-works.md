@@ -125,7 +125,7 @@ first eight:
 | Trips · kinds of item | which kinds are legs, pickups, stays; the buffer before a non-flight leg |
 | Trips · confirming a booking | the message template, hours to wait for a reply, channel order, what a call says first |
 | Trips · the before-you-go checklist | the W25 tasks and how many days before departure each is due |
-| Trips · comparing ways to do a leg | each mode's usual speed, time at the terminal, the road factor for estimated distances, rank by fastest / cheapest / balanced, how much faster before the checker mentions it, the most ways per leg |
+| Trips · comparing ways to do a leg | each mode's usual speed, time at the terminal, the road factor for straight-line distances, road routing on or off, the road-time factor per mode, how long lookups are kept, rank by fastest / cheapest / balanced, how much faster before the checker mentions it, the most ways per leg |
 | Trips · defaults and words | what a new trip starts as, the card-rate markup, the calendar alarm, the words for stages, statuses, who pays, tags |
 | Destinations · defaults and limits | the opening view, the population defaults and steps, how many Compare holds |
 | Destinations · what a search looks at | the fields a search matches |
@@ -258,10 +258,16 @@ it exists ("Compare ways" in the trip's header; it shows on its day as a
 and then the minutes are worked out the way Malachi's MIS-310 route
 optimizer did it: **distance ÷ speed × 60**, a distance or speed of zero or
 less is skipped as invalid, and the fastest wins. Around that rule: a time
-you type always beats the arithmetic; a missing speed is the mode's usual
-speed; a missing distance is the straight line between the two places in the
-GeoNames data (times 1.3 for road and rail), labelled as an estimate; time at
-the airport, pier or station is added for a door-to-door figure; the price
+you type always beats the arithmetic, and your own distance and speed come
+next. Leave them empty and the app works it out when you save the way: it
+finds the two places on OpenStreetMap (or in the GeoNames cities), then car,
+taxi, transfer, van and bus legs take a real road route from OSRM, with the
+road distance and the driving time (a bus gets 15% longer). Ferries go
+straight across the water, flights take the great circle, trains the straight
+line times 1.3, each at the mode's usual speed. Those lookups happen only
+when a way is saved, are cached for 90 days, and can be switched off in
+Settings → Data; "Re-estimate" looks them up again. Time at the airport,
+pier or station is added for a door-to-door figure; the price
 shows per person and for the group in both currencies. The ways are ranked
 fastest, cheapest or balanced, with the fastest, the cheapest and the best fit
 named, and a way that leaves after the last departure of the day or breaks

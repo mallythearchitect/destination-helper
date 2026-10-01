@@ -39,6 +39,8 @@ TRAVEL_SITES = [
     ("Google Flights", "https://www.google.com/travel/flights", "Ways to get there: live fares"),
     ("Rome2Rio", "https://www.rome2rio.com/", "Ways to get there: every mode with live times and prices"),
     ("Amtrak", "https://www.amtrak.com/", "Ways to get there: US trains"),
+    ("OpenStreetMap Nominatim", "https://nominatim.openstreetmap.org/", "Trips: finding the places a way starts and ends, to estimate its distance"),
+    ("OSRM road routes", "https://project-osrm.org/", "Trips: road distance and driving time for car, taxi, van and bus legs (OpenStreetMap data)"),
 ]
 
 

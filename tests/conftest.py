@@ -9,6 +9,18 @@ from engine.main import create_app
 from engine.store import Store
 
 
+@pytest.fixture(autouse=True)
+def offline(monkeypatch):
+    """No test reaches the internet: place lookups and road routes fail as if offline,
+    so the app falls back to the GeoNames straight line. A test that wants answers
+    replaces apps.trips.server.geo.HTTP itself."""
+    from apps.trips.server import geo
+
+    def no_network(url, timeout=8.0):
+        raise OSError("tests are offline")
+    monkeypatch.setattr(geo, "HTTP", no_network)
+
+
 @pytest.fixture
 def env(tmp_path, monkeypatch):
     monkeypatch.setenv("MINDSCAPE_VAULT", str(tmp_path / "vault.db"))

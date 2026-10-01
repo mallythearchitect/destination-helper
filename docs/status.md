@@ -1,5 +1,17 @@
 # Status
 
+## 2026-10-01, later — road distances, not straight lines
+
+Malachi: "log everything done and then max the fix." The log is
+`docs/changelog.md`: every change since the first line, with its commit, and
+what is still open. The fix is for the known limit below: road legs now use
+the real road (OpenStreetMap places via Nominatim, routes via OSRM), stored
+on the way when it is saved and cached, never fetched on read. Krabi → Phuket
+by van went from a 1 h 05 straight-line guess to 111.4 mi, 2 h 48. Ferries go
+across the water, flights the great circle. `apps/trips/server/geo.py`,
+migration 0005, `trips.refresh_ways`, the "osrm" switch in Settings → Data,
+new keys in `logic.trips.route_options`. 53 tests, all offline.
+
 ## 2026-10-01 — Compare ways: the route optimizer inside the trip's sequence
 
 Malachi: "that logic we need as an option in our sequencing, add it" (the
@@ -26,9 +38,8 @@ the code, now lives in `apps/trips/server/routes.py`:
 - 52 tests. Checked on a scratch copy of the vault at 1280 and 390 px; the
   live Thailand trip has no options yet (nothing invented was written).
 
-Known limit: a straight-line estimate undercounts roads that go around water
-(Krabi → Phuket by van estimates about 1 h 05; the real trip is nearer 2 h
-45). It is labelled an estimate; typing the real time fixes it.
+Known limit (fixed the same day, entry above): a straight-line estimate
+undercounted roads that go around water.
 
 ## 2026-09-29 — the Organic look and the four screens from the mockup board
 

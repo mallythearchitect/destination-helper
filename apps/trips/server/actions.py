@@ -762,6 +762,12 @@ def add_option(store: Store, i: AddOption, app: str = "trips") -> dict:
     from . import routes
     v = i.model_dump()
     _check_option(store, v)
+    if i.item_id:
+        with store.read():
+            it0 = _need_item(store.con, i.item_id)
+        v["from_place"] = v["from_place"] or it0["from_place"]
+        v["to_place"] = v["to_place"] or it0["to_place"]
+    est = routes.estimate(store, v, routes.rules(store))      # network, if any, happens here: before the write, never on read
     oid, ts = uuid7(), now_iso()
     with store.tx() as con:
         t = _need_trip(con, i.trip_id)
@@ -782,9 +788,10 @@ def add_option(store: Store, i: AddOption, app: str = "trips") -> dict:
             raise ValueError(f"a leg holds at most {cap} options (Settings → Logic → Trips · comparing ways to do a leg)")
         cur_ = (v["currency"] or t["local_currency"] or t["home_currency"]).upper() if v["price_cents"] is not None or v["currency"] else None
         con.execute("INSERT INTO trip_options(id, trip_id, item_id, day, mode, label, from_place, to_place, distance_miles, speed_mph, minutes, depart_at, price_cents, currency, basis, "
-                    "last_departure, link, notes, version, created_at, updated_at) VALUES(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,1,?,?)",
+                    "last_departure, link, notes, est_distance_miles, est_minutes, est_source, est_at, version, created_at, updated_at) VALUES(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,1,?,?)",
                     (oid, i.trip_id, i.item_id, v["day"], v["mode"], (v["label"] or "").strip() or None, v["from_place"], v["to_place"], v["distance_miles"], v["speed_mph"],
-                     v["minutes"], v["depart_at"], v["price_cents"], cur_, v["basis"], v["last_departure"], v["link"], v["notes"], ts, ts))
+                     v["minutes"], v["depart_at"], v["price_cents"], cur_, v["basis"], v["last_departure"], v["link"], v["notes"],
+                     est["est_distance_miles"], est["est_minutes"], est["est_source"], ts if est["est_source"] else None, ts, ts))
         after = _row(con, "trip_options", oid)
         history.record(con, app=app, action="trips.add_option", tbl="trip_options", row_key=oid, before=None, after=after)
     return after
@@ -810,23 +817,29 @@ class UpdateOption(BaseModel):
     clear: list[str] = Field(default_factory=list, description="Field names to blank out, e.g. minutes to go back to distance ÷ speed")
 
 
-@action("trips.update_option", "Change a way of doing a leg: its time, distance, speed, departure or price.", UpdateOption)
+@action("trips.update_option", "Change a way of doing a leg: its time, distance, speed, departure or price. A change of place or mode re-estimates its distance.", UpdateOption)
 def update_option(store: Store, i: UpdateOption, app: str = "trips") -> dict:
+    from . import routes
+    with store.read():
+        cur0 = _bump(store.con, "trip_options", i.id, None)
+    new = dict(cur0)
+    for k in OPTION_FIELDS:
+        v = getattr(i, k)
+        if v is not None:
+            new[k] = v
+    for k in i.clear:
+        if k in OPTION_FIELDS and k != "mode":
+            new[k] = None
+    _check_option(store, new)
+    moved = any(new[k] != cur0[k] for k in ("mode", "from_place", "to_place", "minutes", "distance_miles", "speed_mph"))
+    est = routes.estimate(store, new, routes.rules(store)) if moved or not cur0["est_source"] else {k: cur0[k] for k in ("est_distance_miles", "est_minutes", "est_source")}
     with store.tx() as con:
         cur_row = _bump(con, "trip_options", i.id, None)
-        new = dict(cur_row)
-        for k in OPTION_FIELDS:
-            v = getattr(i, k)
-            if v is not None:
-                new[k] = v
-        for k in i.clear:
-            if k in OPTION_FIELDS and k != "mode":
-                new[k] = None
-        _check_option(store, new)
         con.execute("UPDATE trip_options SET mode=?, label=?, from_place=?, to_place=?, day=?, distance_miles=?, speed_mph=?, minutes=?, depart_at=?, price_cents=?, currency=?, "
-                    "basis=?, last_departure=?, link=?, notes=?, version=version+1, updated_at=? WHERE id=?",
+                    "basis=?, last_departure=?, link=?, notes=?, est_distance_miles=?, est_minutes=?, est_source=?, est_at=?, version=version+1, updated_at=? WHERE id=?",
                     (new["mode"], new["label"], new["from_place"], new["to_place"], new["day"], new["distance_miles"], new["speed_mph"], new["minutes"], new["depart_at"],
-                     new["price_cents"], (new["currency"] or "").upper() or None, new["basis"], new["last_departure"], new["link"], new["notes"], now_iso(), i.id))
+                     new["price_cents"], (new["currency"] or "").upper() or None, new["basis"], new["last_departure"], new["link"], new["notes"],
+                     est["est_distance_miles"], est["est_minutes"], est["est_source"], now_iso() if moved and est["est_source"] else cur_row["est_at"], now_iso(), i.id))
         after = _row(con, "trip_options", i.id)
         history.record(con, app=app, action="trips.update_option", tbl="trip_options", row_key=i.id, before=cur_row, after=after)
     return after
@@ -881,3 +894,35 @@ def choose_option(store: Store, i: ById, app: str = "trips") -> dict:
         con.execute("UPDATE trip_options SET chosen_at=?, item_id=?, version=version+1, updated_at=? WHERE id=?", (ts, item_id, ts, i.id))
         history.record(con, app=app, action="trips.choose_option", tbl="trip_options", row_key=i.id, before=before, after=_row(con, "trip_options", i.id))
     return {"item": item, "option_id": i.id, "ride_minutes": w["ride_minutes"], "door_minutes": w["door_minutes"]}
+
+
+
+class RefreshWays(BaseModel):
+    trip_id: str
+    forget_cache: bool = Field(False, description="True to look every place and road up again instead of using the saved answers")
+
+
+@action("trips.refresh_ways", "Re-estimate the distance and road time of every way on a trip that has no typed numbers (after a place was renamed, or with road routing just turned on).", RefreshWays)
+def refresh_ways(store: Store, i: RefreshWays, app: str = "trips") -> dict:
+    from . import routes
+    R = routes.rules(store)
+    with store.read():
+        _need_trip(store.con, i.trip_id)
+        rows = [dict(r) for r in store.con.execute("SELECT * FROM trip_options WHERE trip_id=? AND deleted_at IS NULL", (i.trip_id,))]
+    if i.forget_cache:
+        with store.tx() as con:
+            places = {" ".join((r[k] or "").lower().split()) for r in rows for k in ("from_place", "to_place") if r[k]}
+            con.executemany("DELETE FROM trip_geocache WHERE query=?", [(p,) for p in places])
+            con.execute("DELETE FROM trip_route_cache")
+    changed = 0
+    for r in rows:
+        est = routes.estimate(store, r, R)
+        if (est["est_distance_miles"], est["est_minutes"], est["est_source"]) == (r["est_distance_miles"], r["est_minutes"], r["est_source"]):
+            continue
+        with store.tx() as con:
+            before = _row(con, "trip_options", r["id"])
+            con.execute("UPDATE trip_options SET est_distance_miles=?, est_minutes=?, est_source=?, est_at=?, version=version+1, updated_at=? WHERE id=?",
+                        (est["est_distance_miles"], est["est_minutes"], est["est_source"], now_iso(), now_iso(), r["id"]))
+            history.record(con, app=app, action="trips.refresh_ways", tbl="trip_options", row_key=r["id"], before=before, after=_row(con, "trip_options", r["id"]))
+        changed += 1
+    return {"ways": len(rows), "changed": changed}

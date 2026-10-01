@@ -54,7 +54,7 @@ def test_defaults_estimates_prices_and_flags(client):
     by = {o["id"]: o for o in g["options"]}
     van = by[v["id"]]
     assert van["speed_used"] == 45 and van["speed_source"] == "usual van speed"
-    assert "Phuket → Krabi" in van["distance_source"] and "× 1.3" in van["distance_source"] and 40 < van["distance_used"] < 70
+    assert van["distance_source"] == "Rassada Pier → Krabi Airport, straight line × 1.3 (GeoNames)" and 40 < van["distance_used"] < 70   # offline: no road route
     assert van["ride_minutes"] == round(van["distance_used"] / 45 * 60) and van["door_minutes"] == van["ride_minutes"] + 10
     assert van["group_cents"] == 70000 and van["per_person_cents"] == 35000 and van["home_cents"] == round(70000 / 33.4)
     ferry = by[f["id"]]
@@ -115,3 +115,62 @@ def test_choosing_writes_the_leg_and_the_checker_follows(client):
     assert slow["id"] not in {o["id"] for o in ways(client, t["id"])[0]["options"]}
     # the helper's briefing carries the comparison
     assert "Ways to do Ao Nang → Phuket on 2026-11-20 (in the plan)" in client.get(f"/v1/trips/briefing/{t['id']}").json()["text"]
+
+
+
+def test_road_legs_use_the_real_road(client, monkeypatch):
+    """The fix for 'a straight line undercounts roads that go around water': places from
+    OpenStreetMap, a road route from OSRM, stored on save and cached, never fetched on read."""
+    from apps.trips.server import geo
+    calls = []
+    PLACES = {"Nopparat Thara Pier, Ao Nang": (8.0476, 98.7985), "Rassada Pier, Phuket": (7.8729, 98.4148)}   # "Phuket Town" is not known: the plainer try finds it
+
+    def fake(url, timeout=8.0):
+        calls.append(url)
+        if "nominatim" in url:
+            import urllib.parse
+            q = urllib.parse.parse_qs(urllib.parse.urlparse(url).query)["q"][0]
+            return [{"lat": str(PLACES[q][0]), "lon": str(PLACES[q][1]), "display_name": q}] if q in PLACES else []
+        return {"code": "Ok", "routes": [{"distance": 111.4 * 1609.344, "duration": 169 * 60}]}
+    monkeypatch.setattr(geo, "HTTP", fake)
+    monkeypatch.setattr(geo.time, "sleep", lambda s: None)
+    t = trip(client, budget_leg_cents=None)
+    leg = dict(trip_id=t["id"], from_place="Nopparat Thara Pier, Ao Nang", to_place="Rassada Pier, Phuket Town", day="2026-11-20")
+    van = act(client, "trips.add_option", **leg, mode="van", label="Minivan", price_cents=35000, currency="THB", basis="per_person")
+    bus = act(client, "trips.add_option", **leg, mode="bus", label="Bus")
+    ferry = act(client, "trips.add_option", **leg, mode="ferry", label="Ferry")
+    assert van["est_distance_miles"] == 111.4 and van["est_minutes"] == 169 and van["est_source"] == "Nopparat Thara Pier → Rassada Pier, road route, OSRM on OpenStreetMap"
+    assert ferry["est_minutes"] is None and ferry["est_source"].endswith("over water (OpenStreetMap)") and 25 < ferry["est_distance_miles"] < 35
+    n_after_save = len(calls)
+    assert sum("nominatim" in c for c in calls) == 3 and sum("osrm" in c for c in calls) == 1          # pier 1 once, pier 2 twice (as typed, then plainer); the road once
+    assert "Rassada%20Pier%2C%20Phuket" in calls[2] and "Town" not in calls[2]
+    g = ways(client, t["id"])[0]
+    assert len(calls) == n_after_save                                                                   # reading never calls out
+    by = {o["id"]: o for o in g["options"]}
+    assert by[van["id"]]["ride_minutes"] == 169 and by[van["id"]]["minutes_source"] == "road time" and by[van["id"]]["door_minutes"] == 179
+    assert by[bus["id"]]["ride_minutes"] == round(169 * 1.15) and by[bus["id"]]["minutes_source"] == "road time × 1.15 for a bus"
+    assert by[ferry["id"]]["ride_minutes"] == round(by[ferry["id"]]["distance_used"] / 18 * 60) and by[ferry["id"]]["minutes_source"] == "distance ÷ speed × 60"
+    assert g["fastest_id"] == ferry["id"]                                                               # across the bay beats around it
+    # a typed speed brings back the script's rule over the road distance
+    act(client, "trips.update_option", id=van["id"], speed_mph=50)
+    v2 = {o["id"]: o for o in ways(client, t["id"])[0]["options"]}[van["id"]]
+    assert v2["ride_minutes"] == round(111.4 / 50 * 60) and v2["minutes_source"] == "distance ÷ speed × 60"
+    # the source switches turn the lookups off: back to GeoNames, offline
+    monkeypatch.setattr(geo, "HTTP", lambda url, timeout=8.0: (_ for _ in ()).throw(AssertionError("must not call out")))
+    rows = client.get("/v1/settings/data.sources").json()["value"]
+    client.put("/v1/settings/data.sources", json={"value": [{**r, "on": r["id"] not in ("nominatim", "osrm")} for r in rows]})
+    taxi = act(client, "trips.add_option", trip_id=t["id"], from_place="Krabi", to_place="Phuket", day="2026-11-21", mode="taxi")
+    assert taxi["est_source"] == "Krabi → Phuket, straight line × 1.3 (GeoNames)"
+    # re-estimating after the switch comes back on uses the cache it kept
+    client.put("/v1/settings/data.sources", json={"value": rows})
+    monkeypatch.setattr(geo, "HTTP", fake)
+    r = act(client, "trips.refresh_ways", trip_id=t["id"])
+    assert r["ways"] == 4 and r["changed"] >= 1
+    assert client.get("/v1/history?limit=1").json()[0]["action"] == "trips.refresh_ways"
+    # a failed lookup is not remembered: offline once, online next time
+    monkeypatch.setattr(geo, "HTTP", lambda url, timeout=8.0: (_ for _ in ()).throw(OSError("offline")))
+    act(client, "trips.add_option", trip_id=t["id"], from_place="Somewhere Odd", to_place="Phuket", day="2026-11-23", mode="drive")
+    import sqlite3  # noqa: F401
+    store = client.app.state.store
+    with store.read():
+        assert store.con.execute("SELECT count(*) FROM trip_geocache WHERE query='somewhere odd'").fetchone()[0] == 0

@@ -30,7 +30,8 @@ SECTIONS = [
 
 SOURCES = [
     ("google_news", "Google News RSS", "hourly"),
-    ("nominatim", "OpenStreetMap / Nominatim", "on demand"),
+    ("nominatim", "OpenStreetMap / Nominatim (finding places)", "on demand"),
+    ("osrm", "OSRM road routes on OpenStreetMap", "on demand"),
     ("gcal_ics", "Google Calendar iCal", "hourly"),
     ("yahoo_prices", "Yahoo prices (build time)", "daily"),
     ("census_acs", "Census ACS (build time)", "monthly"),
@@ -234,11 +235,15 @@ REGISTRY: list[Setting] = [
     Setting("logic.trips.route_options", "logic", "Trips · comparing ways to do a leg", "json",
             {"speed_mph": {"flight": 450, "train": 55, "bus": 40, "van": 45, "ferry": 18, "taxi": 25, "transfer": 30, "drive": 45},
              "terminal_minutes": {"flight": 150, "ferry": 30, "train": 15, "bus": 15, "van": 10},
-             "road_factor": 1.3, "rank_by": "fastest", "faster_by_minutes": 15, "max_options": 10},
+             "road_factor": 1.3, "rank_by": "fastest", "faster_by_minutes": 15, "max_options": 10,
+             "road_routing": True, "road_minutes_factor": {"drive": 1.0, "taxi": 1.0, "transfer": 1.0, "van": 1.0, "bus": 1.15}, "cache_days": 90},
             "How the options for one leg are worked out and ranked (W02). Ride minutes = distance ÷ speed × 60 when no time is given; "
             "a distance or speed of zero or less is skipped as invalid; the fastest wins. Speed is the mode's usual speed when none is "
             "given; distance, when none is given, is the straight line between the two places (GeoNames) times road_factor for ground "
-            "modes. terminal_minutes is time at the airport, pier or station, added for the door-to-door figure. rank_by is fastest, "
+            "modes. With road_routing on, road legs (car, taxi, transfer, van, bus) use a real road route instead: the road distance and the "
+            "driving time from OSRM on OpenStreetMap, times road_minutes_factor for the mode; places are found with OpenStreetMap "
+            "(Nominatim) or GeoNames; lookups are cached for cache_days and made only when a way is saved. "
+            "terminal_minutes is time at the airport, pier or station, added for the door-to-door figure. rank_by is fastest, "
             "cheapest or balanced. faster_by_minutes is how much quicker an unchosen option must be before the checker mentions it. "
             "max_options caps the options on one leg. Read by trips.leg_options, trips.add_option and the checker.",
             extra={"used_by": ["trips.leg_options", "trips.add_option", "trips.run_checks"]}, check=lambda v: _check_route_options(v)),
@@ -347,6 +352,14 @@ def _check_route_options(v):
         raise ValueError("rank_by is fastest, cheapest or balanced")
     if v["max_options"] < 1:
         raise ValueError("max_options is at least 1")
+    if "road_routing" in v and not isinstance(v["road_routing"], bool):
+        raise ValueError("road_routing is true or false")
+    if v.get("road_minutes_factor"):
+        _check_map_of_numbers(v["road_minutes_factor"])
+        if any(x <= 0 for x in v["road_minutes_factor"].values()):
+            raise ValueError("every road_minutes_factor must be above zero")
+    if "cache_days" in v and (not isinstance(v["cache_days"], int) or isinstance(v["cache_days"], bool) or v["cache_days"] < 0):
+        raise ValueError("cache_days is a whole number, 0 or more")
 
 
 def _check_extra_domains(v):
